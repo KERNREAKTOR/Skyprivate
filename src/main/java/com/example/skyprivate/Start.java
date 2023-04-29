@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class HelloApplication{
+public class Start{
     public static void main(String[] args) throws InterruptedException {
 
         ArrayList<String> urls = new ArrayList<>();
