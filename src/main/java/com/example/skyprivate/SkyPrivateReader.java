@@ -1,5 +1,10 @@
 package com.example.skyprivate;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 public class SkyPrivateReader {
     private String onlineStatus;
@@ -17,36 +24,11 @@ public class SkyPrivateReader {
     private String lastSeen;
     private String pricePerMinute;
     private String skypeID;
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     private String url;
 
     public SkyPrivateReader(String url) {
-        StringBuilder skyPrivateContent = null;
-        setUrl(url);
-        try {
-            skyPrivateContent = getStringBuilder(url);
 
-        } catch (Exception e) {
-            setOnlineStatus("Unbekannt");
-            setUserName("Unbekannt");
-            System.out.println(e.getMessage());
-        }
-        assert skyPrivateContent != null;
-        setOnlineStatus("Unbekannt");
-        if (skyPrivateContent.toString().contains("profile-picture__status--online")) {
-            setOnlineStatus("✅");
-        }
-        if (skyPrivateContent.toString().contains("profile-picture__status--offline")) {
-            setOnlineStatus("❎");
-        }
+        setUrl(url);
         Document doc = null;
         try {
             doc = Jsoup.connect(url).get();
@@ -54,6 +36,9 @@ public class SkyPrivateReader {
         } catch (Exception e) {
             setOnlineStatus("Unbekannt");
             setUserName("Unbekannt");
+            setSkypeID("Unbekannt");
+            setPricePerMinute(null);
+            setLastSeen("-");
             System.out.println(e.getMessage());
         }
 
@@ -63,6 +48,10 @@ public class SkyPrivateReader {
         setSkypeID(getResult(doc, "span.skype-id__id"));
         setPricePerMinute(getResult(doc, "p.profile-meta__price span"));
         setLastSeen(getResult(doc, "span.page-section__heading__tag__text"));
+        setOnlineStatus(getResult(doc, "span.profile-picture__status"));
+
+        //Profilinformationen
+        String test = getResult(doc, "div.profile__dl");
     }
 
     private static String getResult(Document doc, String filter) {
@@ -77,6 +66,15 @@ public class SkyPrivateReader {
             result = element.text();
         }
         return result;
+    }
+
+    private static String getHtmlContent(String url) throws IOException {
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet httpGet = new HttpGet(url);
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+                return EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            }
+        }
     }
 
     private static StringBuilder getStringBuilder(String url) throws IOException {
@@ -96,16 +94,50 @@ public class SkyPrivateReader {
         return content;
     }
 
-    public String getLastSeen() {
-        return lastSeen;
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public long getLastSeen() {
+        //String str = "Last seen 11 minutes ago";
+        int lastTime = Integer.parseInt(lastSeen.replaceAll("[^0-9]", ""));
+
+        Duration duration = Duration.ofMinutes(lastTime);
+
+        if (lastSeen.contains("seconds")) {
+            duration = Duration.ofMinutes(1);
+        }
+        if (lastSeen.contains("minutes")) {
+            duration = Duration.ofMinutes(lastTime);
+        }
+        if (lastSeen.contains("hours")) {
+            duration = Duration.ofHours(lastTime);
+        }
+        if (lastSeen.contains("days")) {
+            duration = Duration.ofDays(lastTime);
+        }
+
+        return duration.toMinutes();
     }
 
     public void setLastSeen(String lastSeen) {
         this.lastSeen = lastSeen;
     }
 
-    public String getPricePerMinute() {
-        return pricePerMinute;
+    public Double getPricePerMinute() {
+        String str = pricePerMinute;
+        double value = 0.0;
+
+        if (str != null) {
+            str = str.replaceAll("[^\\d.]+", ""); // Entfernen von allem außer Zahlen und Punkten
+            value = Double.parseDouble(str);
+        }
+
+        return value;
     }
 
     public void setPricePerMinute(String pricePerMinute) {

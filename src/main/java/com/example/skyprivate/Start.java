@@ -9,20 +9,29 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Start{
-    public static void main(String[] args) throws InterruptedException {
+public class Start {
+    public static void main(String[] args) throws InterruptedException, IOException {
 
         ArrayList<String> urls = new ArrayList<>();
         urls.add("https://profiles.skyprivate.com/models/1s5qw-scofty-s.html");
         urls.add("https://profiles.skyprivate.com/models/1me83-emeralda.html");
+        urls.add("https://profiles.skyprivate.com/models/kgtz-miss-cherry.html");
+        urls.add("https://profiles.skyprivate.com/models/8177-miakross.html");
+        urls.add("https://profiles.skyprivate.com/models/1t5mk-kristenroussel.html");
+        urls.add("https://profiles.skyprivate.com/models/1tcqk-effy.html");
+        urls.add("https://profiles.skyprivate.com/models/1srek-gerogina.html");
+        urls.add("https://profiles.skyprivate.com/models/1sow5-ana-maria.html");
+        urls.add("https://profiles.skyprivate.com/models/1p3t8-miranda-castillo.html");
+        urls.add("https://profiles.skyprivate.com/models/1i0ak-emy-grey.html");
 
-        ArrayList<String> curMode = new ArrayList<>(), lastSeen = new ArrayList<>();
+        ArrayList<String> curMode = new ArrayList<>();
+        ArrayList<Long> lastSeen = new ArrayList<>();
 
         for (String ignored : urls) {
-            curMode.add("❎");
-            lastSeen.add("-");
+            curMode.add("");
+            lastSeen.add(0L);
         }
-        // StripChatReader strip = new StripChatReader("https://profiles.skyprivate.com/models/1s5qw-scofty-s.html");
+
         while (true) {
             ArrayList<SkyPrivateReader> users = new ArrayList<>();
             try {
@@ -32,21 +41,36 @@ public class Start{
                     LocalDateTime now = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
-                    if (Objects.equals(users.get(i).getOnlineStatus(), "❎")) {
-                        lastSeen.set(i, users.get(i).getLastSeen());
+                    if (Objects.equals(users.get(i).getOnlineStatus(), "OFFLINE")) {
+                        //curMode.set(i, users.get(i).getOnlineStatus());
+                        if (users.get(i).getLastSeen() != 0L) {
+                            if (lastSeen.get(i) < users.get(i).getLastSeen() && users.get(i).getLastSeen() < 30) {
+                                lastSeen.set(i, users.get(i).getLastSeen());
+//                                System.out.println(now.format(formatter) + " \uD83D\uDD34 " + users.get(i).getUserName() + " ist " + users.get(i).getOnlineStatus() +
+//                                        " (" + users.get(i).getPricePerMinute() + " pro Minute )[" +
+//                                        lastSeen.get(i) + " Minuten] $" + users.get(i).getLastSeen() * users.get(i).getPricePerMinute());
+                            }
+                        }
                     }
 
                     if (!curMode.get(i).equals(users.get(i).getOnlineStatus())) {
                         curMode.set(i, users.get(i).getOnlineStatus());
 
-                        if (Objects.equals(users.get(i).getOnlineStatus(), "❎")) {
-                            System.out.println(now.format(formatter) + "🔴 " + users.get(i).getUserName() + " ist offline");
-                            // LOG.info("🔴 " + users.get(i).getUserName() + " ist offline");
-                            addToDB(users.get(i).getUserName(), users.get(i).getOnlineStatus(), now.format(formatter), users.get(i).getPricePerMinute(), "");
+                        if (Objects.equals(users.get(i).getOnlineStatus(), "OFFLINE")) {
+                            System.out.println(now.format(formatter) + " 🔴 " + users.get(i).getUserName() + " ist " + users.get(i).getOnlineStatus());
+
+                            // Speichern der Informationen
+                            addToDB(users.get(i).getUserName(), users.get(i).getOnlineStatus(), now.format(formatter),
+                                    String.valueOf(users.get(i).getPricePerMinute()), "");
                         } else {
-                            System.out.println(now.format(formatter) + "🟢 " + users.get(i).getUserName() + " ist online: " + users.get(i).getUrl() + " (" + users.get(i).getPricePerMinute() + " per Minute) [" + lastSeen.get(i) + "]");
-                            //LOG.info("🟢 " + users.get(i).getUserName() + " ist online: " + users.get(i).getUrl() + " (" + users.get(i).getPricePerMinute() + " per Minute) [" + lastSeen.get(i) + "]");
-                            addToDB(users.get(i).getUserName(), users.get(i).getOnlineStatus(), now.format(formatter), users.get(i).getPricePerMinute(), lastSeen.get(i));
+                            System.out.println(now.format(formatter) + " 🟢 " + users.get(i).getUserName() + " ist " + users.get(i).getOnlineStatus() + "-> "
+                                    + users.get(i).getUrl() + " (" + users.get(i).getPricePerMinute() + " pro Minute)["  +
+                                    lastSeen.get(i) + " Minuten] $" + lastSeen.get(i) * users.get(i).getPricePerMinute());
+
+                            //Speichern der Informationen
+                            addToDB(users.get(i).getUserName(), users.get(i).getOnlineStatus(), now.format(formatter),
+                                    String.valueOf(users.get(i).getPricePerMinute()), String.valueOf(lastSeen.get(i)));
+                            lastSeen.set(i, 0L);
                         }
                     }
 
@@ -63,7 +87,7 @@ public class Start{
     private static void addToDB(String username, String status, String date, String pricePerMinute, String lastSeen) throws IOException {
         LocalDate heute = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String filename = "C:\\skyprivate\\" + username + "_" + heute.format(formatter) + ".log";
+        String filename = "C:\\skyprivate\\" + heute.format(formatter) + "_" + username + ".log";
         PrintWriter w = new PrintWriter(new FileWriter(filename, true));
         w.println(status + "|" + date + "|" + username + "|" + pricePerMinute + "|" + lastSeen);
         w.flush();
