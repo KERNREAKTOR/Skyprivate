@@ -27,7 +27,7 @@ public class SkyPrivateReader {
     private String url;
 
     public SkyPrivateReader(String url) {
-
+//        String htm = getHtmlContent("https://www.livejasmin.com/de/frauen/#!chat/AriannaNastya");
         setUrl(url);
         Document doc = null;
         try {
@@ -69,8 +69,11 @@ public class SkyPrivateReader {
     }
 
     private static String getHtmlContent(String url) throws IOException {
+        String cookieHeader = "unique_visitor_id=7d000992-6045-4536-a8ea-69005603dea3; expires=Wed, 31 May 2023 06:55:20 GMT; path=/; domain=.livejasmin.com; secure; SameSite=Lax";
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet httpGet = new HttpGet(url);
+            // Setzen des Cookie-Header
+            httpGet.setHeader("Cookie", cookieHeader);
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 return EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             }

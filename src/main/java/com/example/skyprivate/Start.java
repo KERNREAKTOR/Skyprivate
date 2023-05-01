@@ -10,19 +10,11 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Start {
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws InterruptedException {
 
         ArrayList<String> urls = new ArrayList<>();
         urls.add("https://profiles.skyprivate.com/models/1s5qw-scofty-s.html");
         urls.add("https://profiles.skyprivate.com/models/1me83-emeralda.html");
-        urls.add("https://profiles.skyprivate.com/models/kgtz-miss-cherry.html");
-        urls.add("https://profiles.skyprivate.com/models/8177-miakross.html");
-        urls.add("https://profiles.skyprivate.com/models/1t5mk-kristenroussel.html");
-        urls.add("https://profiles.skyprivate.com/models/1tcqk-effy.html");
-        urls.add("https://profiles.skyprivate.com/models/1srek-gerogina.html");
-        urls.add("https://profiles.skyprivate.com/models/1sow5-ana-maria.html");
-        urls.add("https://profiles.skyprivate.com/models/1p3t8-miranda-castillo.html");
-        urls.add("https://profiles.skyprivate.com/models/1i0ak-emy-grey.html");
 
         ArrayList<String> curMode = new ArrayList<>();
         ArrayList<Long> lastSeen = new ArrayList<>();
@@ -31,7 +23,6 @@ public class Start {
             curMode.add("");
             lastSeen.add(0L);
         }
-
         while (true) {
             ArrayList<SkyPrivateReader> users = new ArrayList<>();
             try {
