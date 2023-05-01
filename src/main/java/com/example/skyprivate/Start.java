@@ -52,7 +52,7 @@ public class Start {
 
                             // Speichern der Informationen
                             addToDB(users.get(i).getUserName(), users.get(i).getOnlineStatus(), now.format(formatter),
-                                    String.valueOf(users.get(i).getPricePerMinute()), "");
+                                    String.valueOf(users.get(i).getPricePerMinute()), String.valueOf(0));
                         } else {
                             System.out.println(now.format(formatter) + " 🟢 " + users.get(i).getUserName() + " ist " + users.get(i).getOnlineStatus() + "-> "
                                     + users.get(i).getUrl() + " (" + users.get(i).getPricePerMinute() + " pro Minute)["  +
