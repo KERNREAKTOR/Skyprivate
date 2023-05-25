@@ -9,4 +9,7 @@ public class Logger {
     public static void log(String message) {
         System.out.println("[" + sdf.format(new Date()) + "] " + message);
     }
+    public static void bongaLog(String message) {
+        System.out.println("[" + sdf.format(new Date()) + "] [BC]" + message);
+    }
 }

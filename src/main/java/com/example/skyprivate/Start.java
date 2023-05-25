@@ -20,6 +20,7 @@ public class Start {
     private static final boolean downloadSnapshot = false;
     //updateFollowerStatus In Minuten
     private static final int updateFollowerStatus = 15;
+    private static BongaReader currBongaPerform = new BongaReader();
     private static double minuteCounter = 0.0;
     private static boolean firstStart = true;
 
@@ -73,16 +74,12 @@ public class Start {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
         // Erstellen eines Runnable, das Ihre Funktion ausführt
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                // Hier können Sie Ihre Funktion aufrufen
-                try {
-                    updateFollowerList();
-                    LiveJasminReader liveJasminReader = new LiveJasminReader("HelenMcCoy");
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+        Runnable task = () -> {
+            // Hier können Sie Ihre Funktion aufrufen
+            try {
+                updateFollowerList();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         };
         // Erstellen eines Runnable für Funktion 2
@@ -94,15 +91,85 @@ public class Start {
             LiveJasminReader liveJasminReader = new LiveJasminReader(curName);
             startLJPerformer.add(liveJasminReader.getPerformerInfo());
         }
-        Runnable ljOnlineChecker = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    checkLJOnlineStatus(ljPerformers);
+        currBongaPerform = new BongaReader("scoftyss");
+        currBongaPerform.getHistory().setOnline(false);
+        currBongaPerform.getResult().getChatShowStatusOptions().setOffline(true);
+        currBongaPerform.getResult().getChatShowStatusOptions().setAvailable(false);
+        Runnable ljOnlineChecker = () -> {
+            try {
+                checkLJOnlineStatus(ljPerformers);
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                BongaReader bongaReader = new BongaReader("scoftyss");
+                if (currBongaPerform.getStatus() != bongaReader.getStatus()) {
+                    if (bongaReader.getHistory().isOnline()) {
+                        Logger.log("[BC] 🟢 " + bongaReader.getHistory().getDisplayName() + " is online!");
+                    } else {
+                        Logger.log("[BC] 🔴 " + bongaReader.getHistory().getDisplayName() + " is offline!");
+                    }
+                    currBongaPerform.setStatus(bongaReader.getStatus());
                 }
+
+                //Verfügbar
+                if(currBongaPerform.getResult().getChatShowStatusOptions().isAvailable() != bongaReader.getResult().getChatShowStatusOptions().isAvailable()){
+                    if (currBongaPerform.getResult().getChatShowStatusOptions().isAvailable()){
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist verfügbar");
+                    }else{
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist nicht verfügbar");
+                    }
+                    currBongaPerform.getResult().getChatShowStatusOptions().setAvailable(bongaReader.getResult().getChatShowStatusOptions().isAvailable());
+                }
+
+                //VIP Show
+                if(currBongaPerform.getResult().getChatShowStatusOptions().isVipShow() != bongaReader.getResult().getChatShowStatusOptions().isVipShow()){
+                    if (currBongaPerform.getResult().getChatShowStatusOptions().isVipShow()){
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist in einer VIP Show");
+                    }else{
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist in einer VIP Show");
+                    }
+                    currBongaPerform.getResult().getChatShowStatusOptions().setVipShow(bongaReader.getResult().getChatShowStatusOptions().isVipShow());
+                }
+
+                //Offline
+                if(currBongaPerform.getResult().getChatShowStatusOptions().isOffline() != bongaReader.getResult().getChatShowStatusOptions().isOffline()){
+                    if (currBongaPerform.getResult().getChatShowStatusOptions().isOffline()){
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " hat den stream beendet");
+                    }else{
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist Live");
+                    }
+                    currBongaPerform.getResult().getChatShowStatusOptions().setOffline(bongaReader.getResult().getChatShowStatusOptions().isOffline());
+                }
+
+                //Gruppen Chat
+                if(currBongaPerform.getResult().getChatShowStatusOptions().isGroupPrivatChat() != bongaReader.getResult().getChatShowStatusOptions().isGroupPrivatChat()){
+                    if (currBongaPerform.getResult().getChatShowStatusOptions().isGroupPrivatChat()){
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist in einem Gruppen Chat");
+                    }else{
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist Gruppen Chat beendet");
+                    }
+                    currBongaPerform.getResult().getChatShowStatusOptions().setGroupPrivatChat(bongaReader.getResult().getChatShowStatusOptions().isGroupPrivatChat());
+                }
+
+                //Privater Chat
+                if(currBongaPerform.getResult().getChatShowStatusOptions().isPrivatChat() != bongaReader.getResult().getChatShowStatusOptions().isPrivatChat()){
+                    if (currBongaPerform.getResult().getChatShowStatusOptions().isPrivatChat()){
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist in einem Privat Chat");
+                    }else{
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " Privat Chat beendet");
+                    }
+                    currBongaPerform.getResult().getChatShowStatusOptions().setPrivatChat(bongaReader.getResult().getChatShowStatusOptions().isPrivatChat());
+                }
+
+                //Exklusiver privater Chat
+                if(currBongaPerform.getResult().getChatShowStatusOptions().isFullPrivatChat() != bongaReader.getResult().getChatShowStatusOptions().isFullPrivatChat()){
+                    if (currBongaPerform.getResult().getChatShowStatusOptions().isFullPrivatChat()){
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist Exklusiven privaten Chat");
+                    }else{
+                        Logger.bongaLog(bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " Exklusiver privater Chat beendet");
+                    }
+                    currBongaPerform.getResult().getChatShowStatusOptions().setFullPrivatChat(bongaReader.getResult().getChatShowStatusOptions().isFullPrivatChat());
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         };
 
@@ -140,11 +207,8 @@ public class Start {
 
         //Urls
         stripUrls.add("Alexsaeli");
-        stripUrls.add("juicekatee");
         stripUrls.add("Sheila_7");
         stripUrls.add("judith_cute");
-        stripUrls.add("Bunny_June");
-        stripUrls.add("KellySanders18");
 
         for (String url : stripUrls) {
             curStripMode.add(StripChatReader.PerformerMode.UNKNOWN);

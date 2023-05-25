@@ -5,20 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.0.3">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/LiveJasminReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/LivejasminData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Logger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/SocialLinks.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatCam.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatCamUserUser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatGoal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatKingInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaChat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaHistory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/net/skyprivate/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/net/skyprivate/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/SkyPrivateReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/SkyPrivateReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Logger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatReader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +51,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.skyprivate" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.example.skyprivate" />
     </key>
@@ -147,7 +143,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682971290584</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Skyprivate 1.0.3">
+      <created>1684786616575</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1684786616575</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -158,11 +161,27 @@
     <option name="LAST_COMMIT_MESSAGE" value="Skyprivate 1.0.3" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaReader.java</url>
+          <line>120</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
-        <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="key" />
         <PinnedItemInfo parentTag="org.json.JSONArray" memberName="myArrayList" />
       </pinned-members>
     </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="jsonBonga.map" />
+        <watch expression="this" language="JAVA" />
+        <watch expression="this" language="JAVA" />
+        <watch expression="this" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
