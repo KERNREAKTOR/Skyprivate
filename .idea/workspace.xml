@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.0.3">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaChat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaHistory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaChat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaChat.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Logger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatReader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +147,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684786616575</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Skyprivate 1.0.3">
+      <created>1685050172035</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1685050172035</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

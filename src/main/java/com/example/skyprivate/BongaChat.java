@@ -1,5 +1,34 @@
 package com.example.skyprivate;
 
+class ChatTopicOptions{
+    private boolean isAvailable;
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public String getCurrentTopic() {
+        return currentTopic;
+    }
+
+    public void setCurrentTopic(String currentTopic) {
+        this.currentTopic = currentTopic;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    private String currentTopic,displayName;
+}
 class ShowStatus{
     public boolean isGroupPrivatChat() {
         return isGroupPrivatChat;
@@ -87,4 +116,14 @@ public class BongaChat {
     }
 
     private ShowStatus chatShowStatusOptions;
+
+    public ChatTopicOptions getChatTopicOptions() {
+        return chatTopicOptions;
+    }
+
+    public void setChatTopicOptions(ChatTopicOptions chatTopicOptions) {
+        this.chatTopicOptions = chatTopicOptions;
+    }
+
+    private ChatTopicOptions chatTopicOptions;
 }
