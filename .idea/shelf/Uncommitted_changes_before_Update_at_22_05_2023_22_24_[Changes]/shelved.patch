@@ -1,0 +1,174 @@
+Index: src/main/java/com/example/skyprivate/Start.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.skyprivate;\r\n\r\nimport java.io.*;\r\nimport java.net.HttpURLConnection;\r\nimport java.net.URL;\r\nimport java.time.LocalDate;\r\nimport java.time.LocalDateTime;\r\nimport java.time.format.DateTimeFormatter;\r\nimport java.util.ArrayList;\r\nimport java.util.Objects;\r\n\r\npublic class Start {\r\n    public static void main(String[] args) throws InterruptedException {\r\n\r\n        ArrayList<String> urls = new ArrayList<>();\r\n        urls.add(\"https://profiles.skyprivate.com/models/1s5qw-scofty-s.html\");\r\n        urls.add(\"https://profiles.skyprivate.com/models/1me83-emeralda.html\");\r\n\r\n        ArrayList<String> curMode = new ArrayList<>();\r\n        ArrayList<Long> lastSeen = new ArrayList<>();\r\n\r\n        for (String ignored : urls) {\r\n            curMode.add(\"\");\r\n            lastSeen.add(0L);\r\n        }\r\n        while (true) {\r\n            ArrayList<SkyPrivateReader> users = new ArrayList<>();\r\n            try {\r\n                int i = 0;\r\n                for (String url : urls) {\r\n                    users.add(new SkyPrivateReader(url));\r\n                    LocalDateTime now = LocalDateTime.now();\r\n                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"dd.MM.yyyy HH:mm:ss\");\r\n\r\n                    if (Objects.equals(users.get(i).getOnlineStatus(), \"OFFLINE\")) {\r\n                        //curMode.set(i, users.get(i).getOnlineStatus());\r\n                        if (users.get(i).getLastSeen() != 0L) {\r\n                            if (lastSeen.get(i) < users.get(i).getLastSeen() && users.get(i).getLastSeen() < 30) {\r\n                                lastSeen.set(i, users.get(i).getLastSeen());\r\n//                                System.out.println(now.format(formatter) + \" \\uD83D\\uDD34 \" + users.get(i).getUserName() + \" ist \" + users.get(i).getOnlineStatus() +\r\n//                                        \" (\" + users.get(i).getPricePerMinute() + \" pro Minute )[\" +\r\n//                                        lastSeen.get(i) + \" Minuten] $\" + users.get(i).getLastSeen() * users.get(i).getPricePerMinute());\r\n                            }\r\n                        }\r\n                    }\r\n\r\n                    if (!curMode.get(i).equals(users.get(i).getOnlineStatus())) {\r\n                        curMode.set(i, users.get(i).getOnlineStatus());\r\n\r\n                        if (Objects.equals(users.get(i).getOnlineStatus(), \"OFFLINE\")) {\r\n                            System.out.println(now.format(formatter) + \" \uD83D\uDD34 \" + users.get(i).getUserName() + \" ist \" + users.get(i).getOnlineStatus());\r\n\r\n                            // Speichern der Informationen\r\n                            addToDB(users.get(i).getUserName(), users.get(i).getOnlineStatus(), now.format(formatter),\r\n                                    String.valueOf(users.get(i).getPricePerMinute()), String.valueOf(0));\r\n                        } else {\r\n                            System.out.println(now.format(formatter) + \" \uD83D\uDFE2 \" + users.get(i).getUserName() + \" ist \" + users.get(i).getOnlineStatus() + \"-> \"\r\n                                    + users.get(i).getUrl() + \" (\" + users.get(i).getPricePerMinute() + \" pro Minute)[\"  +\r\n                                    lastSeen.get(i) + \" Minuten] $\" + lastSeen.get(i) * users.get(i).getPricePerMinute());\r\n\r\n                            //Speichern der Informationen\r\n                            addToDB(users.get(i).getUserName(), users.get(i).getOnlineStatus(), now.format(formatter),\r\n                                    String.valueOf(users.get(i).getPricePerMinute()), String.valueOf(lastSeen.get(i)));\r\n                            lastSeen.set(i, 0L);\r\n                        }\r\n                    }\r\n\r\n                    i = i + 1;\r\n                }\r\n\r\n            } catch (Exception e) {\r\n                System.out.println(e.getMessage());\r\n            }\r\n            Thread.sleep(10000);\r\n        }\r\n    }\r\n\r\n    private static void addToDB(String username, String status, String date, String pricePerMinute, String lastSeen) throws IOException {\r\n        LocalDate heute = LocalDate.now();\r\n        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"yyyyMMdd\");\r\n        String filename = \"C:\\\\skyprivate\\\\\" + heute.format(formatter) + \"_\" + username + \".log\";\r\n        PrintWriter w = new PrintWriter(new FileWriter(filename, true));\r\n        w.println(status + \"|\" + date + \"|\" + username + \"|\" + pricePerMinute + \"|\" + lastSeen);\r\n        w.flush();\r\n        w.close();\r\n    }\r\n\r\n    private static StringBuilder getStringBuilder(String url) throws IOException {\r\n        // HTML-Datei herunterladen\r\n        HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();\r\n        con.setRequestMethod(\"GET\");\r\n        con.setConnectTimeout(10000);\r\n        con.setReadTimeout(10000);\r\n        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));\r\n        StringBuilder content = new StringBuilder();\r\n        String inputLine;\r\n        while ((inputLine = in.readLine()) != null) {\r\n            content.append(inputLine);\r\n        }\r\n        in.close();\r\n        con.disconnect();\r\n        return content;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/skyprivate/Start.java b/src/main/java/com/example/skyprivate/Start.java
+--- a/src/main/java/com/example/skyprivate/Start.java	(revision 23bc636ce0d631a1ca9b1029c62e2a3561de5960)
++++ b/src/main/java/com/example/skyprivate/Start.java	(date 1683138936044)
+@@ -35,7 +35,7 @@
+                     if (Objects.equals(users.get(i).getOnlineStatus(), "OFFLINE")) {
+                         //curMode.set(i, users.get(i).getOnlineStatus());
+                         if (users.get(i).getLastSeen() != 0L) {
+-                            if (lastSeen.get(i) < users.get(i).getLastSeen() && users.get(i).getLastSeen() < 30) {
++                            if (lastSeen.get(i) < users.get(i).getLastSeen()) {
+                                 lastSeen.set(i, users.get(i).getLastSeen());
+ //                                System.out.println(now.format(formatter) + " \uD83D\uDD34 " + users.get(i).getUserName() + " ist " + users.get(i).getOnlineStatus() +
+ //                                        " (" + users.get(i).getPricePerMinute() + " pro Minute )[" +
+@@ -69,7 +69,7 @@
+                 }
+ 
+             } catch (Exception e) {
+-                System.out.println(e.getMessage());
++                System.out.println(e);
+             }
+             Thread.sleep(10000);
+         }
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"VcsDirectoryMappings\">\r\n    <mapping directory=\"\" vcs=\"Git\" />\r\n    <mapping directory=\"$PROJECT_DIR$/server\" vcs=\"Git\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+--- a/.idea/vcs.xml	(revision 23bc636ce0d631a1ca9b1029c62e2a3561de5960)
++++ b/.idea/vcs.xml	(date 1683040574803)
+@@ -2,6 +2,5 @@
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+     <mapping directory="" vcs="Git" />
+-    <mapping directory="$PROJECT_DIR$/server" vcs="Git" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"311c1bd6-bdd5-46fb-8225-5ba86840fe59\" name=\"Changes\" comment=\"Skyprivate 1.0.3\">\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Enum\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2P67VhJTPaPV9jv5Qhg4gvEcZ7E\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Downloaded.Files.Path.Enabled\": \"false\",\r\n    \"Repository.Attach.Annotations\": \"false\",\r\n    \"Repository.Attach.JavaDocs\": \"false\",\r\n    \"Repository.Attach.Sources\": \"false\",\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"master\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"jdk.selected.JAVA_MODULE\": \"openjdk-20\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.17\",\r\n    \"project.structure.side.proportion\": \"0.2\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyClassDialog.RECENTS_KEY\">\r\n      <recent name=\"com.example.skyprivate\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Application.Start\">\r\n    <configuration name=\"Server\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"src.main.java.net.skyprivate.server.Server\" />\r\n      <module name=\"server\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"src.main.java.net.skyprivate.server.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Start\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.example.skyprivate.Start\" />\r\n      <module name=\"skyprivate\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.example.skyprivate.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Start\" />\r\n        <item itemvalue=\"Application.Server\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"311c1bd6-bdd5-46fb-8225-5ba86840fe59\" name=\"Changes\" comment=\"\" />\r\n      <created>1682765706614</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1682765706614</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Skyprivate\">\r\n      <created>1682765846349</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1682765846349</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Skyprivate\">\r\n      <created>1682766122842</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1682766122842</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Skyprivate 1.0.1\">\r\n      <created>1682772396282</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1682772396282</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Skyprivate 1.0.2\">\r\n      <created>1682886476569</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1682886476569</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"Skyprivate 1.0.3\">\r\n      <created>1682971084448</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1682971084448</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"6\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Skyprivate\" />\r\n    <MESSAGE value=\"Skyprivate 1.0.1\" />\r\n    <MESSAGE value=\"Skyprivate 1.0.2\" />\r\n    <MESSAGE value=\"Skyprivate 1.0.3\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Skyprivate 1.0.3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 23bc636ce0d631a1ca9b1029c62e2a3561de5960)
++++ b/.idea/workspace.xml	(date 1683042473895)
+@@ -4,7 +4,9 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.0.3">
++    <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.0.1">
++      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -15,8 +17,8 @@
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
+-        <option value="Enum" />
+         <option value="Class" />
++        <option value="Enum" />
+       </list>
+     </option>
+   </component>
+@@ -28,41 +30,27 @@
+   <component name="ProjectViewState">
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Downloaded.Files.Path.Enabled": "false",
+-    "Repository.Attach.Annotations": "false",
+-    "Repository.Attach.JavaDocs": "false",
+-    "Repository.Attach.Sources": "false",
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "git-widget-placeholder": "master",
+-    "ignore.virus.scanning.warn.message": "true",
+-    "jdk.selected.JAVA_MODULE": "openjdk-20",
+-    "project.structure.last.edited": "Modules",
+-    "project.structure.proportion": "0.17",
+-    "project.structure.side.proportion": "0.2"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
++    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
++    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
++    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
++    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
+     <key name="CopyClassDialog.RECENTS_KEY">
+       <recent name="com.example.skyprivate" />
+     </key>
+   </component>
+-  <component name="RunManager" selected="Application.Start">
+-    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+-      <option name="MAIN_CLASS_NAME" value="src.main.java.net.skyprivate.server.Server" />
+-      <module name="server" />
+-      <extension name="coverage">
+-        <pattern>
+-          <option name="PATTERN" value="src.main.java.net.skyprivate.server.*" />
+-          <option name="ENABLED" value="true" />
+-        </pattern>
+-      </extension>
+-      <method v="2">
+-        <option name="Make" enabled="true" />
+-      </method>
+-    </configuration>
++  <component name="RunManager">
+     <configuration name="Start" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="com.example.skyprivate.Start" />
+       <module name="skyprivate" />
+@@ -79,7 +67,6 @@
+     <recent_temporary>
+       <list>
+         <item itemvalue="Application.Start" />
+-        <item itemvalue="Application.Server" />
+       </list>
+     </recent_temporary>
+   </component>
+@@ -113,28 +100,12 @@
+       <option name="project" value="LOCAL" />
+       <updated>1682772396282</updated>
+     </task>
+-    <task id="LOCAL-00004" summary="Skyprivate 1.0.2">
+-      <created>1682886476569</created>
+-      <option name="number" value="00004" />
+-      <option name="presentableId" value="LOCAL-00004" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1682886476569</updated>
+-    </task>
+-    <task id="LOCAL-00005" summary="Skyprivate 1.0.3">
+-      <created>1682971084448</created>
+-      <option name="number" value="00005" />
+-      <option name="presentableId" value="LOCAL-00005" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1682971084448</updated>
+-    </task>
+-    <option name="localTasksCounter" value="6" />
++    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="Skyprivate" />
+     <MESSAGE value="Skyprivate 1.0.1" />
+-    <MESSAGE value="Skyprivate 1.0.2" />
+-    <MESSAGE value="Skyprivate 1.0.3" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Skyprivate 1.0.3" />
++    <option name="LAST_COMMIT_MESSAGE" value="Skyprivate 1.0.1" />
+   </component>
+ </project>
+\ No newline at end of file
