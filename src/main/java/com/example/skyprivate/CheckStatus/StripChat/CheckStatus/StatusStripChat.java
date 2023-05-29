@@ -12,9 +12,9 @@ public class StatusStripChat {
 
         if (!Objects.equals(currStripChat.getUserInfo().getUser().isOnline(), stripChatReader.getUserInfo().getUser().isOnline())) {
             if (stripChatReader.getUserInfo().getUser().isOnline()) {
-                Logger.stripLog("🟢 " + stripChatReader.getUserInfo().getUser().getName() + " ist Online", stripChatReader);
+                Logger.stripLog("🟢 " + stripChatReader.getUserInfo().getUser().getUsername() + " ist Online", stripChatReader);
             } else {
-                Logger.stripLog("🔴 " + stripChatReader.getUserInfo().getUser().getName() + " ist Offline", stripChatReader);
+                Logger.stripLog("🔴 " + stripChatReader.getUserInfo().getUser().getUsername() + " ist Offline", stripChatReader);
             }
             currStripChat.getUserInfo().getUser().setOnline(stripChatReader.getUserInfo().getUser().isOnline());
         }
@@ -24,9 +24,9 @@ public class StatusStripChat {
 
         if (currStripChat.getUserInfo().getUser().isLive() != stripChatReader.getUserInfo().getUser().isLive()) {
             if (stripChatReader.getUserInfo().getUser().isLive()) {
-                Logger.stripLog(" ❤ " + currStripChat.getUserInfo().getUser().getUsername() + " ist Live ", stripChatReader);
+                Logger.stripLog("❤ " + currStripChat.getUserInfo().getUser().getUsername() + " ist Live ", stripChatReader);
             } else {
-                Logger.stripLog(" 💔 " + currStripChat.getUserInfo().getUser().getUsername() + " ist nicht Live", stripChatReader);
+                Logger.stripLog("💔 " + currStripChat.getUserInfo().getUser().getUsername() + " ist nicht Live", stripChatReader);
             }
             currStripChat.getUserInfo().getUser().setLive(stripChatReader.getUserInfo().getUser().isLive());
         }
@@ -57,29 +57,24 @@ public class StatusStripChat {
             currStripChat.setPerformerMode(stripChatReader.getPerformerMode());
         }
     }
-    public static void stripChatGoal(StripChatReader currStripChat,StripChatReader stripChatReader) throws IOException {
+
+    public static void stripChatGoal(StripChatReader currStripChat, StripChatReader stripChatReader) throws IOException {
         if (stripChatReader.getUserInfo().getUser().isLive()) {
 
-            if (currStripChat.getCamInfo().getGoal() != stripChatReader.getCamInfo().getGoal()) {
+            if (stripChatReader.getCamInfo().getGoal() == null || stripChatReader.getCamInfo().getGoal().getLeft() == 0 ||
+                    (!Objects.equals(currStripChat.getCamInfo().getGoal().getDescription(), stripChatReader.getCamInfo().getGoal().getDescription()))) {
 
-                if (currStripChat.getCamInfo().getGoal() == null) {
-                    currStripChat.getCamInfo().setGoal(stripChatReader.getCamInfo().getGoal());
-                }
+                Logger.stripLog("✅ " + currStripChat.getUserInfo().getUser().getUsername() +
+                        " Ziel erreicht: " + currStripChat.getCamInfo().getGoal().getDescription() + " -> " + stripChatReader.getUrl(), stripChatReader);
+                SoundPlayer.playReached();
+            }
+            if (currStripChat.getCamInfo().getGoal().getLeft() != stripChatReader.getCamInfo().getGoal().getLeft()) {
 
-                if (stripChatReader.getCamInfo().getGoal() == null || stripChatReader.getCamInfo().getGoal().getLeft() == 0 ||
-                        (!Objects.equals(currStripChat.getCamInfo().getGoal().getDescription(), stripChatReader.getCamInfo().getGoal().getDescription()))) {
-
-                    Logger.stripLog(" ✅ " + currStripChat.getUserInfo().getUser().getUsername() +
-                            " Ziel erreicht: " + currStripChat.getCamInfo().getGoal().getDescription() + " -> " + stripChatReader.getUrl(),stripChatReader);
-                    SoundPlayer.playReached();
-                } else if (currStripChat.getCamInfo().getGoal().getLeft() != stripChatReader.getCamInfo().getGoal().getLeft()) {
-
-                    Logger.stripLog(" 🎯 " + currStripChat.getUserInfo().getUser().getUsername() +
-                            " Aktuelles Ziel:" + stripChatReader.getCamInfo().getGoal().getDescription() + " [" +
-                            stripChatReader.getCamInfo().getGoal().getLeft() + " Token übrig] User gab " +
-                            (stripChatReader.getCamInfo().getGoal().getSpent() - currStripChat.getCamInfo().getGoal().getSpent()) + " Tokens",stripChatReader);
-                }
-                currStripChat.getCamInfo().setGoal(stripChatReader.getCamInfo().getGoal());
+                Logger.stripLog("🎯 " + currStripChat.getUserInfo().getUser().getUsername() +
+                        " Aktuelles Ziel:" + stripChatReader.getCamInfo().getGoal().getDescription() + " [" +
+                        stripChatReader.getCamInfo().getGoal().getLeft() + " Token übrig] User gab " +
+                        (stripChatReader.getCamInfo().getGoal().getSpent() - currStripChat.getCamInfo().getGoal().getSpent()) + " Tokens", stripChatReader);
+                currStripChat.getCamInfo().getGoal().setLeft(stripChatReader.getCamInfo().getGoal().getLeft());
             }
         }
     }

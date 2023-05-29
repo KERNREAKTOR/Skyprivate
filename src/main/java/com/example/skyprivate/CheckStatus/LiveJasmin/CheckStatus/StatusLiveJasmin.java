@@ -2,6 +2,7 @@ package com.example.skyprivate.CheckStatus.LiveJasmin.CheckStatus;
 
 import com.example.skyprivate.CheckStatus.LiveJasmin.LiveJasminReader;
 import com.example.skyprivate.Logger;
+import com.example.skyprivate.SoundPlayer;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -32,9 +33,11 @@ public class StatusLiveJasmin {
             switch (liveJasminReader.getPerformerInfo().getOriginalStatus()) {
                 case 0 ->
                         Logger.jasminLog("🔴 " + liveJasminReader.getPerformerInfo().getDisplay_name() + " ist Offline", liveJasminReader);
-                case 1 ->
-                        Logger.jasminLog("📺 " + liveJasminReader.getPerformerInfo().getDisplay_name() + " ist jetzt LIVE -> " +
-                                liveJasminReader.getUrl(), liveJasminReader);
+                case 1 -> {
+                    Logger.jasminLog("📺 " + liveJasminReader.getPerformerInfo().getDisplay_name() + " ist jetzt LIVE -> " +
+                            liveJasminReader.getUrl(), liveJasminReader);
+                    SoundPlayer.playOnline();
+                }
                 case 2 ->
                         Logger.jasminLog("👁 " + liveJasminReader.getPerformerInfo().getDisplay_name() + " ist in einer Privatshow -> " +
                                 liveJasminReader.getUrl(), liveJasminReader);

@@ -2,6 +2,7 @@ package com.example.skyprivate.CheckStatus.BongaCams.CheckStatus;
 
 import com.example.skyprivate.CheckStatus.BongaCams.BongaReader;
 import com.example.skyprivate.Logger;
+import com.example.skyprivate.SoundPlayer;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -56,6 +57,7 @@ public class StatusBongaCams {
                 Logger.bongaLog("🔴 " + bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist offline", bongaReader);
             } else {
                 Logger.bongaLog("🟢 " + bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist Online", bongaReader);
+                SoundPlayer.playOnline();
             }
             currBonga.getResult().getChatShowStatusOptions().setOffline(bongaReader.getResult().getChatShowStatusOptions().isOffline());
         }
@@ -186,6 +188,7 @@ public class StatusBongaCams {
                     }
                 }
                 Logger.bongaLog("📺 " + bongaReader.getHistory().getDisplayName() + " ist Live! -> " + bongaReader.getPerformerURL() + " " + pvt, bongaReader);
+                SoundPlayer.playOnline();
             } else {
                 Logger.bongaLog("💔 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live!", bongaReader);
             }
