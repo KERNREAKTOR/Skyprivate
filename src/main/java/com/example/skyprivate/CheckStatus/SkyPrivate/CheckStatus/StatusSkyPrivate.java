@@ -2,6 +2,7 @@ package com.example.skyprivate.CheckStatus.SkyPrivate.CheckStatus;
 
 import com.example.skyprivate.Logger;
 import com.example.skyprivate.CheckStatus.SkyPrivate.SkyPrivateReader;
+import com.example.skyprivate.SoundPlayer;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -15,6 +16,7 @@ public class StatusSkyPrivate {
             } else {
                 Logger.SkyLog("🟢 " + skyPrivateReader.getUserName() + " ist " + skyPrivateReader.getOnlineStatus() +
                         " -> " + skyPrivateReader.getUrl() + "(" + skyPrivateReader.getPricePerMinute() + "$ pro Minute)", skyPrivateReader);
+                SoundPlayer.playOnline();
             }
             currSkyPrivate.setOnlineStatus(skyPrivateReader.getOnlineStatus());
         }

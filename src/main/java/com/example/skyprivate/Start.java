@@ -113,8 +113,8 @@ public class Start {
                     StatusBongaCams.bongaIsPrivatChat(currBonga, bongaReader);
                     StatusBongaCams.bongaIsFullPrivatChat(currBonga, bongaReader);
                     StatusBongaCams.bongaIsOnline(currBonga, bongaReader);
-                    StatusBongaCams.bongaCheckJSONHistory(currBonga,bongaReader);
-                    StatusBongaCams.bongaCheckJSONResult(currBonga,bongaReader);
+                    StatusBongaCams.bongaCheckJSONHistory(currBonga, bongaReader);
+                    StatusBongaCams.bongaCheckJSONResult(currBonga, bongaReader);
                 }
 
             } catch (Exception e) {
@@ -203,17 +203,19 @@ public class Start {
             stripChatReader.getUserInfo().getUser().setLive(false);
             stripChatReader.getUserInfo().getUser().setOnline(false);
             stripChatReader.setPerformerMode(StripChatReader.PerformerMode.OFFLINE);
+            stripChatReader.getCamInfo().getGoal().setLeft(-1);
             currStripChatPerformer.add(stripChatReader);
         }
 
         Runnable stripChatChecker = () -> {
             // Hier können Sie Ihre Funktion aufrufen
             try {
-                for (StripChatReader currPerformer:currStripChatPerformer){
+                for (StripChatReader currPerformer : currStripChatPerformer) {
                     StripChatReader stripChatReader = new StripChatReader(currPerformer.getUserInfo().getUser().getUsername());
-                    StatusStripChat.stripChatOnlineStatus(currPerformer,stripChatReader);
-                    StatusStripChat.stripChatLiveStatus(currPerformer,stripChatReader);
-                    StatusStripChat.stripChatPerformerMode(currPerformer,stripChatReader);
+                    StatusStripChat.stripChatOnlineStatus(currPerformer, stripChatReader);
+                    StatusStripChat.stripChatLiveStatus(currPerformer, stripChatReader);
+                    StatusStripChat.stripChatPerformerMode(currPerformer, stripChatReader);
+                    StatusStripChat.stripChatGoal(currPerformer,stripChatReader);
                 }
 
                 getStripMode(stripUrls, curStripMode);
@@ -262,24 +264,6 @@ public class Start {
 
             if (stripStartFollower.get(i) == 0) {
                 stripStartFollower.set(i, stripChatReader.getUserInfo().getUser().getFavoritedCount());
-            }
-
-            if (stripChatReader.getUserInfo().getUser().isLive()) {
-
-                if (currStripChatPerformer.get(i).getCamInfo().getGoal() != stripChatReader.getCamInfo().getGoal()) {
-
-                    if (currStripChatPerformer.get(i).getCamInfo().getGoal() == null) {
-                        currStripChatPerformer.get(i).getCamInfo().setGoal(stripChatReader.getCamInfo().getGoal());
-                    }
-
-                    if (stripChatReader.getCamInfo().getGoal() == null || stripChatReader.getCamInfo().getGoal().getLeft() == 0) {
-                        Logger.log(" ✅ " + currStripChatPerformer.get(i).getUserInfo().getUser().getUsername() + " Ziel erreicht: " + currStripChatPerformer.get(i).getCamInfo().getGoal().getDescription() + " -> " + stripChatReader.getUrl());
-                    } else if (currStripChatPerformer.get(i).getCamInfo().getGoal().getLeft() != stripChatReader.getCamInfo().getGoal().getLeft()) {
-
-                        Logger.log(" 🎯 " + currStripChatPerformer.get(i).getUserInfo().getUser().getUsername() + " Aktuelles Ziel:" + stripChatReader.getCamInfo().getGoal().getDescription() + " [" + stripChatReader.getCamInfo().getGoal().getLeft() + " Token übrig] User gab " + (stripChatReader.getCamInfo().getGoal().getSpent() - currStripChatPerformer.get(i).getCamInfo().getGoal().getSpent()) + " Tokens");
-                    }
-                    currStripChatPerformer.get(i).getCamInfo().setGoal(stripChatReader.getCamInfo().getGoal());
-                }
             }
 
             if (stripChatReader.getUserInfo().getCurrPosition() != currStripChatPerformer.get(i).getUserInfo().getCurrPosition()) {
