@@ -1,4 +1,4 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.LiveJasmin;
 
 import com.google.gson.Gson;
 import org.json.JSONObject;
@@ -10,21 +10,31 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class LiveJasminReader {
-    public LivejasminData getPerformerInfo() {
+    public LiveJasminData getPerformerInfo() {
         return performerInfo;
     }
 
-    public void setPerformerInfo(LivejasminData performerInfo) {
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    private String url;
+    public void setPerformerInfo(LiveJasminData performerInfo) {
         this.performerInfo = performerInfo;
     }
 
-    private LivejasminData performerInfo;
+    private LiveJasminData performerInfo;
    public LiveJasminReader(String performerName) throws IOException {
        String stringLJ = getLJStringBuilder("https://www.livejasmin.com/de/flash/get-performer-details/" + performerName).toString();
        JSONObject jsonJasmin = new JSONObject(stringLJ).getJSONObject("data");
 
        Gson gson = new Gson();
-       setPerformerInfo(gson.fromJson(jsonJasmin.toString(), LivejasminData.class));
+       setPerformerInfo(gson.fromJson(jsonJasmin.toString(), LiveJasminData.class));
+       setUrl("https://www.livejasmin.com/" + performerName);
     }
     private static StringBuilder getLJStringBuilder(String url) throws IOException {
         // HTML-Datei herunterladen

@@ -1,27 +1,8 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.LiveJasmin;
 
 import java.math.BigDecimal;
-class LiveJasminAchievement{
-    public int getLevel() {
-        return level;
-    }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    private int level, points;
-}
-
-public class LivejasminData {
+public class LiveJasminData {
     private String public_show_status, become_online_at, has_event_show, p_id, profile_picture_url, toy_connection_status,
             display_name, performer_id;
     private Integer is_on_private, has_vip_show, status, rate_average, has_hot_show, person_age, last_activity_time,

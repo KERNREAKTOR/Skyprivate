@@ -1,4 +1,4 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.StripChat;
 
 public class StripChatGoal {
     private int goal, left, spent;

@@ -1,4 +1,4 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.StripChat;
 
 public class StripChatUser {
     private boolean isStudioAdmin, hasNonNudeProfileAccess, isSubscribed;

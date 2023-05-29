@@ -1,5 +1,6 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.StripChat;
 
+import com.example.skyprivate.Logger;
 import com.google.gson.Gson;
 import org.json.JSONObject;
 
@@ -7,7 +8,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -167,7 +167,7 @@ public class StripChatReader {
         this.performerMode = performerMode;
     }
 
-    enum PerformerMode {
+    public enum PerformerMode {
         PRIVATE,
         VIRTUAL_PRIVATE,
         EXCLUSIVE_PRIVATE,

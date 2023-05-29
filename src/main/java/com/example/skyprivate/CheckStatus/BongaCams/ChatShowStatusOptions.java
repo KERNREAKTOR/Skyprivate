@@ -1,35 +1,10 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.BongaCams;
 
-class ChatTopicOptions{
-    private boolean isAvailable;
+public class ChatShowStatusOptions {
+    private boolean isGroupPrivatChat, isAvailable, rtAvailable, isQoQWinner, isOffline, isFullPrivatChat, isPrivatChat,
+            isVipShow;
+    private String displayName;
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
-    public void setAvailable(boolean available) {
-        isAvailable = available;
-    }
-
-    public String getCurrentTopic() {
-        return currentTopic;
-    }
-
-    public void setCurrentTopic(String currentTopic) {
-        this.currentTopic = currentTopic;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    private String currentTopic,displayName;
-}
-class ShowStatus{
     public boolean isGroupPrivatChat() {
         return isGroupPrivatChat;
     }
@@ -102,28 +77,18 @@ class ShowStatus{
         this.displayName = displayName;
     }
 
-    private boolean isGroupPrivatChat, isAvailable, rtAvailable, isQoQWinner, isOffline, isFullPrivatChat, isPrivatChat,
-            isVipShow;
-    private String displayName;
-}
-public class BongaChat {
-    public ShowStatus getChatShowStatusOptions() {
-        return chatShowStatusOptions;
+    @Override
+    public String toString() {
+        return "ChatShowStatusOptions{" +
+                "isGroupPrivatChat=" + isGroupPrivatChat +
+                ", isAvailable=" + isAvailable +
+                ", rtAvailable=" + rtAvailable +
+                ", isQoQWinner=" + isQoQWinner +
+                ", isOffline=" + isOffline +
+                ", isFullPrivatChat=" + isFullPrivatChat +
+                ", isPrivatChat=" + isPrivatChat +
+                ", isVipShow=" + isVipShow +
+                ", displayName='" + displayName + '\'' +
+                '}';
     }
-
-    public void setChatShowStatusOptions(ShowStatus chatShowStatusOptions) {
-        this.chatShowStatusOptions = chatShowStatusOptions;
-    }
-
-    private ShowStatus chatShowStatusOptions;
-
-    public ChatTopicOptions getChatTopicOptions() {
-        return chatTopicOptions;
-    }
-
-    public void setChatTopicOptions(ChatTopicOptions chatTopicOptions) {
-        this.chatTopicOptions = chatTopicOptions;
-    }
-
-    private ChatTopicOptions chatTopicOptions;
 }

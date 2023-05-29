@@ -1,4 +1,4 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.StripChat;
 
 public class StripChatKingInfo {
     private int kingId, selfAmount, kingAmount, fanClubNumberMonthsOfSubscribed;

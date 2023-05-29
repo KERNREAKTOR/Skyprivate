@@ -5,10 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.0.3">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaChat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/ChatShowStatusOptions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/ChatTopicOptions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/Chat_show_invite.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/CheckStatus/StatusBongaCams.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/Full_private_chat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/Group_chat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/PrivatePopupOptions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/Private_chat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/TipPopupOptions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/Voyeur_chat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/LiveJasmin/CheckStatus/StatusLiveJasmin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/LiveJasmin/LiveJasminAchievement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/SkyPrivate/CheckStatus/StatusSkyPrivate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/CheckStatus/StatusStripChat.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaChat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaChat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaChat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/LiveJasminReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/LiveJasmin/LiveJasminReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/LivejasminData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/LiveJasmin/LiveJasminData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Logger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/SkyPrivateReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/SkyPrivate/SkyPrivateReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/SocialLinks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/SocialLinks.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatCam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/StripChatCam.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatCamUserUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/StripChatCamUserUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatGoal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/StripChatGoal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatKingInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/StripChatKingInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/StripChatReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/StripChatUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/StripChatUser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +52,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2P67VhJTPaPV9jv5Qhg4gvEcZ7E" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -74,7 +104,7 @@
       <module name="skyprivate" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.example.skyprivate.*" />
+          <option name="PATTERN" value="com.example.skyprivate.CheckStatus.BongaCams.CheckStatus.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -154,8 +184,26 @@
       <option name="project" value="LOCAL" />
       <updated>1685050172035</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Skyprivate 1.0.3">
+      <created>1685135714354</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1685135714354</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Skyprivate" />
@@ -165,15 +213,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Skyprivate 1.0.3" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaReader.java</url>
-          <line>120</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.json.JSONArray" memberName="myArrayList" />

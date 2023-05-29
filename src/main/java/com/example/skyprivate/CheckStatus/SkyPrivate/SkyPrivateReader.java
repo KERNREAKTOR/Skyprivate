@@ -1,4 +1,4 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.SkyPrivate;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -51,7 +51,7 @@ public class SkyPrivateReader {
         setOnlineStatus(getResult(doc, "span.profile-picture__status"));
 
         //Profilinformationen
-        //Age 18 Sex Female Location medellin, Colombia Sexual orientation Bisexual Speaks English Eyes Black Hair Black Constitution Athletic Height 168 cm Weight 52 Kg Twitter Scofty_s Category Regular Tags anal, female, bigass, pretty, pink, glamour, soft, kitty
+        //Age 18 Sex Female Location Medellin, Colombia Sexual orientation Bisexual Speaks English Eyes Black Hair Black Constitution Athletic Height 168 cm Weight 52 Kg Twitter Scofty_s Category Regular Tags anal, female, bigass, pretty, pink, glamour, soft, kitty
         String test = getResult(doc, "div.profile__dl");
     }
 

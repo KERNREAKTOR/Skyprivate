@@ -1,4 +1,4 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.StripChat;
 
 public class StripChatCamUserUser {
     private String genderDoc, previewUrl, broadcastServer, broadcastGender, interestedIn, offlineStatusUpdatedAt,

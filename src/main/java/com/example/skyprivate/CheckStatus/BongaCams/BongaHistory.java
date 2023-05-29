@@ -1,4 +1,4 @@
-package com.example.skyprivate;
+package com.example.skyprivate.CheckStatus.BongaCams;
 
 public class BongaHistory {
     private String username, gender, displayName, profileAvatarUrl, profileAvatarUrlMedium, profileAvatarUrlSmall;
