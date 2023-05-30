@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Start {
-    private static final ArrayList<Integer> stripStartFollower = new ArrayList<>();
+    private static final ArrayList<StripChatReader> stripStartFollower = new ArrayList<>();
     private static final ArrayList<StripChatReader> currStripChatPerformer = new ArrayList<>();
     private static final ArrayList<LiveJasminReader> currLiveJasminPerformer = new ArrayList<>();
     private static final ArrayList<SkyPrivateReader> currSkyPerformer = new ArrayList<>();
@@ -86,6 +86,7 @@ public class Start {
 
         ArrayList<String> bongaPerformer = new ArrayList<>();
         bongaPerformer.add("scoftyss");
+        bongaPerformer.add("deewhite");
 
         for (String curPerformer : bongaPerformer) {
             BongaReader bongaReader = new BongaReader(curPerformer);
@@ -100,10 +101,10 @@ public class Start {
 
                 for (BongaReader currBonga : currBongaPerformer) {
                     BongaReader bongaReader = new BongaReader(currBonga.getHistory().getUsername());
-                    if (!Objects.equals(currBonga.getResult().getTipPopupOptions().toString(), bongaReader.getResult().getTipPopupOptions().toString())) {
-                        Logger.bongaLog(bongaReader.getResult().getTipPopupOptions().toString(), bongaReader);
-                        currBonga.getResult().setTipPopupOptions(bongaReader.getResult().getTipPopupOptions());
-                    }
+//                    if (!Objects.equals(currBonga.getResult().getTipPopupOptions().toString(), bongaReader.getResult().getTipPopupOptions().toString())) {
+//                        Logger.bongaLog(bongaReader.getResult().getTipPopupOptions().toString(), bongaReader);
+//                        currBonga.getResult().setTipPopupOptions(bongaReader.getResult().getTipPopupOptions());
+//                    }
 
                     StatusBongaCams.bongaCurrentTopic(currBonga, bongaReader);
                     StatusBongaCams.bongaIsAvailable(currBonga, bongaReader);
@@ -195,11 +196,13 @@ public class Start {
         stripUrls.add("Alexsaeli");
         stripUrls.add("Sheila_7");
         stripUrls.add("judith_cute");
+        stripUrls.add("jasminesummer");
 
         for (String url : stripUrls) {
             curStripMode.add(StripChatReader.PerformerMode.UNKNOWN);
-            stripStartFollower.add(0);
+
             StripChatReader stripChatReader = new StripChatReader(url);
+            stripStartFollower.add(stripChatReader);
             stripChatReader.getUserInfo().getUser().setLive(false);
             stripChatReader.getUserInfo().getUser().setOnline(false);
             stripChatReader.setPerformerMode(StripChatReader.PerformerMode.OFFLINE);
@@ -262,10 +265,6 @@ public class Start {
                 }
             }
 
-            if (stripStartFollower.get(i) == 0) {
-                stripStartFollower.set(i, stripChatReader.getUserInfo().getUser().getFavoritedCount());
-            }
-
             if (stripChatReader.getUserInfo().getCurrPosition() != currStripChatPerformer.get(i).getUserInfo().getCurrPosition()) {
                 Logger.log(" 🏆 " + currStripChatPerformer.get(i).getUserInfo().getUser().getUsername() + " ist von Platz "
                         + currStripChatPerformer.get(i).getUserInfo().getCurrPosition() + " auf Platz " +
@@ -288,17 +287,27 @@ public class Start {
         if (firstStart) {
             firstStart = false;
         } else {
+            int i =0;
 
             for (StripChatReader chatReader : currStripChatPerformer) {
                 StripChatReader stripChatReader = new StripChatReader(chatReader.getUserInfo().getUser().getUsername());
                 if (chatReader.getUserInfo().getUser().getFavoritedCount() != stripChatReader.getUserInfo().getUser().getFavoritedCount()) {
                     if (chatReader.getUserInfo().getUser().getFavoritedCount() > stripChatReader.getUserInfo().getUser().getFavoritedCount()) {
-                        Logger.log(" ➖ " + chatReader.getUserInfo().getUser().getUsername() + " hat " + (chatReader.getUserInfo().getUser().getFavoritedCount() - stripChatReader.getUserInfo().getUser().getFavoritedCount()) + " Follower verloren! Sie hat jetzt insgesamt " + stripChatReader.getUserInfo().getUser().getFavoritedCount() + " Follower. (" + (stripChatReader.getUserInfo().getUser().getFavoritedCount() - chatReader.getUserInfo().getUser().getFavoritedCount()) + " neue Follower dazubekommen)");
+                        Logger.log(" ➖ " + chatReader.getUserInfo().getUser().getUsername() + " hat " +
+                                (chatReader.getUserInfo().getUser().getFavoritedCount() - stripChatReader.getUserInfo().getUser().getFavoritedCount()) +
+                                " Follower verloren! Sie hat jetzt insgesamt " + stripChatReader.getUserInfo().getUser().getFavoritedCount() +
+                                " Follower. (" + (stripChatReader.getUserInfo().getUser().getFavoritedCount() - stripStartFollower.get(i).getUserInfo().getUser().getFavoritedCount()) +
+                                " neue Follower dazubekommen)");
                     } else {
-                        Logger.log(" ➕ " + chatReader.getUserInfo().getUser().getUsername() + " hat " + (stripChatReader.getUserInfo().getUser().getFavoritedCount() - chatReader.getUserInfo().getUser().getFavoritedCount()) + " Follower dazu bekommen! Sie hat jetzt insgesamt " + stripChatReader.getUserInfo().getUser().getFavoritedCount() + " Follower. (" + (stripChatReader.getUserInfo().getUser().getFavoritedCount() - chatReader.getUserInfo().getUser().getFavoritedCount()) + " neue Follower dazubekommen)");
+                        Logger.log(" ➕ " + chatReader.getUserInfo().getUser().getUsername() + " hat " +
+                                (stripChatReader.getUserInfo().getUser().getFavoritedCount() - chatReader.getUserInfo().getUser().getFavoritedCount()) +
+                                " Follower dazu bekommen! Sie hat jetzt insgesamt " + stripChatReader.getUserInfo().getUser().getFavoritedCount() +
+                                " Follower. (" + (stripChatReader.getUserInfo().getUser().getFavoritedCount() - stripStartFollower.get(i).getUserInfo().getUser().getFavoritedCount()) +
+                                " neue Follower dazubekommen)");
                     }
                     chatReader.getUserInfo().getUser().setFavoritedCount(stripChatReader.getUserInfo().getUser().getFavoritedCount());
                 }
+                i=i+1;
             }
         }
     }

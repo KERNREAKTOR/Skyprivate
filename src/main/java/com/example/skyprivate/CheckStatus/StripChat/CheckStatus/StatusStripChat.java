@@ -61,20 +61,20 @@ public class StatusStripChat {
     public static void stripChatGoal(StripChatReader currStripChat, StripChatReader stripChatReader) throws IOException {
         if (stripChatReader.getUserInfo().getUser().isLive()) {
 
-            if (stripChatReader.getCamInfo().getGoal() == null || stripChatReader.getCamInfo().getGoal().getLeft() == 0 ||
-                    (!Objects.equals(currStripChat.getCamInfo().getGoal().getDescription(), stripChatReader.getCamInfo().getGoal().getDescription()))) {
 
-                Logger.stripLog("✅ " + currStripChat.getUserInfo().getUser().getUsername() +
-                        " Ziel erreicht: " + currStripChat.getCamInfo().getGoal().getDescription() + " -> " + stripChatReader.getUrl(), stripChatReader);
-                SoundPlayer.playReached();
-            }
             if (currStripChat.getCamInfo().getGoal().getLeft() != stripChatReader.getCamInfo().getGoal().getLeft()) {
+                if (stripChatReader.getCamInfo().getGoal() == null || stripChatReader.getCamInfo().getGoal().getLeft() == 0 ||
+                        (!Objects.equals(currStripChat.getCamInfo().getGoal().getDescription(), stripChatReader.getCamInfo().getGoal().getDescription()))) {
 
+                    Logger.stripLog("✅ " + currStripChat.getUserInfo().getUser().getUsername() +
+                            " Ziel erreicht: " + currStripChat.getCamInfo().getGoal().getDescription() + " -> " + stripChatReader.getUrl(), stripChatReader);
+                    SoundPlayer.playReached();
+                }
                 Logger.stripLog("🎯 " + currStripChat.getUserInfo().getUser().getUsername() +
                         " Aktuelles Ziel:" + stripChatReader.getCamInfo().getGoal().getDescription() + " [" +
                         stripChatReader.getCamInfo().getGoal().getLeft() + " Token übrig] User gab " +
                         (stripChatReader.getCamInfo().getGoal().getSpent() - currStripChat.getCamInfo().getGoal().getSpent()) + " Tokens", stripChatReader);
-                currStripChat.getCamInfo().getGoal().setLeft(stripChatReader.getCamInfo().getGoal().getLeft());
+                currStripChat.getCamInfo().setGoal(stripChatReader.getCamInfo().getGoal());
             }
         }
     }
