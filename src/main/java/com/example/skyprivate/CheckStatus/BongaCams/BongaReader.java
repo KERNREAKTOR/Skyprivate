@@ -14,6 +14,16 @@ import java.util.Objects;
 
 public class BongaReader {
     private BongaHistory history;
+
+    public String getVid() {
+        return vid;
+    }
+
+    public void setVid(String vid) {
+        this.vid = vid;
+    }
+
+    private String vid;
     private BongaChat result;
     private String performerURL;
     private String jsonHistory;
@@ -39,7 +49,14 @@ public class BongaReader {
     public BongaReader() {
 
     }
-
+public String getVideoUrl() throws IOException {
+    String bongaContent = String.valueOf(getStringBuilder("https://bongacams.com/tools/listing_v3.php?chathost=" + getHistory().getUsername() +"&_nav=1"));
+    JSONObject jsonBonga = new JSONObject(bongaContent);
+    //https://live-edge73.bcvcdn.com/hls/stream_Mashulya29/public-aac/stream_Mashulya29/l_1731625_2520000_1260.ts
+    return "https://live-edge" + jsonBonga.getJSONObject("nav").getJSONObject("current").getString("vsid") +
+            ".bcvcdn.com/hls/stream_" + getHistory().getUsername() + "/public-aac/stream_"+
+            getHistory().getUsername() ;
+}
     public BongaReader(String performerName) throws Exception {
 
         String bongaContent = getBongaStringBuilder(performerName);
@@ -76,6 +93,30 @@ public class BongaReader {
 
             gson = new Gson();
             setResult(gson.fromJson(bongaChatShowStatusOptions.toString(), BongaChat.class));
+//            bongaContent = String.valueOf(getStringBuilder("https://bongacams.com/tools/listing_v3.php?chathost=" + getHistory().getDisplayName() +"&_nav=1"));
+//            jsonBonga = new JSONObject(bongaContent);
+//            //if(getHistory().isOnline()){
+//                setVid(jsonBonga.getJSONObject("nav").getJSONObject("current").getString("vsid"));
+//            //}
+//
+//            System.out.println(bongaContent);
+        }
+    }
+
+    public static boolean isFileAvailable(String fileURL) {
+        try {
+            URL url = new URL(fileURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("HEAD");
+
+            // Überprüfe den HTTP-Statuscode
+            int responseCode = connection.getResponseCode();
+
+            // Ein Statuscode von 200 bedeutet, dass die Datei verfügbar ist
+            return responseCode == HttpURLConnection.HTTP_OK;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

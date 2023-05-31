@@ -16,8 +16,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +29,7 @@ public class Start {
     private static final boolean downloadSnapshot = false;
     private static final ArrayList<BongaReader> currBongaPerformer = new ArrayList<>();
     private static boolean firstStart = true;
+    private static String curChuck="";
 
     private static void writefile(String videoUrl) {
 
@@ -74,19 +74,58 @@ public class Start {
         }
 
     }
+    private static List<String> readM3UPlaylist(String playlistContent, String videoUrl) {
+        List<String> fileNames = new ArrayList<>();
+
+        String[] lines = playlistContent.split("\n");
+        for (String line : lines) {
+            if (line.startsWith("l_")) {
+                int commaIndex = line.indexOf('\r');
+                if (commaIndex != -1) {
+                    fileNames.add(videoUrl + "_720/" + line.replace("\r",""));
+                }
+            }
+        }
+
+        return fileNames;
+    }
 
     public static void main(String[] args) throws Exception {
 
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        Set<String> uniqueFileNames = new HashSet<>();
 
         //#############
         //# BongaCams #
         //#############
 
+        Runnable chunkChecker = () -> {
+            try {
+                BongaReader bongaReader = new BongaReader("taanni");
+                String chuckChecker = StatusBongaCams.GetChunks_m3u8( "taanni");
+                if(!Objects.equals(curChuck, chuckChecker)){
+
+                    List<String> fileNames =readM3UPlaylist(chuckChecker, bongaReader.getVideoUrl());
+                    uniqueFileNames.addAll(fileNames);
+                    //StatusBongaCams.DownloadViodeos(uniqueFileNames);
+
+                    curChuck = chuckChecker;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+        Runnable BongaDownloadVideos = () -> {
+            try {
+                StatusBongaCams.DownloadViodeos(uniqueFileNames);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
         ArrayList<String> bongaPerformer = new ArrayList<>();
         bongaPerformer.add("scoftyss");
-        bongaPerformer.add("deewhite");
 
         for (String curPerformer : bongaPerformer) {
             BongaReader bongaReader = new BongaReader(curPerformer);
@@ -196,7 +235,7 @@ public class Start {
         stripUrls.add("Alexsaeli");
         stripUrls.add("Sheila_7");
         stripUrls.add("judith_cute");
-        stripUrls.add("jasminesummer");
+
 
         for (String url : stripUrls) {
             curStripMode.add(StripChatReader.PerformerMode.UNKNOWN);
@@ -232,6 +271,8 @@ public class Start {
         executor.scheduleAtFixedRate(bongaChecker, 0, 15, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(skyPrivateChecker, 0, 30, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(stripChatChecker, 0, 30, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(chunkChecker, 0, 1, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(BongaDownloadVideos,0,2,TimeUnit.SECONDS);
 
         // Weitere Code-Ausführung...
         //https://b-hls-08.doppiocdn.com/hls/59707439/59707439_480p_868_gdf4Qx36VTbNwj4m_1683323192.mp4

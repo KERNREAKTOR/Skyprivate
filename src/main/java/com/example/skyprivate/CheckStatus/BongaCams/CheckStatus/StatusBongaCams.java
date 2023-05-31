@@ -4,8 +4,14 @@ import com.example.skyprivate.CheckStatus.BongaCams.BongaReader;
 import com.example.skyprivate.Logger;
 import com.example.skyprivate.SoundPlayer;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Set;
 
 public class StatusBongaCams {
     public static void bongaCurrentTopic(BongaReader currBonga, BongaReader bongaReader) throws IOException {
@@ -57,7 +63,6 @@ public class StatusBongaCams {
                 Logger.bongaLog("🔴 " + bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist offline", bongaReader);
             } else {
                 Logger.bongaLog("🟢 " + bongaReader.getResult().getChatShowStatusOptions().getDisplayName() + " ist Online", bongaReader);
-                SoundPlayer.playOnline();
             }
             currBonga.getResult().getChatShowStatusOptions().setOffline(bongaReader.getResult().getChatShowStatusOptions().isOffline());
         }
@@ -163,6 +168,80 @@ public class StatusBongaCams {
             currBonga.setJsonTipAfterPrivateOptions(bongaReader.getJsonTipAfterPrivateOptions());
         }
 
+    }
+    private static void writefile(String videoUrl) {
+
+        try {
+            // Erstellen Sie den Ordner für die Ausgabedatei
+            String outputPath = "H:\\BongaCams\\";
+
+            URL url = new URL(videoUrl);
+            Path uriPath = Paths.get(url.getPath());
+            Path finalPath = Paths.get(outputPath, String.valueOf(uriPath.subpath(0, uriPath.getNameCount())));
+
+            File outputDir = new File(finalPath.toString());
+            File Folder = new File(outputDir.getParent());
+
+            if (!Folder.exists()) {
+                Folder.mkdirs();
+            }
+
+            // Erstellen Sie den Dateinamen basierend auf der URL
+            String fileName = videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
+            File outputFile = new File(finalPath.toUri());
+
+            // Öffnen Sie eine Verbindung zur URL und lesen Sie die Daten
+
+
+
+            if(!outputFile.exists()){
+                InputStream inputStream = url.openStream();
+                FileOutputStream outputStream = new FileOutputStream(outputFile);
+
+                byte[] buffer = new byte[4096];
+                int bytesRead = -1;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+
+                // Schließen Sie die Streams
+                inputStream.close();
+                outputStream.close();
+
+                System.out.println(outputFile.toString());
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void DownloadViodeos(Set<String> videoFiles){
+
+
+        for(String curVideo : videoFiles){
+            writefile(curVideo);
+
+        }
+        videoFiles.clear();
+    }
+    public static String GetChunks_m3u8(String performerName) throws Exception {
+        BongaReader bongaReader = new BongaReader(performerName);
+        //https://live-edge73.bcvcdn.com/hls/stream_Mashulya29/public-aac/stream_Mashulya29/chunks.m3u8
+        String fileURL = bongaReader.getVideoUrl() + "_720/chunks.m3u8";
+        StringBuilder content = new StringBuilder();
+        URL url = new URL(fileURL);
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+                content.append(System.lineSeparator());
+            }
+        }
+
+        return content.toString();
     }
 
     public static void bongaIsOnline(BongaReader currBonga, BongaReader bongaReader) throws IOException {
