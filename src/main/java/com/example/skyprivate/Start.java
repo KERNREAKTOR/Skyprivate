@@ -29,7 +29,7 @@ public class Start {
     private static final boolean downloadSnapshot = false;
     private static final ArrayList<BongaReader> currBongaPerformer = new ArrayList<>();
     private static boolean firstStart = true;
-    private static String curChuck="";
+    private static String curChuck = "";
 
     private static void writefile(String videoUrl) {
 
@@ -74,6 +74,7 @@ public class Start {
         }
 
     }
+
     private static List<String> readM3UPlaylist(String playlistContent, String videoUrl) {
         List<String> fileNames = new ArrayList<>();
 
@@ -82,7 +83,7 @@ public class Start {
             if (line.startsWith("l_")) {
                 int commaIndex = line.indexOf('\r');
                 if (commaIndex != -1) {
-                    fileNames.add(videoUrl + "_720/" + line.replace("\r",""));
+                    fileNames.add(videoUrl + "/" + line.replace("\r", ""));
                 }
             }
         }
@@ -94,31 +95,33 @@ public class Start {
 
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        Set<String> uniqueFileNames = new HashSet<>();
+
 
         //#############
         //# BongaCams #
         //#############
-
+        Deque<String> urlQuere = new ArrayDeque<>();
         Runnable chunkChecker = () -> {
             try {
-                BongaReader bongaReader = new BongaReader("taanni");
-                String chuckChecker = StatusBongaCams.GetChunks_m3u8( "taanni");
-                if(!Objects.equals(curChuck, chuckChecker)){
-
-                    List<String> fileNames =readM3UPlaylist(chuckChecker, bongaReader.getVideoUrl());
-                    uniqueFileNames.addAll(fileNames);
-                    //StatusBongaCams.DownloadViodeos(uniqueFileNames);
-
-                    curChuck = chuckChecker;
+                BongaReader bongaReader = new BongaReader("madina3");
+                if (bongaReader.getHistory().isOnline()) {
+                    String chuckChecker = StatusBongaCams.GetChunks_m3u8("madina3");
+                    if (!Objects.equals(curChuck, chuckChecker)) {
+                        Set<String> uniqueFileNames = new HashSet<>(readM3UPlaylist(chuckChecker, bongaReader.getVideoUrl()));
+                        List<String> sortedList = new ArrayList<>(uniqueFileNames);
+                        sortedList.sort(Comparator.naturalOrder());
+                        urlQuere.addAll(sortedList);
+                        uniqueFileNames.clear();
+                        curChuck = chuckChecker;
+                    }
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                Logger.log(e.getMessage());
             }
         };
         Runnable BongaDownloadVideos = () -> {
             try {
-                StatusBongaCams.DownloadViodeos(uniqueFileNames);
+                StatusBongaCams.DownloadViodeos(urlQuere);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -245,7 +248,7 @@ public class Start {
             stripChatReader.getUserInfo().getUser().setLive(false);
             stripChatReader.getUserInfo().getUser().setOnline(false);
             stripChatReader.setPerformerMode(StripChatReader.PerformerMode.OFFLINE);
-            stripChatReader.getCamInfo().getGoal().setLeft(-1);
+            //stripChatReader.getCamInfo().getGoal().setLeft(-1);
             currStripChatPerformer.add(stripChatReader);
         }
 
@@ -257,7 +260,7 @@ public class Start {
                     StatusStripChat.stripChatOnlineStatus(currPerformer, stripChatReader);
                     StatusStripChat.stripChatLiveStatus(currPerformer, stripChatReader);
                     StatusStripChat.stripChatPerformerMode(currPerformer, stripChatReader);
-                    StatusStripChat.stripChatGoal(currPerformer,stripChatReader);
+                    StatusStripChat.stripChatGoal(currPerformer, stripChatReader);
                 }
 
                 getStripMode(stripUrls, curStripMode);
@@ -272,7 +275,7 @@ public class Start {
         executor.scheduleAtFixedRate(skyPrivateChecker, 0, 30, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(stripChatChecker, 0, 30, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(chunkChecker, 0, 1, TimeUnit.SECONDS);
-        executor.scheduleAtFixedRate(BongaDownloadVideos,0,2,TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(BongaDownloadVideos, 0, 2, TimeUnit.SECONDS);
 
         // Weitere Code-Ausführung...
         //https://b-hls-08.doppiocdn.com/hls/59707439/59707439_480p_868_gdf4Qx36VTbNwj4m_1683323192.mp4
@@ -328,7 +331,7 @@ public class Start {
         if (firstStart) {
             firstStart = false;
         } else {
-            int i =0;
+            int i = 0;
 
             for (StripChatReader chatReader : currStripChatPerformer) {
                 StripChatReader stripChatReader = new StripChatReader(chatReader.getUserInfo().getUser().getUsername());
@@ -348,7 +351,7 @@ public class Start {
                     }
                     chatReader.getUserInfo().getUser().setFavoritedCount(stripChatReader.getUserInfo().getUser().getFavoritedCount());
                 }
-                i=i+1;
+                i = i + 1;
             }
         }
     }

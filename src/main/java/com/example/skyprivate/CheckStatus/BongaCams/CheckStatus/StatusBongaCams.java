@@ -8,10 +8,8 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Deque;
 import java.util.Objects;
-import java.util.Set;
 
 public class StatusBongaCams {
     public static void bongaCurrentTopic(BongaReader currBonga, BongaReader bongaReader) throws IOException {
@@ -96,7 +94,8 @@ public class StatusBongaCams {
         }
         currBonga.setJsonHistory(bongaReader.getJsonHistory());
     }
-//    setJsonStreamOptions(bongaChatShowStatusOptions.getJSONObject("streamOptions").toString());
+
+    //    setJsonStreamOptions(bongaChatShowStatusOptions.getJSONObject("streamOptions").toString());
 //    setJsonTipAfterPrivateOptions(bongaChatShowStatusOptions.getJSONObject("tipAfterPrivateOptions").toString());
     public static void bongaCheckJSONResult(BongaReader currBonga, BongaReader bongaReader) throws IOException {
         if (!Objects.equals(currBonga.getJsonChatShowStatusOptions(), bongaReader.getJsonChatShowStatusOptions())) {
@@ -169,6 +168,7 @@ public class StatusBongaCams {
         }
 
     }
+
     private static void writefile(String videoUrl) {
 
         try {
@@ -185,16 +185,11 @@ public class StatusBongaCams {
             if (!Folder.exists()) {
                 Folder.mkdirs();
             }
-
-            // Erstellen Sie den Dateinamen basierend auf der URL
-            String fileName = videoUrl.substring(videoUrl.lastIndexOf("/") + 1);
             File outputFile = new File(finalPath.toUri());
 
             // Öffnen Sie eine Verbindung zur URL und lesen Sie die Daten
 
-
-
-            if(!outputFile.exists()){
+            if (!outputFile.exists()) {
                 InputStream inputStream = url.openStream();
                 FileOutputStream outputStream = new FileOutputStream(outputFile);
 
@@ -208,7 +203,7 @@ public class StatusBongaCams {
                 inputStream.close();
                 outputStream.close();
 
-                System.out.println(outputFile.toString());
+                System.out.println(outputFile);
             }
 
 
@@ -217,19 +212,30 @@ public class StatusBongaCams {
         }
 
     }
-    public static void DownloadViodeos(Set<String> videoFiles){
+
+    public static void DownloadViodeos(Deque<String> videoFiles) {
 
 
-        for(String curVideo : videoFiles){
-            writefile(curVideo);
+//        Deque<String> videoQueue = new ArrayDeque<>();
+//        List<String> vUrls = new ArrayList<>(videoFiles);
+//        videoFiles.clear();
+//        vUrls.sort(Comparator.reverseOrder());
 
+ //       System.out.println(videoFiles.size());
+//        for(String curVideo : vUrls){
+//            videoQueue.push(curVideo);
+//        }
+        while (!videoFiles.isEmpty()) {
+            String curFile = videoFiles.pop();
+            Thread thread = new Thread(() -> writefile(curFile));
+            thread.start();
         }
-        videoFiles.clear();
     }
+
     public static String GetChunks_m3u8(String performerName) throws Exception {
         BongaReader bongaReader = new BongaReader(performerName);
         //https://live-edge73.bcvcdn.com/hls/stream_Mashulya29/public-aac/stream_Mashulya29/chunks.m3u8
-        String fileURL = bongaReader.getVideoUrl() + "_720/chunks.m3u8";
+        String fileURL = bongaReader.getVideoUrl() + "/chunks.m3u8";
         StringBuilder content = new StringBuilder();
         URL url = new URL(fileURL);
 
@@ -240,7 +246,6 @@ public class StatusBongaCams {
                 content.append(System.lineSeparator());
             }
         }
-
         return content.toString();
     }
 

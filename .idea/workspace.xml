@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.1.0">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/SoundPlayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/SoundFile/zapsplat_multimedia_ui_alert_synth_key_001_99758.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/SoundFile/zapsplat_multimedia_ui_chime_tone_simple_004_99764.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_05_2023_22_24__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_05_2023_22_24__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25_05_2023_23_33__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_25_05_2023_23_33__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_05_2023_23_15__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_05_2023_23_15__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2023_13_36__Changes_.xml" beforeDir="false" />
+    <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.1.3">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_05_2023_22_24_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_05_2023_22_24__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/SkyPrivate/CheckStatus/StatusSkyPrivate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/SkyPrivate/CheckStatus/StatusSkyPrivate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/CheckStatus/StatusStripChat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/CheckStatus/StatusStripChat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/CheckStatus/StatusBongaCams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/CheckStatus/StatusBongaCams.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/Start.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,23 +33,23 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "jdk.selected.JAVA_MODULE": "openjdk-20",
-    "last_opened_file_path": "H:/JavaProjects/skyprivate/src/main/resources/com/SoundFile",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-20&quot;,
+    &quot;last_opened_file_path&quot;: &quot;H:/JavaProjects/skyprivate/src/main/resources/com/SoundFile&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.skyprivate" />
@@ -70,6 +65,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.Start">
+    <configuration name="BongaReader" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.skyprivate.CheckStatus.BongaCams.BongaReader" />
+      <module name="skyprivate" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.skyprivate.CheckStatus.BongaCams.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="src.main.java.net.skyprivate.server.Server" />
       <module name="server" />
@@ -99,6 +107,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Start" />
+        <item itemvalue="Application.BongaReader" />
         <item itemvalue="Application.Server" />
       </list>
     </recent_temporary>
@@ -175,7 +184,35 @@
       <option name="project" value="LOCAL" />
       <updated>1685362223795</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Skyprivate 1.1.1">
+      <created>1685384152508</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1685384152509</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Skyprivate 1.1.1">
+      <created>1685395029666</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1685395029666</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Skyprivate 1.1.3">
+      <created>1685481951397</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1685481951397</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Skyprivate 1.1.3">
+      <created>1685561908102</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1685561908102</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -184,7 +221,9 @@
     <MESSAGE value="Skyprivate 1.0.2" />
     <MESSAGE value="Skyprivate 1.0.3" />
     <MESSAGE value="Skyprivate 1.1.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="Skyprivate 1.1.0" />
+    <MESSAGE value="Skyprivate 1.1.1" />
+    <MESSAGE value="Skyprivate 1.1.3" />
+    <option name="LAST_COMMIT_MESSAGE" value="Skyprivate 1.1.3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -193,6 +232,21 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/example/skyprivate/BongaReader.java</url>
           <line>120</line>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaReader.java</url>
+          <line>93</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaReader.java</url>
+          <line>88</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaReader.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -207,6 +261,8 @@
         <watch expression="this" language="JAVA" />
         <watch expression="this" language="JAVA" />
         <watch expression="this" language="JAVA" />
+        <watch expression="((HashMap)jsonBonga.map).entrySet().toArray()[1]" custom="java.util.HashMap" />
+        <watch expression="((HashMap)jsonBonga.map).entrySet().toArray()[1]" custom="java.util.HashMap" />
       </configuration>
     </watches-manager>
   </component>

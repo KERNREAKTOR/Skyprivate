@@ -10,19 +10,21 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Objects;
+import java.util.Queue;
 
 public class BongaReader {
+    public static void main(String[] args) {
+        Deque<String> test = new ArrayDeque<>();
+        test.push("t1");
+        test.push("t3");
+
+        System.out.println(test.pop());
+        System.out.println(test.pop());
+    }
     private BongaHistory history;
-
-    public String getVid() {
-        return vid;
-    }
-
-    public void setVid(String vid) {
-        this.vid = vid;
-    }
-
     private String vid;
     private BongaChat result;
     private String performerURL;
@@ -45,20 +47,10 @@ public class BongaReader {
     private String jsonMiniProfile;
     private String jsonMiniProfileToggleOptions;
     private String jsonStylePanelOptions;
-
     public BongaReader() {
 
     }
-public String getVideoUrl() throws IOException {
-    String bongaContent = String.valueOf(getStringBuilder("https://bongacams.com/tools/listing_v3.php?chathost=" + getHistory().getUsername() +"&_nav=1"));
-    JSONObject jsonBonga = new JSONObject(bongaContent);
-    //https://live-edge73.bcvcdn.com/hls/stream_Mashulya29/public-aac/stream_Mashulya29/l_1731625_2520000_1260.ts
-    return "https://live-edge" + jsonBonga.getJSONObject("nav").getJSONObject("current").getString("vsid") +
-            ".bcvcdn.com/hls/stream_" + getHistory().getUsername() + "/public-aac/stream_"+
-            getHistory().getUsername() ;
-}
     public BongaReader(String performerName) throws Exception {
-
         String bongaContent = getBongaStringBuilder(performerName);
         JSONObject jsonBonga = new JSONObject(bongaContent);
         setJsonHistory(bongaContent);
@@ -195,6 +187,28 @@ public String getVideoUrl() throws IOException {
         connection.disconnect();
 
         return response.toString();
+    }
+
+    public String getVid() {
+        return vid;
+    }
+
+    public void setVid(String vid) {
+        this.vid = vid;
+    }
+
+    public String getVideoUrl() throws IOException {
+
+        String vSID = null;
+        //https://live-edge73.bcvcdn.com/hls/stream_Mashulya29/public-aac/stream_Mashulya29/l_1731625_2520000_1260.ts
+        if (getHistory().isOnline()) {
+            String bongaContent = String.valueOf(getStringBuilder("https://bongacams.com/tools/listing_v3.php?chathost=" + getHistory().getUsername() + "&_nav=1"));
+            JSONObject jsonBonga = new JSONObject(bongaContent);
+            vSID = "https://live-edge" + jsonBonga.getJSONObject("nav").getJSONObject("current").getString("vsid") +
+                    ".bcvcdn.com/hls/stream_" + getHistory().getUsername() + "/public-aac/stream_" +
+                    getHistory().getUsername();
+        }
+        return vSID;
     }
 
     public String getJsonChatShowStatusOptions() {
