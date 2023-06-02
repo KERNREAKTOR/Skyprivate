@@ -103,9 +103,9 @@ public class Start {
         Deque<String> urlQuere = new ArrayDeque<>();
         Runnable chunkChecker = () -> {
             try {
-                BongaReader bongaReader = new BongaReader("madina3");
+                BongaReader bongaReader = new BongaReader("scoftyss");
                 if (bongaReader.getHistory().isOnline()) {
-                    String chuckChecker = StatusBongaCams.GetChunks_m3u8("madina3");
+                    String chuckChecker = StatusBongaCams.GetChunks_m3u8("scoftyss");
                     if (!Objects.equals(curChuck, chuckChecker)) {
                         Set<String> uniqueFileNames = new HashSet<>(readM3UPlaylist(chuckChecker, bongaReader.getVideoUrl()));
                         List<String> sortedList = new ArrayList<>(uniqueFileNames);
@@ -275,7 +275,7 @@ public class Start {
         executor.scheduleAtFixedRate(skyPrivateChecker, 0, 30, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(stripChatChecker, 0, 30, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(chunkChecker, 0, 1, TimeUnit.SECONDS);
-        executor.scheduleAtFixedRate(BongaDownloadVideos, 0, 2, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(BongaDownloadVideos, 0, 1, TimeUnit.SECONDS);
 
         // Weitere Code-Ausführung...
         //https://b-hls-08.doppiocdn.com/hls/59707439/59707439_480p_868_gdf4Qx36VTbNwj4m_1683323192.mp4

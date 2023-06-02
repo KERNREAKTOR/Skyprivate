@@ -8,6 +8,8 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Deque;
 import java.util.Objects;
 
@@ -173,20 +175,19 @@ public class StatusBongaCams {
 
         try {
             // Erstellen Sie den Ordner für die Ausgabedatei
-            String outputPath = "H:\\BongaCams\\";
+            String outputPath = "C:\\BongaCams\\";
 
             URL url = new URL(videoUrl);
             Path uriPath = Paths.get(url.getPath());
             Path finalPath = Paths.get(outputPath, String.valueOf(uriPath.subpath(0, uriPath.getNameCount())));
 
             File outputDir = new File(finalPath.toString());
-            File Folder = new File(outputDir.getParent());
+            File Folder = new File(outputDir.getParent()+ "\\" + StatusBongaCams.getLastOnline());
 
             if (!Folder.exists()) {
                 Folder.mkdirs();
             }
-            File outputFile = new File(finalPath.toUri());
-
+            File outputFile = new File(Folder + "\\" + finalPath.getFileName());
             // Öffnen Sie eine Verbindung zur URL und lesen Sie die Daten
 
             if (!outputFile.exists()) {
@@ -249,6 +250,15 @@ public class StatusBongaCams {
         return content.toString();
     }
 
+    public static String getLastOnline() {
+        return lastOnline;
+    }
+
+    public static void setLastOnline(String lastOnline) {
+        StatusBongaCams.lastOnline = lastOnline;
+    }
+
+    private static String lastOnline;
     public static void bongaIsOnline(BongaReader currBonga, BongaReader bongaReader) throws IOException {
         if (currBonga.getHistory().isOnline() != bongaReader.getHistory().isOnline()) {
             if (bongaReader.getHistory().isOnline()) {
@@ -272,6 +282,8 @@ public class StatusBongaCams {
                     }
                 }
                 Logger.bongaLog("📺 " + bongaReader.getHistory().getDisplayName() + " ist Live! -> " + bongaReader.getPerformerURL() + " " + pvt, bongaReader);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+                setLastOnline(sdf.format(new Date()));
                 SoundPlayer.playOnline();
             } else {
                 Logger.bongaLog("💔 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live!", bongaReader);
