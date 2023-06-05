@@ -60,7 +60,7 @@ public class BongaReader {
             setHistory(gson.fromJson(jsonBonga.getJSONObject("result").getJSONArray("history").get(0).toString(), BongaHistory.class));
             setPerformerURL("https://bongacams.com/" + performerName);
 
-            bongaContent = String.valueOf(getStringBuilder("https://bongacams.com/get-member-chat-data?username=" + getHistory().getUsername()));
+            bongaContent = String.valueOf(getStringBuilder("https://bongacams.com/get-member-chat-data?username=" + performerName));
             setJsonResult(bongaContent);
             JSONObject bongaChatShowStatusOptions = new JSONObject(bongaContent).getJSONObject("result");
             //System.out.println(bongaChatShowStatusOptions.getJSONObject("miniProfileV2"));
