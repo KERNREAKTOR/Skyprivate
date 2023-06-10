@@ -12,8 +12,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class BongaServer {
-    private static final String bongaPerformer = "flirtymarin1";
-    private static String finalChunkList;
+    private static final String bongaPerformer = "girl-pleasure";
     private static String finalStreamUrl = null;
 
     private static List<String> readM3UPlaylist(String playlistContent, String videoUrl) {
@@ -53,7 +52,6 @@ public class BongaServer {
                 System.out.println(curRes);
                 assert chunkList != null;
                 streamUrl = streamUrl.split("playlist.m3u8")[0] + chunkList.split("chunks.m3u8")[0];
-                finalChunkList = chunkList;
                 finalStreamUrl = streamUrl;
             }
         }
@@ -114,20 +112,20 @@ public class BongaServer {
                 isLive = bongaReader.getHistory().isOnline();
                 if (curLive[0] == null) {
                     if (isLive) {
-                        Logger.bongaLog("🟢 " + bongaReader.getHistory().getUsername() + " ist Live.", bongaReader);
+                        Logger.bongaLog("🟢 " + bongaReader.getHistory().getDisplayName() + " ist Live.", bongaReader);
 
                     } else {
-                        Logger.bongaLog("🔴 " + bongaReader.getHistory().getUsername() + " ist nicht Live.", bongaReader);
+                        Logger.bongaLog("🔴 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live.", bongaReader);
                     }
                     curLive[0] = isLive;
                 }
 
                 if (isLive != curLive[0]) {
                     if (isLive) {
-                        Logger.bongaLog("🟢 " + bongaReader.getHistory().getUsername() + " ist Live.", bongaReader);
+                        Logger.bongaLog("🟢 " + bongaReader.getHistory().getDisplayName() + " ist Live.", bongaReader);
 
                     } else {
-                        Logger.bongaLog("🔴 " + bongaReader.getHistory().getUsername() + " ist nicht Live.", bongaReader);
+                        Logger.bongaLog("🔴 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live.", bongaReader);
                     }
                     curLive[0] = isLive;
                 }
