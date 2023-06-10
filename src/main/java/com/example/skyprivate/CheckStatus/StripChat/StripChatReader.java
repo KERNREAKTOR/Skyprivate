@@ -23,6 +23,8 @@ public class StripChatReader {
         //https://img.strpst.com/thumbs/snapshotTimestamp/id_webp
         //https://img.strpst.com/thumbs/1684348230/70251310_webp
         String jsonCamUrl = "https://de.stripchat.com/api/front/v2/models/username/" + username + "/cam";
+        //String PvtChat = "https://de.stripchat.com/api/front/users/34994583/conversations/74318307?beforeMessageId=5782999262";
+        //JSONObject jsonPvtChat = new JSONObject(getStringBuilder(PvtChat).toString());
         //String jsonChatUrl = "https://de.stripchat.com/api/front/v2/models/username/" + username + "/chat";
         JSONObject jsonCam = new JSONObject(getStringBuilder(jsonCamUrl).toString());
 

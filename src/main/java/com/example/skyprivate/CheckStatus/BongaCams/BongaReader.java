@@ -210,6 +210,18 @@ public class BongaReader {
         }
         return vSID;
     }
+    public String getPlayList() throws IOException {
+
+        String vSID = null;
+        //https://live-edge73.bcvcdn.com/hls/stream_Mashulya29/public-aac/stream_Mashulya29/l_1731625_2520000_1260.ts
+        if (getHistory().isOnline()) {
+            String bongaContent = String.valueOf(getStringBuilder("https://bongacams.com/tools/listing_v3.php?chathost=" + getHistory().getUsername() + "&_nav=1"));
+            JSONObject jsonBonga = new JSONObject(bongaContent);
+            vSID = "https://live-edge" + jsonBonga.getJSONObject("nav").getJSONObject("current").getString("vsid") +
+                    ".bcvcdn.com/hls/stream_" + getHistory().getUsername() + "/playlist.m3u8";
+        }
+        return vSID;
+    }
 
     public String getJsonChatShowStatusOptions() {
         return jsonChatShowStatusOptions;

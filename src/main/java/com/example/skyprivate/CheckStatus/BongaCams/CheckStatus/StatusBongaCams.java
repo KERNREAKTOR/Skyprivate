@@ -5,15 +5,19 @@ import com.example.skyprivate.Logger;
 import com.example.skyprivate.SoundPlayer;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Deque;
 import java.util.Objects;
 
 public class StatusBongaCams {
+    private static String lastOnline;
+
     public static void bongaCurrentTopic(BongaReader currBonga, BongaReader bongaReader) throws IOException {
         if (bongaReader.getResult().getChatTopicOptions().isAvailable()) {
 
@@ -97,6 +101,26 @@ public class StatusBongaCams {
         currBonga.setJsonHistory(bongaReader.getJsonHistory());
     }
 
+    public static boolean isFileAvailable(String fileURL) {
+        try {
+            URL url = new URL(fileURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("HEAD");
+
+            // Überprüfe den HTTP-Statuscode
+            int responseCode = connection.getResponseCode();
+
+            // Ein Statuscode von 200 bedeutet, dass die Datei verfügbar ist
+            return responseCode == HttpURLConnection.HTTP_OK;
+        } catch (Exception e) {
+
+            Logger.log("[StatusBongaCams.isFileAvailable]: " + e.getMessage());
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     //    setJsonStreamOptions(bongaChatShowStatusOptions.getJSONObject("streamOptions").toString());
 //    setJsonTipAfterPrivateOptions(bongaChatShowStatusOptions.getJSONObject("tipAfterPrivateOptions").toString());
     public static void bongaCheckJSONResult(BongaReader currBonga, BongaReader bongaReader) throws IOException {
@@ -171,47 +195,48 @@ public class StatusBongaCams {
 
     }
 
-    private static void writefile(String videoUrl) {
+    private static void writeFile(String videoUrl) {
+        if (isFileAvailable(videoUrl)) {
+            try {
+                // Erstellen Sie den Ordner für die Ausgabedatei
+                String outputPath = "C:\\BongaCams\\";
 
-        try {
-            // Erstellen Sie den Ordner für die Ausgabedatei
-            String outputPath = "C:\\BongaCams\\";
+                URL url = new URL(videoUrl);
+                Path uriPath = Paths.get(url.getPath());
+                Path finalPath = Paths.get(outputPath, String.valueOf(uriPath.subpath(0, uriPath.getNameCount())));
 
-            URL url = new URL(videoUrl);
-            Path uriPath = Paths.get(url.getPath());
-            Path finalPath = Paths.get(outputPath, String.valueOf(uriPath.subpath(0, uriPath.getNameCount())));
+                File outputDir = new File(finalPath.toString());
+                File Folder = new File(outputDir.getParent() + "\\" + StatusBongaCams.getLastOnline());
 
-            File outputDir = new File(finalPath.toString());
-            File Folder = new File(outputDir.getParent()+ "\\" + StatusBongaCams.getLastOnline());
+                if (!Folder.exists()) {
+                    Folder.mkdirs();
+                }
+                File outputFile = new File(Folder + "\\" + finalPath.getFileName());
+                // Öffnen Sie eine Verbindung zur URL und lesen Sie die Daten
 
-            if (!Folder.exists()) {
-                Folder.mkdirs();
-            }
-            File outputFile = new File(Folder + "\\" + finalPath.getFileName());
-            // Öffnen Sie eine Verbindung zur URL und lesen Sie die Daten
+                if (!outputFile.exists()) {
+                    InputStream inputStream = url.openStream();
+                    FileOutputStream outputStream = new FileOutputStream(outputFile);
 
-            if (!outputFile.exists()) {
-                InputStream inputStream = url.openStream();
-                FileOutputStream outputStream = new FileOutputStream(outputFile);
+                    byte[] buffer = new byte[4096];
+                    int bytesRead = -1;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
 
-                byte[] buffer = new byte[4096];
-                int bytesRead = -1;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
+                    // Schließen Sie die Streams
+                    inputStream.close();
+                    outputStream.close();
+
+                    System.out.println(outputFile);
                 }
 
-                // Schließen Sie die Streams
-                inputStream.close();
-                outputStream.close();
 
-                System.out.println(outputFile);
+            } catch (IOException e) {
+                Logger.log("[StatusBongaCams.WriteFile] : " + e.getMessage());
+                e.printStackTrace();
             }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
     }
 
     public static void DownloadViodeos(Deque<String> videoFiles) {
@@ -222,15 +247,40 @@ public class StatusBongaCams {
 //        videoFiles.clear();
 //        vUrls.sort(Comparator.reverseOrder());
 
- //       System.out.println(videoFiles.size());
+        //       System.out.println(videoFiles.size());
 //        for(String curVideo : vUrls){
 //            videoQueue.push(curVideo);
 //        }
         while (!videoFiles.isEmpty()) {
             String curFile = videoFiles.pop();
-            Thread thread = new Thread(() -> writefile(curFile));
+            Thread thread = new Thread(() -> writeFile(curFile));
             thread.start();
         }
+    }
+
+    public static ArrayList<StreamInfo> getPlayList(String urlPlayList) throws IOException {
+
+        URL url = new URL(urlPlayList);
+        ArrayList<StreamInfo> streamInfos = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("#EXT-X-STREAM-INF")) {
+                    StreamInfo myInfo = new StreamInfo();
+                    myInfo.setBandWith(Integer.valueOf(line.split(",")[0].split(":")[1].split("=")[1]));
+                    myInfo.setResolution(line.split(",")[1].split("=")[1]);
+                    myInfo.setWidth(Integer.valueOf(line.split(",")[1].split("=")[1].split("x")[0]));
+                    myInfo.setHeight(Integer.valueOf(line.split(",")[1].split("=")[1].split("x")[1]));
+                    myInfo.setCodecs(line.split(",")[2].split("=")[1]);
+                    myInfo.setChunkLink(reader.readLine());
+                    streamInfos.add(myInfo);
+                }
+            }
+        } catch (Exception e) {
+            Logger.log("[StatusBongaCams.getPlayList]: " + e.getMessage());
+        }
+        return streamInfos;
     }
 
     public static String GetChunks_m3u8(String performerName) throws Exception {
@@ -246,6 +296,27 @@ public class StatusBongaCams {
                 content.append(line);
                 content.append(System.lineSeparator());
             }
+        } catch (Exception e) {
+            Logger.log("[StatusBongaCams.GetChunk]:" + e.getMessage());
+        }
+        return content.toString();
+    }
+
+    public static String GetUrlChunk(String fileURL) throws Exception {
+
+        StringBuilder content = new StringBuilder();
+        URL url = new URL(fileURL);
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+                content.append(System.lineSeparator());
+            }
+
+        } catch (Exception e) {
+            Logger.log("[StatusBongaCams.GetUrlChunk]:" + e.getMessage());
+            e.printStackTrace();
         }
         return content.toString();
     }
@@ -258,7 +329,6 @@ public class StatusBongaCams {
         StatusBongaCams.lastOnline = lastOnline;
     }
 
-    private static String lastOnline;
     public static void bongaIsOnline(BongaReader currBonga, BongaReader bongaReader) throws IOException {
         if (currBonga.getHistory().isOnline() != bongaReader.getHistory().isOnline()) {
             if (bongaReader.getHistory().isOnline()) {

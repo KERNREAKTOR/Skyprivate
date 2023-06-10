@@ -93,40 +93,40 @@ public class Start {
 
     public static void main(String[] args) throws Exception {
 
-
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-
 
         //#############
         //# BongaCams #
         //#############
-        Deque<String> urlQuere = new ArrayDeque<>();
-        Runnable chunkChecker = () -> {
-            try {
-                BongaReader bongaReader = new BongaReader("scoftyss");
-                if (bongaReader.getHistory().isOnline()) {
-                    String chuckChecker = StatusBongaCams.GetChunks_m3u8("scoftyss");
-                    if (!Objects.equals(curChuck, chuckChecker)) {
-                        Set<String> uniqueFileNames = new HashSet<>(readM3UPlaylist(chuckChecker, bongaReader.getVideoUrl()));
-                        List<String> sortedList = new ArrayList<>(uniqueFileNames);
-                        sortedList.sort(Comparator.naturalOrder());
-                        urlQuere.addAll(sortedList);
-                        uniqueFileNames.clear();
-                        curChuck = chuckChecker;
-                    }
-                }
-            } catch (Exception e) {
-                Logger.log(e.getMessage());
-            }
-        };
-        Runnable BongaDownloadVideos = () -> {
-            try {
-                StatusBongaCams.DownloadViodeos(urlQuere);
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
+//        Deque<String> urlQuere = new ArrayDeque<>();
+//        Runnable chunkChecker = () -> {
+//            try {
+//                BongaReader bongaReader = new BongaReader("scoftyss");
+//                if (bongaReader.getHistory().isOnline()) {
+//                    String chuckChecker = StatusBongaCams.GetChunks_m3u8("scoftyss");
+//                    if (!Objects.equals(curChuck, chuckChecker)) {
+//                        Set<String> uniqueFileNames = new HashSet<>(readM3UPlaylist(chuckChecker, bongaReader.getVideoUrl()));
+//                        List<String> sortedList = new ArrayList<>(uniqueFileNames);
+//                        sortedList.sort(Comparator.naturalOrder());
+//                        urlQuere.addAll(sortedList);
+//                        uniqueFileNames.clear();
+//                        curChuck = chuckChecker;
+//                    }
+//                }
+//            } catch (Exception e) {
+//                Logger.log(e.getMessage());
+//            }
+//        };
+//        Runnable BongaDownloadVideos = () -> {
+//            try {
+//                StatusBongaCams.DownloadViodeos(urlQuere);
+//
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        };
+
         ArrayList<String> bongaPerformer = new ArrayList<>();
         bongaPerformer.add("scoftyss");
 
@@ -138,6 +138,7 @@ public class Start {
             bongaReader.getResult().getChatTopicOptions().setCurrentTopic("");
             currBongaPerformer.add(bongaReader);
         }
+
         Runnable bongaChecker = () -> {
             try {
 
@@ -193,6 +194,7 @@ public class Start {
                 throw new RuntimeException(e);
             }
         };
+
         //##############
         //# SkyPrivate #
         //##############
@@ -218,6 +220,7 @@ public class Start {
                 throw new RuntimeException(e);
             }
         };
+
         //#############
         //# StripChat #
         //#############
@@ -242,8 +245,8 @@ public class Start {
 
         for (String url : stripUrls) {
             curStripMode.add(StripChatReader.PerformerMode.UNKNOWN);
-
             StripChatReader stripChatReader = new StripChatReader(url);
+
             stripStartFollower.add(stripChatReader);
             stripChatReader.getUserInfo().getUser().setLive(false);
             stripChatReader.getUserInfo().getUser().setOnline(false);
@@ -274,8 +277,8 @@ public class Start {
         executor.scheduleAtFixedRate(bongaChecker, 0, 15, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(skyPrivateChecker, 0, 30, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(stripChatChecker, 0, 30, TimeUnit.SECONDS);
-        executor.scheduleAtFixedRate(chunkChecker, 0, 1, TimeUnit.SECONDS);
-        executor.scheduleAtFixedRate(BongaDownloadVideos, 0, 1, TimeUnit.SECONDS);
+//        executor.scheduleAtFixedRate(chunkChecker, 0, 1, TimeUnit.SECONDS);
+//        executor.scheduleAtFixedRate(BongaDownloadVideos, 0, 1, TimeUnit.SECONDS);
 
         // Weitere Code-Ausführung...
         //https://b-hls-08.doppiocdn.com/hls/59707439/59707439_480p_868_gdf4Qx36VTbNwj4m_1683323192.mp4
