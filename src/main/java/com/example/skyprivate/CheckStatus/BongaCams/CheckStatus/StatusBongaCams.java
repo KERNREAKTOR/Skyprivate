@@ -314,9 +314,8 @@ public class StatusBongaCams {
                 content.append(System.lineSeparator());
             }
 
-        } catch (Exception e) {
-            Logger.log("[StatusBongaCams.GetUrlChunk]:" + e.getMessage());
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            Logger.log("Die Url: " + fileURL + " ist nicht verfügbar.");
         }
         return content.toString();
     }

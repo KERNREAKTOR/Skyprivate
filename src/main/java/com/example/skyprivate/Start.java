@@ -241,6 +241,7 @@ public class Start {
         stripUrls.add("Alexsaeli");
         stripUrls.add("Sheila_7");
         stripUrls.add("judith_cute");
+        stripUrls.add("Dolly_XOX");
 
 
         for (String url : stripUrls) {

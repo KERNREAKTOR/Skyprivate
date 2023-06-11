@@ -3,10 +3,51 @@ package com.example.skyprivate.CheckStatus.LiveJasmin;
 import java.math.BigDecimal;
 
 public class LiveJasminData {
-    private String public_show_status, become_online_at, has_event_show, p_id, profile_picture_url, toy_connection_status,
+    private String public_show_status, become_online_at, has_event_show, profile_picture_url, toy_connection_status,
             display_name, performer_id;
-    private Integer is_on_private, has_vip_show, status, rate_average, has_hot_show, person_age, last_activity_time,
-            msc_id, originalStatus, sum_of_online_performers, status_order, last_online_at;
+    private Integer  p_id;
+    private Integer is_on_private;
+    private Integer has_vip_show;
+    private Integer status;
+    private Integer rate_average;
+    private Integer has_hot_show;
+    private Integer person_age;
+    private Integer last_activity_time;
+    private Integer msc_id;
+    private Integer originalStatus;
+    private Integer sum_of_online_performers;
+    private Integer status_order;
+    private Integer last_online_at;
+
+    public Integer getChannel_video_count() {
+        return channel_video_count;
+    }
+
+    public void setChannel_video_count(Integer channel_video_count) {
+        this.channel_video_count = channel_video_count;
+    }
+
+    private Integer channel_video_count;
+
+    public Integer getStory_active_items_count() {
+        return story_active_items_count;
+    }
+
+    public void setStory_active_items_count(Integer story_active_items_count) {
+        this.story_active_items_count = story_active_items_count;
+    }
+
+    private Integer story_active_items_count;
+
+    public Integer getChannel_image_count() {
+        return channel_image_count;
+    }
+
+    public void setChannel_image_count(Integer channel_image_count) {
+        this.channel_image_count = channel_image_count;
+    }
+
+    private Integer channel_image_count;
     private double price;
 
     public LiveJasminAchievement getAchievement() {
@@ -31,7 +72,7 @@ public class LiveJasminData {
         this.has_event_show = has_event_show;
     }
 
-    public void setP_id(String p_id) {
+    public void setP_id(Integer p_id) {
         this.p_id = p_id;
     }
 
@@ -126,7 +167,7 @@ public class LiveJasminData {
         return has_event_show;
     }
 
-    public String getP_id() {
+    public Integer getP_id() {
         return p_id;
     }
 
