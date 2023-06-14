@@ -4,14 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.1.5">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/bongastream/BongaServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/stripchatstream/StripChatServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_05_2023_23_15_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_05_2023_23_15__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_05_2023_14_08_[Changes]/shelved.patch" beforeDir="false" />
+    <list default="true" id="311c1bd6-bdd5-46fb-8225-5ba86840fe59" name="Changes" comment="Skyprivate 1.2.0">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DB/DateHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DB/LiveJasminAchievement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DB/LiveJasminPerformerInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DB/SQLReadHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/BongaCams/BongaReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/path/to/database.db" beforeDir="false" afterPath="$PROJECT_DIR$/path/to/database.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DB/LiveJasminDataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DB/LiveJasminDataBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/bongastream/BongaServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/bongastream/BongaServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/LiveJasmin/LiveJasminData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/LiveJasmin/LiveJasminData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +32,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
   </component>
   <component name="ProjectId" id="2P67VhJTPaPV9jv5Qhg4gvEcZ7E" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -46,9 +53,10 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-20&quot;,
     &quot;last_opened_file_path&quot;: &quot;H:/JavaProjects/skyprivate/src/main/resources/com/SoundFile&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.fileTypes&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -59,13 +67,16 @@
       <recent name="H:\JavaProjects\skyprivate\src\main\resources\com\SoundFile" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\JavaProjects\skyprivate\src\main\resources" />
+      <recent name="H:\JavaProjects\skyprivate\src\main\java\com\example\DB" />
+      <recent name="H:\JavaProjects\skyprivate\path\to" />
       <recent name="H:\JavaProjects\skyprivate\src\main\resources\com\SoundFile" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.example.skyprivate" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.StripChatServer">
+  <component name="RunManager" selected="Application.BongaServer">
     <configuration name="BongaReader" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.skyprivate.CheckStatus.BongaCams.BongaReader" />
       <module name="skyprivate" />
@@ -92,12 +103,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="src.main.java.net.skyprivate.server.Server" />
-      <module name="server" />
+    <configuration name="LiveJasminDataBase" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.DB.LiveJasminDataBase" />
+      <module name="skyprivate" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="src.main.java.net.skyprivate.server.*" />
+          <option name="PATTERN" value="com.example.DB.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -133,11 +144,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.StripChatServer" />
-        <item itemvalue="Application.Start" />
         <item itemvalue="Application.BongaServer" />
+        <item itemvalue="Application.LiveJasminDataBase" />
+        <item itemvalue="Application.Start" />
+        <item itemvalue="Application.StripChatServer" />
         <item itemvalue="Application.BongaReader" />
-        <item itemvalue="Application.Server" />
       </list>
     </recent_temporary>
   </component>
@@ -255,7 +266,35 @@
       <option name="project" value="LOCAL" />
       <updated>1685719706106</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Skyprivate 1.1.6">
+      <created>1685993113273</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1685993113273</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Skyprivate 1.1.7">
+      <created>1686401352760</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1686401352760</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Skyprivate 1.1.7">
+      <created>1686432152329</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1686432152329</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Skyprivate 1.2.0">
+      <created>1686510410760</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1686510410760</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -268,7 +307,10 @@
     <MESSAGE value="Skyprivate 1.1.3" />
     <MESSAGE value="Skyprivate 1.1.4" />
     <MESSAGE value="Skyprivate 1.1.5" />
-    <option name="LAST_COMMIT_MESSAGE" value="Skyprivate 1.1.5" />
+    <MESSAGE value="Skyprivate 1.1.6" />
+    <MESSAGE value="Skyprivate 1.1.7" />
+    <MESSAGE value="Skyprivate 1.2.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="Skyprivate 1.2.0" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -295,13 +337,14 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/skyprivate/CheckStatus/StripChat/StripChatReader.java</url>
-          <line>26</line>
+          <line>28</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
+        <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="key" />
         <PinnedItemInfo parentTag="org.json.JSONArray" memberName="myArrayList" />
       </pinned-members>
     </pin-to-top-manager>
@@ -313,6 +356,7 @@
         <watch expression="this" language="JAVA" />
         <watch expression="((HashMap)jsonBonga.map).entrySet().toArray()[1]" custom="java.util.HashMap" />
         <watch expression="((HashMap)jsonBonga.map).entrySet().toArray()[1]" custom="java.util.HashMap" />
+        <watch expression="((HashMap)((JSONObject)((HashMap.Node)((HashMap)jsonJasmin.map).entrySet().toArray()[23]).getValue()).map).entrySet().toArray()[0]" custom="org.json.JSONObject,java.util.HashMap.Node,java.util.HashMap" />
       </configuration>
     </watches-manager>
   </component>

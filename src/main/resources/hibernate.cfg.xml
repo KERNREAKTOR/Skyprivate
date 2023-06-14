@@ -1,0 +1,9 @@
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.SQLiteDialect</property>
+        <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:path/to/database.db</property>
+        <property name="hibernate.show_sql">true</property>
+        <!-- Weitere Einstellungen -->
+    </session-factory>
+</hibernate-configuration>

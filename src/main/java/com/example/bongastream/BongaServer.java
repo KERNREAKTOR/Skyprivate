@@ -12,8 +12,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class BongaServer {
-//    private static final String bongaPerformer = "dollyxo";
-private static final String bongaPerformer = "sarabecker";
+    //    private static final String bongaPerformer = "dollyxo";
+    private static final String bongaPerformer = "scoftyss";
     private static String finalStreamUrl = null;
 
     private static List<String> readM3UPlaylist(String playlistContent, String videoUrl) {
@@ -42,14 +42,17 @@ private static final String bongaPerformer = "sarabecker";
                 ArrayList<StreamInfo> streamInfo = StatusBongaCams.getPlayList(streamUrl);
 
                 for (StreamInfo curStream : streamInfo) {
-                    if (curStream.getBandWith() < 3600000) {
+                    Logger.bongaLog("Auflösung: " + curStream.getResolution() +
+                            " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
+                    if (Objects.equals(curStream.getResolution(), "1280x720")) {
 
                         chunkList = curStream.getChunkLink();
-                        curRes = "Auflösung: " + curStream.getResolution() + "\r\n" + "Bandbreite: " + curStream.getBandWith();
+                        curRes = "Aktuelle Auflösung: " + curStream.getResolution()  + " Bandbreite: " + curStream.getBandWith();
 
                     }
                 }
 
+                Logger.bongaLog(curRes, bonga);
                 System.out.println(curRes);
                 assert chunkList != null;
                 streamUrl = streamUrl.split("playlist.m3u8")[0] + chunkList.split("chunks.m3u8")[0];
