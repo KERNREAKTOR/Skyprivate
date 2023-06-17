@@ -1,6 +1,7 @@
 package com.example.skyprivate.CheckStatus.BongaCams.CheckStatus;
 
 import com.example.skyprivate.CheckStatus.BongaCams.BongaReader;
+import com.example.skyprivate.CheckStatus.DownloadManager;
 import com.example.skyprivate.Logger;
 import com.example.skyprivate.SoundPlayer;
 
@@ -195,7 +196,7 @@ public class StatusBongaCams {
 
     }
 
-    private static void writeFile(String videoUrl) {
+    public static void writeFile(String videoUrl) {
         if (isFileAvailable(videoUrl)) {
             try {
                 // Erstellen Sie den Ordner für die Ausgabedatei
@@ -228,7 +229,7 @@ public class StatusBongaCams {
                     inputStream.close();
                     outputStream.close();
 
-                    System.out.println(outputFile);
+                    System.out.println("Datei gespeichert in: " + outputFile );
                 }
 
 
@@ -236,10 +237,12 @@ public class StatusBongaCams {
                 Logger.log("[StatusBongaCams.WriteFile] : " + e.getMessage());
                 e.printStackTrace();
             }
+        }else{
+            Logger.log("Die Datei " + videoUrl + " ist nicht verfügbar.");
         }
     }
 
-    public static void DownloadViodeos(Deque<String> videoFiles) {
+    public static void DownloadVideos(Deque<String> videoFiles) {
 
 
 //        Deque<String> videoQueue = new ArrayDeque<>();
@@ -251,11 +254,23 @@ public class StatusBongaCams {
 //        for(String curVideo : vUrls){
 //            videoQueue.push(curVideo);
 //        }
+        DownloadManager downloadManager = new DownloadManager();
+
+        // Beispielaufrufe für Downloads
+//        downloadManager.downloadFile("https://example.com/file1");
+//        downloadManager.downloadFile("https://example.com/file2");
+//        downloadManager.downloadFile("https://example.com/file3");
+//        downloadManager.downloadFile("https://example.com/file4");
+
+        // Warten, bis alle Downloads abgeschlossen sind
+
         while (!videoFiles.isEmpty()) {
             String curFile = videoFiles.pop();
-            Thread thread = new Thread(() -> writeFile(curFile));
-            thread.start();
+            downloadManager.downloadFile(curFile);
+            //Thread thread = new Thread(() -> writeFile(curFile));
+            //thread.start();
         }
+        downloadManager.shutdown();
     }
 
     public static ArrayList<StreamInfo> getPlayList(String urlPlayList) throws IOException {

@@ -10,16 +10,8 @@ public class LiveJasminAchievement {
     private Integer points;
 
     private String timestamp;
-
-    public ArrayList<LiveJasminAchievement> getAchievements() {
-        return achievements;
-    }
-
-    public void setAchievements(ArrayList<LiveJasminAchievement> achievements) {
-        this.achievements = achievements;
-    }
-
     private ArrayList<LiveJasminAchievement> achievements = new ArrayList<>();
+
     public LiveJasminAchievement(Integer id, Integer level, Integer points, String timestamp) {
         this.id = id;
         this.level = level;
@@ -42,8 +34,6 @@ public class LiveJasminAchievement {
                 ResultSet resultSet = stmt.executeQuery();
 
                 // Ergebnisse in einer Liste speichern
-
-
                 while (resultSet.next()) {
                     Integer id = resultSet.getInt("id");
                     Integer level = resultSet.getInt("level");
@@ -52,16 +42,26 @@ public class LiveJasminAchievement {
 
 
                     achievements.add(new LiveJasminAchievement(id, level, points, timestamp));
+                    setAchievements(achievements);
                 }
 
                 // Ergebnisse ausgeben
                 if (achievements.isEmpty()) {
-                    System.out.println("Keine Ergebnisse für performer_name = " + performerName + " gefunden.");
+                    System.out.println("Keine Ergebnisse für performer_name = " + performerName + " in der Tabelle " +
+                            tableName + " gefunden.");
                 }
             }
         } catch (SQLException e) {
             System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank: " + e.getMessage());
         }
+    }
+
+    public ArrayList<LiveJasminAchievement> getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(ArrayList<LiveJasminAchievement> achievements) {
+        this.achievements = achievements;
     }
 
     public Integer getId() {

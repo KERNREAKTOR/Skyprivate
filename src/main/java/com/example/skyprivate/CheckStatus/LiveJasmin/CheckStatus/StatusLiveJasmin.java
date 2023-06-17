@@ -25,6 +25,11 @@ public class StatusLiveJasmin {
             }
             currLiveJasmin.getPerformerInfo().setAchievement(liveJasminReader.getPerformerInfo().getAchievement());
         }
+
+        if (!Objects.equals(currLiveJasmin.getPerformerInfo().getPublic_show_status(), liveJasminReader.getPerformerInfo().getPublic_show_status())) {
+            Logger.jasminLog(liveJasminReader.getPerformerInfo().getPublic_show_status(), liveJasminReader);
+            currLiveJasmin.getPerformerInfo().setPublic_show_status((liveJasminReader.getPerformerInfo().getPublic_show_status()));
+        }
     }
 
     public static void liveJasminGetOriginalStatus(LiveJasminReader currLiveJasmin, LiveJasminReader liveJasminReader) throws IOException {

@@ -120,7 +120,7 @@ public class Start {
 //        };
 //        Runnable BongaDownloadVideos = () -> {
 //            try {
-//                StatusBongaCams.DownloadViodeos(urlQuere);
+//                StatusBongaCams.DownloadVideos(urlQuere);
 //
 //            } catch (Exception e) {
 //                throw new RuntimeException(e);

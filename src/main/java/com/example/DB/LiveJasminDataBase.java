@@ -2,45 +2,80 @@ package com.example.DB;
 
 import com.example.skyprivate.CheckStatus.LiveJasmin.LiveJasminReader;
 import com.example.skyprivate.Logger;
+import difflib.Delta;
+import difflib.DiffUtils;
+import difflib.Patch;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class LiveJasminDataBase {
     private LiveJasminPerformerInfo performerInfo;
     private ArrayList<LiveJasminAchievement> achievementInfo;
-
-    public String getPerformerName() {
-        return performerName;
-    }
-
-    public void setPerformerName(String performerName) {
-        this.performerName = performerName;
-    }
-
+    private ArrayList<LiveJasminIncome> incomeInfo;
     private String performerName;
 
     public LiveJasminDataBase(String performerName) {
         setPerformerName(performerName);
         setPerformerInfo(new LiveJasminPerformerInfo(performerName));
         setAchievementInfo(new LiveJasminAchievement(performerName).getAchievements());
+        setIncomeInfo(new LiveJasminIncome(performerName).getIncomes());
     }
 
-    public static void main(String[] args) throws IOException, SQLException {
+    public static void diff(String str1, String str2) {
+        // Erzeuge eine Liste mit den Differenzen zwischen den beiden Strings
+        Patch<String> patch = DiffUtils.diff(Collections.singletonList(str1), Collections.singletonList(str2));
+
+        // Gehe die Änderungen in der Reihenfolge durch und gib sie aus
+        for (Delta<String> delta : patch.getDeltas()) {
+            if (delta.getType() == Delta.TYPE.DELETE) {
+                System.out.println("Gelöscht: " + delta.getOriginal().getLines());
+            } else if (delta.getType() == Delta.TYPE.INSERT) {
+                System.out.println("Eingefügt: " + delta.getRevised().getLines());
+            } else if (delta.getType() == Delta.TYPE.CHANGE) {
+                System.out.println("Geändert von: " + delta.getOriginal().getLines());
+                System.out.println("Geändert zu: " + delta.getRevised().getLines());
+            }
+        }
+    }
+
+    public static void main(String[] args) {
         ArrayList<LiveJasminDataBase> liveJasminDataBases = new ArrayList<>();
         liveJasminDataBases.add(new LiveJasminDataBase("LilithAnge"));
-        liveJasminDataBases.add(new LiveJasminDataBase("JosephineBlaire"));
+        //liveJasminDataBases.add(new LiveJasminDataBase("ValerieSins"));
 
+
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+        Runnable ljOnlineChecker = () -> {
+            try {
+                checkStatus(liveJasminDataBases);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        executor.scheduleAtFixedRate(ljOnlineChecker, 0, 5, TimeUnit.SECONDS);
+
+    }
+
+    private static void checkStatus(ArrayList<LiveJasminDataBase> liveJasminDataBases) throws IOException {
         for (LiveJasminDataBase currentPerformer : liveJasminDataBases) {
 
             LiveJasminReader liveJasminReader = new LiveJasminReader(currentPerformer.getPerformerName());
             boolean bFound = false;
+
             for (LiveJasminAchievement liveJasminAchievement : currentPerformer.getAchievementInfo()) {
+
                 if (liveJasminAchievement.getPoints() == liveJasminReader.getPerformerInfo().getAchievement().getPoints()) {
                     bFound = true;
                     break;
@@ -48,7 +83,13 @@ public class LiveJasminDataBase {
             }
 
             if (!bFound) {
+                addIncomeInfo(currentPerformer.performerName,
+                        liveJasminReader.getPerformerInfo().getAchievement().getPoints() -
+                                currentPerformer.getAchievementInfo().get(currentPerformer.getAchievementInfo().size() - 1).getPoints());
                 addAchievementInfo(currentPerformer.getPerformerName(), liveJasminReader.getPerformerInfo().getAchievement().getLevel(), liveJasminReader.getPerformerInfo().getAchievement().getPoints());
+
+                currentPerformer.setIncomeInfo(new LiveJasminDataBase(currentPerformer.performerName).getIncomeInfo());
+                currentPerformer.setAchievementInfo(new LiveJasminDataBase(currentPerformer.performerName).getAchievementInfo());
             }
 
             if (!Objects.equals(currentPerformer.getPerformerInfo().getChannel_image_count(), liveJasminReader.getPerformerInfo().getChannel_image_count()) ||
@@ -111,6 +152,53 @@ public class LiveJasminDataBase {
         }
     }
 
+    public static void addIncomeInfo(String performerName, Integer income) {
+        // Verbindung zur Datenbank herstellen
+        String url = "jdbc:sqlite:path/to/database.db";
+        try (Connection conn = DriverManager.getConnection(url)) {
+
+            // SQL-Abfrage zum Einfügen eines neuen Eintrags ausführen
+            // Aktuelles Datum und Uhrzeit erhalten
+            LocalDateTime now = LocalDateTime.now();
+
+            // Datumsformat definieren
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            // Datum und Uhrzeit in einen String umwandeln
+            String formattedDateTime = now.format(formatter);
+
+
+            String insertQuery = "INSERT INTO live_jasmin_income (performer_name, income, timestamp) " +
+                    "VALUES (?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
+                stmt.setString(1, performerName);
+                stmt.setInt(2, income);
+                stmt.setString(3, formattedDateTime);
+                stmt.executeUpdate();
+
+                Logger.log("Performer: " + performerName + " wurde ein Eintrag in der Datenbank (live_jasmin_income) hinzugefügt.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank: " + e.getMessage());
+        }
+    }
+
+    public ArrayList<LiveJasminIncome> getIncomeInfo() {
+        return incomeInfo;
+    }
+
+    public void setIncomeInfo(ArrayList<LiveJasminIncome> incomeInfo) {
+        this.incomeInfo = incomeInfo;
+    }
+
+    public String getPerformerName() {
+        return performerName;
+    }
+
+    public void setPerformerName(String performerName) {
+        this.performerName = performerName;
+    }
+
     public ArrayList<LiveJasminAchievement> getAchievementInfo() {
         return achievementInfo;
     }
@@ -119,7 +207,7 @@ public class LiveJasminDataBase {
         this.achievementInfo = achievementInfo;
     }
 
-    public  LiveJasminPerformerInfo getPerformerInfo() {
+    public LiveJasminPerformerInfo getPerformerInfo() {
         return performerInfo;
     }
 
