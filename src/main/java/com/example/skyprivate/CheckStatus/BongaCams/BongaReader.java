@@ -13,17 +13,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
-import java.util.Queue;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BongaReader {
-    public static void main(String[] args) {
-        Deque<String> test = new ArrayDeque<>();
-        test.push("t1");
-        test.push("t3");
-
-        System.out.println(test.pop());
-        System.out.println(test.pop());
-    }
     private BongaHistory history;
     private String vid;
     private BongaChat result;
@@ -49,6 +52,39 @@ public class BongaReader {
     private String jsonStylePanelOptions;
     public BongaReader() {
 
+    }
+    private static final String URL = "https://bongacams.com/tools/amf.php";
+
+    public static void main(String[] args) {
+        String model = "scoftyss"; // Replace with the desired model
+
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(URL);
+
+        // Set headers
+        httpPost.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36");
+        httpPost.setHeader("X-Requested-With", "XMLHttpRequest");
+
+        // Set form data
+        List<NameValuePair> formData = new ArrayList<>();
+        formData.add(new BasicNameValuePair("method", "getRoomData"));
+        formData.add(new BasicNameValuePair("args[]", model));
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(formData));
+
+            // Execute the request
+            HttpResponse response = httpClient.execute(httpPost);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                String responseData = EntityUtils.toString(entity);
+                // Process the response data as needed
+                System.out.println(responseData);
+            } else {
+                System.out.println("No response data");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public BongaReader(String performerName) throws Exception {
         String bongaContent = getBongaStringBuilder(performerName);

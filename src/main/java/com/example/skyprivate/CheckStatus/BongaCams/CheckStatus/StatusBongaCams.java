@@ -1,7 +1,6 @@
 package com.example.skyprivate.CheckStatus.BongaCams.CheckStatus;
 
 import com.example.skyprivate.CheckStatus.BongaCams.BongaReader;
-import com.example.skyprivate.CheckStatus.DownloadManager;
 import com.example.skyprivate.Logger;
 import com.example.skyprivate.SoundPlayer;
 
@@ -242,36 +241,7 @@ public class StatusBongaCams {
         }
     }
 
-    public static void DownloadVideos(Deque<String> videoFiles) {
 
-
-//        Deque<String> videoQueue = new ArrayDeque<>();
-//        List<String> vUrls = new ArrayList<>(videoFiles);
-//        videoFiles.clear();
-//        vUrls.sort(Comparator.reverseOrder());
-
-        //       System.out.println(videoFiles.size());
-//        for(String curVideo : vUrls){
-//            videoQueue.push(curVideo);
-//        }
-        DownloadManager downloadManager = new DownloadManager();
-
-        // Beispielaufrufe für Downloads
-//        downloadManager.downloadFile("https://example.com/file1");
-//        downloadManager.downloadFile("https://example.com/file2");
-//        downloadManager.downloadFile("https://example.com/file3");
-//        downloadManager.downloadFile("https://example.com/file4");
-
-        // Warten, bis alle Downloads abgeschlossen sind
-
-        while (!videoFiles.isEmpty()) {
-            String curFile = videoFiles.pop();
-            downloadManager.downloadFile(curFile);
-            //Thread thread = new Thread(() -> writeFile(curFile));
-            //thread.start();
-        }
-        downloadManager.shutdown();
-    }
 
     public static ArrayList<StreamInfo> getPlayList(String urlPlayList) throws IOException {
 

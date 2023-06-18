@@ -1,17 +1,15 @@
-package com.example.DB;
+package com.example.DB.LiveJasmin;
 
+import com.example.DB.DateHelper;
 import com.example.skyprivate.CheckStatus.LiveJasmin.LiveJasminReader;
 import com.example.skyprivate.Logger;
-import difflib.Delta;
-import difflib.DiffUtils;
-import difflib.Patch;
+
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,22 +29,6 @@ public class LiveJasminDataBase {
         setIncomeInfo(new LiveJasminIncome(performerName).getIncomes());
     }
 
-    public static void diff(String str1, String str2) {
-        // Erzeuge eine Liste mit den Differenzen zwischen den beiden Strings
-        Patch<String> patch = DiffUtils.diff(Collections.singletonList(str1), Collections.singletonList(str2));
-
-        // Gehe die Änderungen in der Reihenfolge durch und gib sie aus
-        for (Delta<String> delta : patch.getDeltas()) {
-            if (delta.getType() == Delta.TYPE.DELETE) {
-                System.out.println("Gelöscht: " + delta.getOriginal().getLines());
-            } else if (delta.getType() == Delta.TYPE.INSERT) {
-                System.out.println("Eingefügt: " + delta.getRevised().getLines());
-            } else if (delta.getType() == Delta.TYPE.CHANGE) {
-                System.out.println("Geändert von: " + delta.getOriginal().getLines());
-                System.out.println("Geändert zu: " + delta.getRevised().getLines());
-            }
-        }
-    }
 
     public static void main(String[] args) {
         ArrayList<LiveJasminDataBase> liveJasminDataBases = new ArrayList<>();
