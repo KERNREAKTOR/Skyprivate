@@ -27,7 +27,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
-    private final String performerName = "scinderella";
+    private final String performerName = "scoftyss";
+    //private final String performerName = "lolypop19";
     private int currId;
     private WebSocketClient client;
 
@@ -59,7 +60,7 @@ public class SecureWebSocketClientExample {
                 public void onOpen(ServerHandshake handshakedata) {
                     // WebSocket connection is successfully established
 
-                    System.out.println("Connected to WebSocket!");
+                    Logger.log("Connected to WebSocket!");
                     Info workerData = new Info(performerName); // Set your worker data here
 
                     String chathost = workerData.getChathost();
@@ -87,6 +88,7 @@ public class SecureWebSocketClientExample {
                         try {
                             if (currId != 0) {
                                 send("{\"id\":" + currId + ",\"name\":\"ping\"}");
+                                Logger.log("Ping current Id :" + currId);
                             }
                         } catch (Exception e) {
                             throw new RuntimeException(e);
@@ -102,14 +104,24 @@ public class SecureWebSocketClientExample {
 
                     if (jsonObject.has("id")) {
                         if (jsonObject.getInt("id") == 1) {
-                            send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
-                            Logger.log("Mit dem chat von '" + performerName + "' verbunden");
+                            if (jsonObject.getJSONObject("result").has("audioAvailable")) {
+                                if (jsonObject.getJSONObject("result").getBoolean("audioAvailable")) {
+                                    send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
+                                    Logger.log("Mit dem chat von '" + performerName + "' verbunden");
+                                    currId = jsonObject.getInt("id") + 1;
+                                }else{
+                                    Logger.log(performerName + " ist nicht verfügbar");
+                                }
+                            } else {
+
+                                currId = jsonObject.getInt("id") + 1;
+                            }
                         }
-                        currId = jsonObject.getInt("id") +1;
+
                     }
 
                     if (jsonObject.has("result")) {
-                        if(!Objects.equals(jsonObject.get("result").toString(), "null")){
+                        if (!Objects.equals(jsonObject.get("result").toString(), "null")) {
                             if (jsonObject.getJSONObject("result").has("tk")) {
                                 //String unKingName = jsonObject.getJSONObject("result").getJSONObject("tk").getString("un");
                                 String dnKingName = jsonObject.getJSONObject("result").getJSONObject("tk").getString("dn");
@@ -183,7 +195,8 @@ public class SecureWebSocketClientExample {
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
                     // WebSocket connection is closed
-                    System.out.println("WebSocket connection closed.");
+                    Logger.log("WebSocket connection closed.");
+                    client.reconnect();
                 }
 
                 @Override
