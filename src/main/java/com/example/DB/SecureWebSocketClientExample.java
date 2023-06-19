@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
     private final String performerName = "scoftyss";
-    //private final String performerName = "lolypop19";
+    //private final String performerName = "pippalee";
     private int currId;
     private WebSocketClient client;
 
@@ -69,8 +69,7 @@ public class SecureWebSocketClientExample {
                     String location = workerData.getLocation();
                     boolean isRu = workerData.isRu();
                     String dataKey = workerData.getDataKey();
-                    String joinRoomMessage = String.format("{\"id\":1,\"name\":\"joinRoom\",\"args\":[\"%s\",{\"username\":\"%s\",\"displayName\":\"%s\",\"location\":\"%s\",\"chathost\":\"%s\",\"isRu\":%b,\"isPerformer\":false,\"hasStream\":false,\"isLogged\":false,\"isPayable\":false,\"showType\":\"public\"}],\"%s\"}",
-                            chathost, username, displayName, location, chathost, isRu, dataKey);
+                    String joinRoomMessage;
 
                     joinRoomMessage = "{\"id\":1,\"name\":\"joinRoom\",\"args\":[\""
                             + chathost + "\",{\"username\":\"" +
@@ -102,23 +101,23 @@ public class SecureWebSocketClientExample {
                     // Handle incoming messages
                     JSONObject jsonObject = new JSONObject(message);
 
-                    if (jsonObject.has("id")) {
-                        if (jsonObject.getInt("id") == 1) {
-                            if (jsonObject.getJSONObject("result").has("audioAvailable")) {
-                                if (jsonObject.getJSONObject("result").getBoolean("audioAvailable")) {
-                                    send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
-                                    Logger.log("Mit dem chat von '" + performerName + "' verbunden");
-                                    currId = jsonObject.getInt("id") + 1;
-                                }else{
-                                    Logger.log(performerName + " ist nicht verfügbar");
-                                }
-                            } else {
-
-
-                            }
-                        }
-                        currId = jsonObject.getInt("id") + 1;
-                    }
+//                    if (jsonObject.has("id")) {
+//
+//                        if (jsonObject.getInt("id") == 1) {
+//
+//                            if (jsonObject.getJSONObject("result").has("audioAvailable")) {
+//
+//                                if (jsonObject.getJSONObject("result").getBoolean("audioAvailable")) {
+//                                    send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
+//                                    Logger.log("Mit dem chat von '" + performerName + "' verbunden");
+//                                    currId = jsonObject.getInt("id") + 1;
+//                                } else {
+//                                    Logger.log(performerName + " ist nicht verfügbar");
+//                                }
+//                            }
+//                        }
+//                        currId = jsonObject.getInt("id") + 1;
+//                    }
 
                     if (jsonObject.has("result")) {
                         if (!Objects.equals(jsonObject.get("result").toString(), "null")) {
@@ -128,9 +127,14 @@ public class SecureWebSocketClientExample {
                                 int amount = jsonObject.getJSONObject("result").getJSONObject("tk").getInt("amount");
                                 Logger.log("Der aktuelle König ist :" + dnKingName + " mit " + amount + " Token");
 
-//
-                                //System.out.println(jsonObject.getJSONObject("result").getJSONObject("tk").getInt("amount"));
                             }
+
+                            if (jsonObject.getJSONObject("result").has("audioAvailable") && jsonObject.getJSONObject("result").has("freeShow")) {
+                                if(!jsonObject.getJSONObject("result").getBoolean("audioAvailable") && !jsonObject.getJSONObject("result").getBoolean("freeShow")) {
+                                    Logger.log(performerName + " ist nicht verfügbar");
+                                }
+                            }
+
                             if (jsonObject.getJSONObject("result").has("status")) {
 
                                 BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
@@ -138,7 +142,10 @@ public class SecureWebSocketClientExample {
 
                                 switch (jsonObject.getJSONObject("result").getString("status")) {
                                     case "offline" -> Logger.log(performerName + " ist Offline");
-                                    case "public" -> Logger.log(performerName + " ist Öffentlich");
+                                    case "public" -> {Logger.log(performerName + " ist Öffentlich");
+                                        send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
+                                        Logger.log("Mit dem chat von '" + performerName + "' verbunden");
+                                        currId = jsonObject.getInt("id") + 1;}
                                     case "away" -> Logger.log(performerName + " ist AFK");
                                     default ->
                                             Logger.log("Statuts unbekannt: " + jsonObject.getJSONObject("result").getString("status"));
@@ -213,9 +220,6 @@ public class SecureWebSocketClientExample {
     }
 
     static class Info {
-        private String room;
-        private String server;
-        private String proxy;
         private String chathost;
         private String username;
         private String displayName;
