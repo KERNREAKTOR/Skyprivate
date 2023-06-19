@@ -114,10 +114,10 @@ public class SecureWebSocketClientExample {
                                 }
                             } else {
 
-                                currId = jsonObject.getInt("id") + 1;
+
                             }
                         }
-
+                        currId = jsonObject.getInt("id") + 1;
                     }
 
                     if (jsonObject.has("result")) {
