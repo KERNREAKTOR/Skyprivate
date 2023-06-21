@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
-    private final String performerName = "panamera96";
-    //private static final String performerName = "scoftyss";
+    //private final String performerName = "panamera96";
+    private static final String performerName = "scoftyss";
     private String performerStatus = "";
     private String currStatus = "";
     private int currId;
@@ -116,7 +116,7 @@ public class SecureWebSocketClientExample {
                     Runnable bongaChecker = () -> {
                         try {
                             if (!Objects.equals(performerStatus, "offline")) {
-                                send("{\"id\":" + currId + ",\"name\":\"ChatModule.syncUserList\",\"args\":[\"public-chat\"]}");
+                                //send("{\"id\":" + currId + ",\"name\":\"ChatModule.syncUserList\",\"args\":[\"public-chat\"]}");
                                 send("{\"id\":" + currId + ",\"name\":\"ping\"}");
                                 Logger.log("send Ping current Id :" + currId);
                             }
@@ -133,23 +133,10 @@ public class SecureWebSocketClientExample {
                     // Handle incoming messages
                     JSONObject jsonObject = new JSONObject(message);
 
-//                    if (jsonObject.has("id")) {
-//
-//                        if (jsonObject.getInt("id") == 1) {
-//
-//                            if (jsonObject.getJSONObject("result").has("audioAvailable")) {
-//
-//                                if (jsonObject.getJSONObject("result").getBoolean("audioAvailable")) {
-//                                    send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
-//                                    Logger.log("Mit dem chat von '" + performerName + "' verbunden");
-//                                    currId = jsonObject.getInt("id") + 1;
-//                                } else {
-//                                    Logger.log(performerName + " ist nicht verfügbar");
-//                                }
-//                            }
-//                        }
-//                        currId = jsonObject.getInt("id") + 1;
-//                    }
+                    if (jsonObject.has("id")) {
+
+                        currId = jsonObject.getInt("id") + 1;
+                    }
 
                     if (jsonObject.has("result")) {
                         if (!Objects.equals(jsonObject.get("result").toString(), "null")) {
