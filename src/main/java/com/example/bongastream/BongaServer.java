@@ -44,7 +44,7 @@ public class BongaServer {
                 for (StreamInfo curStream : streamInfo) {
                     Logger.bongaLog("Auflösung: " + curStream.getResolution() +
                             " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
-                    if (curStream.getBandWith() < 3600000) {
+                    if (curStream.getBandWith() < 3600000 && curStream.getBandWith() != 0) {
                         chunkList = curStream.getChunkLink();
                         curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
                     }

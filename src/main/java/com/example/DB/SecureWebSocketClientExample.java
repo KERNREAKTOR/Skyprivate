@@ -1,6 +1,7 @@
 package com.example.DB;
 
 import com.example.DB.BongaCams.BongaCamsDataBase;
+import com.example.skyprivate.CheckStatus.BongaCams.BongaReader;
 import com.example.skyprivate.Logger;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -27,18 +28,47 @@ import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
-    private final String performerName = "scoftyss";
-    //private final String performerName = "pippalee";
+    private final String performerName = "panamera96";
+    //private static final String performerName = "scoftyss";
+    private String performerStatus = "";
+    private String currStatus = "";
     private int currId;
     private WebSocketClient client;
 
     public static void main(String[] args) {
+
         SecureWebSocketClientExample reader = new SecureWebSocketClientExample();
         reader.start();
     }
 
     private void start() {
-        connectToWebSocket();
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        Runnable bongaChecker = () -> {
+            try {
+                if (Objects.equals(performerStatus, "")) {
+                    BongaReader bongaReader = new BongaReader(performerName);
+                    if (bongaReader.getHistory().isOnline()) {
+                        performerStatus = "live";
+                    } else {
+                        performerStatus = "offline";
+                    }
+                }
+
+                if (!Objects.equals(performerStatus, currStatus)) {
+                    if (Objects.equals(performerStatus, "live")) {
+                        connectToWebSocket();
+                    }else{
+                        Logger.log(performerName + " ist nicht Live.");
+                    }
+                    currStatus = performerStatus;
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+        executor.scheduleAtFixedRate(bongaChecker, 0, 1, TimeUnit.SECONDS);
+
 
         Scanner scanner = new Scanner(System.in);
         String input;
@@ -81,14 +111,16 @@ public class SecureWebSocketClientExample {
                             dataKey + "\"]}";
 
                     send(joinRoomMessage);
-                    currId = 0;
+                    currId = 1;
                     ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
                     Runnable bongaChecker = () -> {
                         try {
-                            if (currId != 0) {
+                            if (!Objects.equals(performerStatus, "offline")) {
+                                send("{\"id\":" + currId + ",\"name\":\"ChatModule.syncUserList\",\"args\":[\"public-chat\"]}");
                                 send("{\"id\":" + currId + ",\"name\":\"ping\"}");
-                                Logger.log("Ping current Id :" + currId);
+                                Logger.log("send Ping current Id :" + currId);
                             }
+
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -130,8 +162,9 @@ public class SecureWebSocketClientExample {
                             }
 
                             if (jsonObject.getJSONObject("result").has("audioAvailable") && jsonObject.getJSONObject("result").has("freeShow")) {
-                                if(!jsonObject.getJSONObject("result").getBoolean("audioAvailable") && !jsonObject.getJSONObject("result").getBoolean("freeShow")) {
+                                if (!jsonObject.getJSONObject("result").getBoolean("audioAvailable") && !jsonObject.getJSONObject("result").getBoolean("freeShow")) {
                                     Logger.log(performerName + " ist nicht verfügbar");
+                                    performerStatus = "offline";
                                 }
                             }
 
@@ -142,10 +175,12 @@ public class SecureWebSocketClientExample {
 
                                 switch (jsonObject.getJSONObject("result").getString("status")) {
                                     case "offline" -> Logger.log(performerName + " ist Offline");
-                                    case "public" -> {Logger.log(performerName + " ist Öffentlich");
+                                    case "public" -> {
+                                        Logger.log(performerName + " ist Öffentlich");
                                         send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
                                         Logger.log("Mit dem chat von '" + performerName + "' verbunden");
-                                        currId = jsonObject.getInt("id") + 1;}
+                                        currId = jsonObject.getInt("id") + 1;
+                                    }
                                     case "away" -> Logger.log(performerName + " ist AFK");
                                     default ->
                                             Logger.log("Statuts unbekannt: " + jsonObject.getJSONObject("result").getString("status"));
