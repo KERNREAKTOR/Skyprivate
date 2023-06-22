@@ -30,8 +30,7 @@ public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
     //private final String performerName = "panamera96";
     private static final String performerName = "scoftyss";
-    private String performerStatus = "";
-    private String currStatus = "";
+    private Boolean currStatus = null;
     private int currId;
     private WebSocketClient client;
 
@@ -45,22 +44,19 @@ public class SecureWebSocketClientExample {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         Runnable bongaChecker = () -> {
             try {
-                if (Objects.equals(performerStatus, "")) {
-                    BongaReader bongaReader = new BongaReader(performerName);
-                    if (bongaReader.getHistory().isOnline()) {
-                        performerStatus = "live";
-                    } else {
-                        performerStatus = "offline";
-                    }
-                }
 
-                if (!Objects.equals(performerStatus, currStatus)) {
-                    if (Objects.equals(performerStatus, "live")) {
+                boolean isLive =  new BongaReader(performerName).getHistory().isOnline();
+                if (currStatus == null){
+                    currStatus = isLive;
+                }
+                if (!Objects.equals(isLive, currStatus)) {
+                    if( isLive){
                         connectToWebSocket();
+                        Logger.log(performerName + " ist live.");
                     }else{
-                        Logger.log(performerName + " ist nicht Live.");
+                        Logger.log(performerName + " ist offline.");
                     }
-                    currStatus = performerStatus;
+                    currStatus = isLive;
                 }
 
             } catch (Exception e) {
@@ -115,7 +111,7 @@ public class SecureWebSocketClientExample {
                     ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
                     Runnable bongaChecker = () -> {
                         try {
-                            if (!Objects.equals(performerStatus, "offline")) {
+                            if (currStatus) {
                                 //send("{\"id\":" + currId + ",\"name\":\"ChatModule.syncUserList\",\"args\":[\"public-chat\"]}");
                                 send("{\"id\":" + currId + ",\"name\":\"ping\"}");
                                 Logger.log("send Ping current Id :" + currId);
@@ -151,7 +147,6 @@ public class SecureWebSocketClientExample {
                             if (jsonObject.getJSONObject("result").has("audioAvailable") && jsonObject.getJSONObject("result").has("freeShow")) {
                                 if (!jsonObject.getJSONObject("result").getBoolean("audioAvailable") && !jsonObject.getJSONObject("result").getBoolean("freeShow")) {
                                     Logger.log(performerName + " ist nicht verfügbar");
-                                    performerStatus = "offline";
                                 }
                             }
 

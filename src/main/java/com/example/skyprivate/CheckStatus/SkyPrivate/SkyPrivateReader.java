@@ -43,16 +43,19 @@ public class SkyPrivateReader {
         }
 
         // Wählen Sie das Element mit der Klasse "profile-meta__heading__item ignoreTranslate" aus
-        assert doc != null;
-        setUserName(getResult(doc, "span.profile-meta__heading__item.ignoreTranslate"));
-        setSkypeID(getResult(doc, "span.skype-id__id"));
-        setPricePerMinute(getResult(doc, "p.profile-meta__price span"));
-        setLastSeen(getResult(doc, "span.page-section__heading__tag__text"));
-        setOnlineStatus(getResult(doc, "span.profile-picture__status"));
+
+        if(doc != null){
+            setUserName(getResult(doc, "span.profile-meta__heading__item.ignoreTranslate"));
+            setSkypeID(getResult(doc, "span.skype-id__id"));
+            setPricePerMinute(getResult(doc, "p.profile-meta__price span"));
+            setLastSeen(getResult(doc, "span.page-section__heading__tag__text"));
+            setOnlineStatus(getResult(doc, "span.profile-picture__status"));
+        }
+
 
         //Profilinformationen
         //Age 18 Sex Female Location Medellin, Colombia Sexual orientation Bisexual Speaks English Eyes Black Hair Black Constitution Athletic Height 168 cm Weight 52 Kg Twitter Scofty_s Category Regular Tags anal, female, bigass, pretty, pink, glamour, soft, kitty
-        String test = getResult(doc, "div.profile__dl");
+        //String test = getResult(doc, "div.profile__dl");
     }
 
     private static String getResult(Document doc, String filter) {
