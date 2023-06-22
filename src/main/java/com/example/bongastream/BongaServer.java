@@ -114,8 +114,7 @@ public class BongaServer {
     }
 
     public static void main(String[] args) throws Exception {
-        mergeVideos("H:\\full.ts",
-                "H:\\Video Projekte\\Dennis Hype\\stream_scoftyss\\Nude\\20230608_004558572");
+     //   mergeVideos("H:\\full.ts",//          "H:\\Video Projekte\\Dennis Hype\\stream_scoftyss\\Nude\\20230608_004558572");
 
         String curChuck = "";
         boolean curLive;
