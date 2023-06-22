@@ -47,6 +47,12 @@ public class SecureWebSocketClientExample {
 
                 boolean isLive =  new BongaReader(performerName).getHistory().isOnline();
                 if (currStatus == null){
+                    if( isLive){
+                        connectToWebSocket();
+                        Logger.log(performerName + " ist live.");
+                    }else{
+                        Logger.log(performerName + " ist offline.");
+                    }
                     currStatus = isLive;
                 }
                 if (!Objects.equals(isLive, currStatus)) {
