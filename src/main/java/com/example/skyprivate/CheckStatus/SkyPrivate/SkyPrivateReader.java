@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -26,7 +27,39 @@ public class SkyPrivateReader {
     private String skypeID;
     private String url;
 
-    public SkyPrivateReader(String url) {
+    public SkyPrivateReader(String url) throws IOException {
+        String url1 = "https://profiles.skyprivate.com/models/visited/?_ajax=1&_caller=https%3A%2F%2Fprofiles.skyprivate.com%2Fmodels%2F1s5qw-scofty-s.html";
+
+        // Verbindung herstellen
+        URL obj = new URL(url1);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        // Request-Methoden und Header setzen
+        con.setRequestMethod("GET");
+        con.setRequestProperty("accept", "application/json, text/javascript, */*; q=0.01");
+        con.setRequestProperty("accept-language", "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7");
+        con.setRequestProperty("sec-ch-ua", "\"Opera GX\";v=\"99\", \"Chromium\";v=\"113\", \"Not-A.Brand\";v=\"24\"");
+        con.setRequestProperty("sec-ch-ua-mobile", "?0");
+        con.setRequestProperty("sec-ch-ua-platform", "\"Windows\"");
+        con.setRequestProperty("sec-fetch-dest", "empty");
+        con.setRequestProperty("sec-fetch-mode", "cors");
+        con.setRequestProperty("sec-fetch-site", "same-origin");
+        con.setRequestProperty("x-requested-with", "XMLHttpRequest");
+        con.setRequestProperty("referrer", "https://profiles.skyprivate.com/models/1s5qw-scofty-s.html");
+        con.setRequestProperty("referrerPolicy", "strict-origin-when-cross-origin");
+        con.setDoOutput(true);
+
+        // Response verarbeiten
+        int responseCode = con.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+        }
 //        String htm = getHtmlContent("https://www.livejasmin.com/de/frauen/#!chat/AriannaNastya");
         setUrl(url);
         Document doc = null;

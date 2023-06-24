@@ -1,6 +1,8 @@
 package com.example.DB;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class DateHelper {
@@ -14,6 +16,14 @@ public class DateHelper {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         // Datum und Uhrzeit in einen String umwandeln
+        return dateTime.format(formatter);
+    }
+    public static String getBongaLongToDate(long unixTimestamp) {
+        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(unixTimestamp), ZoneId.of("Europe/Berlin"));
+
+        // Datumsformat definieren
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
         return dateTime.format(formatter);
     }
     public static String getTimeNow(){
