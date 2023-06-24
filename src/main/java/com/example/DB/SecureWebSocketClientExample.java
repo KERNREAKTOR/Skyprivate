@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
-    private static final String performerName = "syka001";
-    //private static final String performerName = "scoftyss";
+    //private static final String performerName = "syka001";
+    private static final String performerName = "scoftyss";
     private Boolean currStatus = null;
     private int currId;
     private WebSocketClient client;
