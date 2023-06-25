@@ -1,6 +1,7 @@
 package com.example.DB;
 
 import com.example.DB.BongaCams.BongaCamsDataBase;
+import com.example.helpers.CurrencyHelper;
 import com.example.skyprivate.CheckStatus.BongaCams.BongaReader;
 import com.example.skyprivate.Logger;
 import org.apache.http.HttpEntity;
@@ -28,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
-    //private static final String performerName = "syka001";
-    private static final String performerName = "scoftyss";
+    private static final String performerName = "mashulya29";
+    //private static final String performerName = "scoftyss";
     private Boolean currStatus = null;
     private int currId;
     private WebSocketClient client;
@@ -50,20 +51,20 @@ public class SecureWebSocketClientExample {
         Runnable bongaChecker = () -> {
             try {
 
-                boolean isLive = new BongaReader(performerName).getHistory().isOnline();
+                boolean isLive = new BongaReader(performerName).getResult().getChatShowStatusOptions().isOffline();
                 if (currStatus == null) {
-                    if (isLive) {
+                    if (!isLive) {
                         connectToWebSocket();
-                        Logger.log(performerName + " ist live.");
+                        Logger.log(performerName + " ist online.");
                     } else {
                         Logger.log(performerName + " ist offline.");
                     }
                     currStatus = isLive;
                 }
                 if (!Objects.equals(isLive, currStatus)) {
-                    if (isLive) {
+                    if (!isLive) {
                         connectToWebSocket();
-                        Logger.log(performerName + " ist live.");
+                        Logger.log(performerName + " ist online.");
                     } else {
                         Logger.log(performerName + " ist offline.");
                     }
@@ -124,12 +125,11 @@ public class SecureWebSocketClientExample {
 
                     Runnable bongaChecker = () -> {
                         try {
-                            if (currStatus) {
-
+                            if (!currStatus) {
                                 send("{\"id\":" + currId + ",\"name\":\"ping\"}");
-                                Logger.log("###########################");
-                                Logger.log("# send Ping current Id :" + currId + " #");
-                                Logger.log("###########################");
+
+                                Logger.log("--- send Ping current Id :" + currId + " ---");
+
                             }
 
                         } catch (Exception e) {
@@ -138,11 +138,11 @@ public class SecureWebSocketClientExample {
                     };
                     Runnable syncUserList = () -> {
                         try {
-                            if (currStatus) {
+                            if (!currStatus) {
                                 send("{\"id\":" + currId + ",\"name\":\"ChatModule.syncUserList\",\"args\":[\"public-chat\"]}");
-                                Logger.log("##########################################");
-                                Logger.log("# Synchronisiere Userliste current Id :" + currId + " #");
-                                Logger.log("##########################################");
+
+                                Logger.log("--- Synchronisiere Userliste current Id :" + currId + " ---");
+
                             }
 
                         } catch (Exception e) {
@@ -171,9 +171,9 @@ public class SecureWebSocketClientExample {
                             //{"id":3,"result":{"totalUsers":324,"totalGuests":2534,"userListLimit":-1},"error":null}
                             if (jsonObject.getJSONObject("result").has("totalUsers")) {
                                 int totalUsers = jsonObject.getJSONObject("result").getInt("totalUsers");
-                                int totalGuests= jsonObject.getJSONObject("result").getInt("totalGuests");
-                                int userListLimit= jsonObject.getJSONObject("result").getInt("userListLimit");
-                                Logger.log("Zuschauer: " + (totalUsers+totalGuests) + " Gäste: " + totalGuests + " Benutzer: " + totalUsers);
+                                int totalGuests = jsonObject.getJSONObject("result").getInt("totalGuests");
+                                int userListLimit = jsonObject.getJSONObject("result").getInt("userListLimit");
+                                Logger.log("Zuschauer: " + (totalUsers + totalGuests) + " davon Gäste: " + totalGuests + " und Benutzer: " + totalUsers);
 
                             }
                             if (jsonObject.getJSONObject("result").has("history")) {
@@ -201,6 +201,7 @@ public class SecureWebSocketClientExample {
 
                                 switch (jsonObject.getJSONObject("result").getString("status")) {
                                     case "offline" -> Logger.log(performerName + " ist Offline");
+                                    case "fullprivate" -> Logger.log(performerName + " ist Offline");
                                     case "public" -> {
                                         if (jsonObject.getJSONObject("result").has("tipMenu")) {
                                             Logger.log("--- Tip Menü ---");
@@ -213,12 +214,10 @@ public class SecureWebSocketClientExample {
                                     }
                                     case "away" -> Logger.log(performerName + " ist away");
                                     default ->
-                                            Logger.log("Statuts unbekannt: " + jsonObject.getJSONObject("result").getString("status"));
+                                            Logger.log("Status unbekannt: " + jsonObject.getJSONObject("result").getString("status"));
                                 }
                             }
                         }
-
-
                     }
 
                     if (jsonObject.has("type")) {
@@ -250,11 +249,12 @@ public class SecureWebSocketClientExample {
 
                                 BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
                                 dataBase.addIncomeInfo(amount, username, timestamp, isBestMember, role, displayName, signupDate, accessLevel, userId);
-                                Logger.log(username + " hat " + amount + " Token gegeben.");
+                                Logger.log(username + " hat " + amount + "(" + CurrencyHelper.convertWithEuro (amount * 0.05) + " €) Token gegeben.");
                             }
                             case "ServerMessageEvent:PERFORMER_STATUS_CHANGE" -> {
                                 //{"ts":1687615387314,"type":"ServerMessageEvent:PERFORMER_STATUS_CHANGE","body":"offline"}
-
+                                BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
+                                dataBase.addStatus(jsonObject.getString("body"),timestamp);
                                 switch (jsonObject.getString("body")) {
                                     case "offline" -> Logger.log(performerName + " ist offline.");
                                     case "fullprivate" -> Logger.log(performerName + " ist fullprivate.");

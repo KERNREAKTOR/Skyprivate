@@ -1,4 +1,4 @@
-package com.example.DB;
+package com.example.helpers;
 
 import com.example.DB.LiveJasmin.LiveJasminDataBase;
 import com.example.skyprivate.Logger;

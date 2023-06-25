@@ -5,10 +5,7 @@ import com.example.skyprivate.CheckStatus.BongaCams.CheckStatus.StatusBongaCams;
 import com.example.skyprivate.CheckStatus.BongaCams.CheckStatus.StreamInfo;
 import com.example.skyprivate.Logger;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +16,7 @@ public class BongaServer {
     //private static final String bongaPerformer = "lovewildguy";
     private static final String bongaPerformer = "scoftyss";
     private static String finalStreamUrl = null;
+
     public static void mergeVideos(String outputFile, String directoryPath) {
         String ffmpegCmd = "libs/ffmpeg";
         StringBuilder cmd = new StringBuilder();
@@ -38,6 +36,7 @@ public class BongaServer {
             }
         }
 
+        Logger.log("Starte die zusammenführung der " + fileList.size() + " Videos");
         // Konstruiere den FFmpeg-Befehl
         cmd.append(ffmpegCmd).append(" -i \"concat:");
         for (File inputFile : fileList) {
@@ -48,6 +47,10 @@ public class BongaServer {
 
         try {
             Process process = Runtime.getRuntime().exec(cmd.toString());
+            // Lesen und Anzeigen des stdout-Streams
+
+            String line;
+
             int exitValue = process.waitFor();
             if (exitValue == 0) {
                 System.out.println("Zusammenfügen der Videos abgeschlossen.");
@@ -55,7 +58,6 @@ public class BongaServer {
                 System.out.println("Fehler beim Zusammenfügen der Videos. Exit-Code: " + exitValue);
                 // Lese die Fehlermeldung aus dem Error-Stream
                 BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                String line;
                 while ((line = errorReader.readLine()) != null) {
                     System.out.println(line);
                 }
@@ -93,15 +95,15 @@ public class BongaServer {
                 for (StreamInfo curStream : streamInfo) {
                     Logger.bongaLog("Auflösung: " + curStream.getResolution() +
                             " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
-                    if (curStream.getBandWith() < 3600000 && curStream.getBandWith() != 0) {
-                        chunkList = curStream.getChunkLink();
-                        curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
-                    }
-//                    if (Objects.equals(curStream.getResolution(), "1280x720")) {
-//
+//                    if (curStream.getBandWith() < 3600000 && curStream.getBandWith() != 0) {
 //                        chunkList = curStream.getChunkLink();
 //                        curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
 //                    }
+                    if (Objects.equals(curStream.getResolution(), "1280x720")) {
+
+                        chunkList = curStream.getChunkLink();
+                        curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
+                    }
                 }
 
                 Logger.bongaLog(curRes, bonga);
@@ -114,13 +116,11 @@ public class BongaServer {
     }
 
     public static void main(String[] args) throws Exception {
-     //   mergeVideos("H:\\full.ts",//          "H:\\Video Projekte\\Dennis Hype\\stream_scoftyss\\Nude\\20230608_004558572");
+        mergeVideos("H:\\20230625_00_36_03_983.ts", "E:\\stream_scoftyss\\20230625_00_36_03_983");
 
         String curChuck = "";
         boolean curLive;
 
-        //Deque<String> urlQuere = new ArrayDeque<>();
-        //ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         BongaReader bongaReader = new BongaReader(bongaPerformer);
         curLive = bongaReader.getHistory().isOnline();
 

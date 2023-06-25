@@ -1,4 +1,4 @@
-package com.example.DB;
+package com.example.helpers;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

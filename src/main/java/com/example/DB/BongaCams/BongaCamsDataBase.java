@@ -1,9 +1,11 @@
 package com.example.DB.BongaCams;
 
-import com.example.DB.DateHelper;
+import com.example.helpers.CurrencyHelper;
+import com.example.helpers.DateHelper;
 import com.example.skyprivate.Logger;
 
 import java.sql.*;
+import java.text.ParseException;
 
 public class BongaCamsDataBase {
     private static String performerName;
@@ -111,8 +113,8 @@ public class BongaCamsDataBase {
         String tableName = "bonga_cams_income";
         try (Connection conn = DriverManager.getConnection(url)) {
 
-            String insertQuery = "INSERT INTO " + tableName + " (performer_name, amount, username, timestamp,isBestMember, role, displayName, signupDate, accessLevel, userId) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO " + tableName + " (performer_name, amount, username, timestamp,isBestMember, role, displayName, signupDate, accessLevel, userId, euro) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
 
                 stmt.setString(1, performerName);
@@ -125,9 +127,12 @@ public class BongaCamsDataBase {
                 stmt.setString(8, signupDate);
                 stmt.setString(9, accessLevel);
                 stmt.setInt(10, userId);
+                stmt.setDouble(11, CurrencyHelper.convertWithoutEuro(income * 0.05));
                 stmt.executeUpdate();
 
                 Logger.log("Performer: " + performerName + " wurde ein Eintrag in der Datenbank (" + tableName + ") hinzugefügt.");
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
         } catch (SQLException e) {
             System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank: " + e.getMessage());
