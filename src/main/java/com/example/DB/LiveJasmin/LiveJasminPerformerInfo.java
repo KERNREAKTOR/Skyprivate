@@ -8,8 +8,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static com.example.DB.SQLReadHelper.getIntegerValue;
-import static com.example.DB.SQLReadHelper.getStringValue;
+import static com.example.helpers.SQLReadHelper.getIntegerValue;
+import static com.example.helpers.SQLReadHelper.getStringValue;
 
 public class LiveJasminPerformerInfo {
     public LiveJasminPerformerInfo(String performerName){
