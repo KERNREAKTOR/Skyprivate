@@ -15,7 +15,7 @@ public class BongaCamsDataBase {
         BongaCamsDataBase.performerName = performerName;
     }
 
-    public void resetDataBase(){
+    public void resetDataBase() {
         // Verbindung zur Datenbank herstellen
         String url = "jdbc:sqlite:path/to/database.db";
         try (Connection conn = DriverManager.getConnection(url)) {
@@ -23,11 +23,11 @@ public class BongaCamsDataBase {
 
             // SQL-Abfrage zum Zurücksetzen der Einträge ausführen
             //Setze die Tabelle bonga_cams_performer_status_change zurück
-            String currTable="bonga_cams_performer_status_change";
+            String currTable = "bonga_cams_performer_status_change";
             String deleteQuery = "DELETE FROM " + currTable;
             try (Statement stmt = conn.createStatement()) {
                 int rowCount = stmt.executeUpdate(deleteQuery);
-               Logger.log(rowCount + " Einträge inder Tabelle '"+ currTable +"' wurden zurückgesetzt.");
+                Logger.log(rowCount + " Einträge inder Tabelle '" + currTable + "' wurden zurückgesetzt.");
             }
             String resetAutoIncrementQuery = "DELETE FROM sqlite_sequence WHERE name='" + currTable + "'";
             try (Statement stmt = conn.createStatement()) {
@@ -36,24 +36,24 @@ public class BongaCamsDataBase {
             }
 
             //Setze die Tabelle bonga_cams_messages zurück.
-            currTable="bonga_cams_messages";
+            currTable = "bonga_cams_messages";
             deleteQuery = "DELETE FROM " + currTable;
             try (Statement stmt = conn.createStatement()) {
                 int rowCount = stmt.executeUpdate(deleteQuery);
-                Logger.log(rowCount + " Einträge inder Tabelle '"+ currTable +"' wurden zurückgesetzt.");
+                Logger.log(rowCount + " Einträge inder Tabelle '" + currTable + "' wurden zurückgesetzt.");
             }
-             resetAutoIncrementQuery = "DELETE FROM sqlite_sequence WHERE name='" + currTable + "'";
+            resetAutoIncrementQuery = "DELETE FROM sqlite_sequence WHERE name='" + currTable + "'";
             try (Statement stmt = conn.createStatement()) {
                 stmt.executeUpdate(resetAutoIncrementQuery);
                 Logger.log("Auto-Increment-Wert in der Tabelle '" + currTable + " zurückgesetzt.");
             }
 
             //Setze die Tabelle bonga_cams_income zurück.
-            currTable="bonga_cams_income";
+            currTable = "bonga_cams_income";
             deleteQuery = "DELETE FROM " + currTable;
             try (Statement stmt = conn.createStatement()) {
                 int rowCount = stmt.executeUpdate(deleteQuery);
-                Logger.log(rowCount + " Einträge inder Tabelle '"+ currTable +"' wurden zurückgesetzt.");
+                Logger.log(rowCount + " Einträge inder Tabelle '" + currTable + "' wurden zurückgesetzt.");
             }
             resetAutoIncrementQuery = "DELETE FROM sqlite_sequence WHERE name='" + currTable + "'";
             try (Statement stmt = conn.createStatement()) {
@@ -65,6 +65,7 @@ public class BongaCamsDataBase {
         }
 
     }
+
     public void addStatus(String status, long ts) {
         // Verbindung zur Datenbank herstellen
 
@@ -78,14 +79,13 @@ public class BongaCamsDataBase {
                 stmt.setString(2, status);
                 stmt.setString(3, DateHelper.getBongaLongToDate(ts));
                 stmt.executeUpdate();
-
-                //Logger.log("Performer: " + performerName + " wurde ein Eintrag in der Datenbank (" + tableName + ") hinzugefügt.");
             }
         } catch (SQLException e) {
             System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank: " + e.getMessage());
         }
     }
-    public void addMessage(String message, String userName,Long ts) {
+
+    public void addMessage(String message, String userName, Long ts) {
         // Verbindung zur Datenbank herstellen
 
         String tableName = "bonga_cams_messages";
@@ -105,8 +105,8 @@ public class BongaCamsDataBase {
         }
     }
 
-    public void addIncomeInfo(Integer income, String userName,long ts, int isBestMember,
-                              String role, String displayName,String signupDate, String accessLevel,
+    public void addIncomeInfo(Integer income, String userName, long ts, int isBestMember,
+                              String role, String displayName, String signupDate, String accessLevel,
                               int userId) {
         // Verbindung zur Datenbank herstellen
 
@@ -129,8 +129,6 @@ public class BongaCamsDataBase {
                 stmt.setInt(10, userId);
                 stmt.setDouble(11, CurrencyHelper.convertWithoutEuro(income * 0.05));
                 stmt.executeUpdate();
-
-                Logger.log("Performer: " + performerName + " wurde ein Eintrag in der Datenbank (" + tableName + ") hinzugefügt.");
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
