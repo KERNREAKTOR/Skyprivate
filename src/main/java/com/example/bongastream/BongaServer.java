@@ -15,7 +15,7 @@ public class BongaServer {
     //private static final String bongaPerformer = "tenderpassion";
     //private static final String bongaPerformer = "ladysunshine-";
     //private static final String bongaPerformer = "scoftyss";
-    private static final String bongaPerformer = "annaplayboy";
+    private static final String bongaPerformer = "sonyaplayxxxt";
     private static String finalStreamUrl = null;
 
     public static void mergeVideos(String outputFile, String directoryPath) {
@@ -121,7 +121,7 @@ public class BongaServer {
     }
 
     public static void main(String[] args) throws Exception {
-        //mergeVideos("H:\\stream_LadySunshine_001.mp4", "C:\\BongaCams\\hls\\stream_LadySunshine-\\public-aac\\stream_LadySunshine-\\2023\\06\\25\\17.34.47.940\\001");
+        //mergeVideos("H:\\stream_Tenderpassion_01.mp4", "E:\\stream_Tenderpassion\\2023\\06\\26\\18.51.23.077\\01");
 
 
         String curChuck = "";
@@ -163,6 +163,7 @@ public class BongaServer {
                 if (bongaReader.getHistory().isOnline()) {
                     errorCode = 10;
 
+                    getStreamLink(bongaReader);
                     if (StatusBongaCams.getLastOnline() == null) {
                         errorCode = 11;
 
@@ -170,7 +171,7 @@ public class BongaServer {
                         errorCode = 12;
                         StatusBongaCams.setLastOnline(sdf.format(new Date()));
                         errorCode = 13;
-                        getStreamLink(bongaReader);
+
                         errorCode = 14;
                     }
 
@@ -195,7 +196,7 @@ public class BongaServer {
                 }
 
             } catch (Exception e) {
-                Logger.log("[BongaServer.checkChunk] :" + " Error Code:" + errorCode + e.getMessage());
+                Logger.log("[BongaServer.checkChunk] :" + " Error Code:" + errorCode + " " + e.getMessage());
             }
         }
     }
