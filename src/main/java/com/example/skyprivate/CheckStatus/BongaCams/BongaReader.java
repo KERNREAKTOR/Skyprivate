@@ -56,7 +56,7 @@ public class BongaReader {
     private static final String URL = "https://bongacams.com/tools/amf.php";
 
     public static void main(String[] args) {
-        String model = "scoftyss"; // Replace with the desired model
+        String model = "milkssweeet"; // Replace with the desired model
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost httpPost = new HttpPost(URL);

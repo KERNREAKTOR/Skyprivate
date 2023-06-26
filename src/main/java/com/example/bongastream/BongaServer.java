@@ -12,8 +12,10 @@ import java.util.*;
 
 public class BongaServer {
     //private static final String bongaPerformer = "princessara";
-    private static final String bongaPerformer = "ladysunshine-";
+    //private static final String bongaPerformer = "tenderpassion";
+    //private static final String bongaPerformer = "ladysunshine-";
     //private static final String bongaPerformer = "scoftyss";
+    private static final String bongaPerformer = "annaplayboy";
     private static String finalStreamUrl = null;
 
     public static void mergeVideos(String outputFile, String directoryPath) {
@@ -98,7 +100,7 @@ public class BongaServer {
                 for (StreamInfo curStream : streamInfo) {
                     Logger.bongaLog("Auflösung: " + curStream.getResolution() +
                             " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
-                    if (curStream.getBandWith() < 33600000 && curStream.getBandWith() != 0) {
+                    if (curStream.getBandWith() < 3600000 && curStream.getBandWith() != 0) {
                         chunkList = curStream.getChunkLink();
                         curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
                     }
@@ -135,42 +137,65 @@ public class BongaServer {
         }
 
         while (true) {
+            Integer errorCode = null;
             try {
+                errorCode = 0;
 
                 bongaReader = new BongaReader(bongaPerformer);
-
+                errorCode = 1;
                 if (!Objects.equals(curLive, bongaReader.getHistory().isOnline())) {
+
+                    errorCode = 2;
                     if (bongaReader.getHistory().isOnline()) {
+                        errorCode = 3;
                         Logger.bongaLog("🟢 " + bongaReader.getHistory().getDisplayName() + " ist Live.", bongaReader);
+                        errorCode = 4;
                     } else {
+                        errorCode = 5;
                         Logger.bongaLog("🔴 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live.", bongaReader);
+                        errorCode = 6;
                     }
+                    errorCode = 7;
                     curLive = bongaReader.getHistory().isOnline();
+                    errorCode = 8;
                 }
+                errorCode = 9;
                 if (bongaReader.getHistory().isOnline()) {
+                    errorCode = 10;
 
                     if (StatusBongaCams.getLastOnline() == null) {
+                        errorCode = 11;
 
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
+                        errorCode = 12;
                         StatusBongaCams.setLastOnline(sdf.format(new Date()));
+                        errorCode = 13;
                         getStreamLink(bongaReader);
+                        errorCode = 14;
                     }
 
+
+                    errorCode = 15;
                     String chuckChecker = StatusBongaCams.GetUrlChunk(finalStreamUrl + "chunks.m3u8");
+                    errorCode = 16;
+
 
                     if (!Objects.equals(curChuck, chuckChecker)) {
-
+                        errorCode = 17;
                         curChuck = chuckChecker;
+                        errorCode = 18;
                         StatusBongaCams.writeFile(readM3UPlaylist(chuckChecker, finalStreamUrl).get(0));
+                        errorCode = 19;
                     }
-
+                    errorCode = 20;
                 } else {
-
+                    errorCode = 21;
                     StatusBongaCams.setLastOnline(null);
+                    errorCode = 22;
                 }
 
             } catch (Exception e) {
-                Logger.log("[BongaServer.checkChunk] :" + e.getMessage());
+                Logger.log("[BongaServer.checkChunk] :" + " Error Code:" + errorCode + e.getMessage());
             }
         }
     }
