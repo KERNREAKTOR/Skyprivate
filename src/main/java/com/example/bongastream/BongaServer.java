@@ -5,16 +5,15 @@ import com.example.skyprivate.CheckStatus.BongaCams.CheckStatus.StatusBongaCams;
 import com.example.skyprivate.CheckStatus.BongaCams.CheckStatus.StreamInfo;
 import com.example.skyprivate.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class BongaServer {
-    //private static final String bongaPerformer = "lovewildguy";
-    private static final String bongaPerformer = "scoftyss";
+    //private static final String bongaPerformer = "princessara";
+    private static final String bongaPerformer = "ladysunshine-";
+    //private static final String bongaPerformer = "scoftyss";
     private static String finalStreamUrl = null;
 
     public static void mergeVideos(String outputFile, String directoryPath) {
@@ -23,7 +22,7 @@ public class BongaServer {
 
         String fileExtension = ".ts"; // Gewünschte Dateierweiterung
 
-        ArrayList<File> fileList = new ArrayList<>();
+        ArrayList<String> fileList = new ArrayList<>();
 
         File directory = new File(directoryPath);
         File[] files = directory.listFiles();
@@ -31,38 +30,42 @@ public class BongaServer {
         if (files != null) {
             for (File file : files) {
                 if (file.isFile() && file.getName().endsWith(fileExtension)) {
-                    fileList.add(file);
+                    fileList.add(file.toString());
+                    //Logger.log(file.getName());
                 }
             }
         }
 
+        Collections.sort(fileList, new FilenameComparator());
+
         Logger.log("Starte die zusammenführung der " + fileList.size() + " Videos");
         // Konstruiere den FFmpeg-Befehl
         cmd.append(ffmpegCmd).append(" -i \"concat:");
-        for (File inputFile : fileList) {
+        for (String inputFile : fileList) {
             cmd.append(inputFile).append("|");
         }
         cmd.deleteCharAt(cmd.length() - 1); // Entferne das letzte Trennzeichen |
         cmd.append("\" -c copy ").append(outputFile);
 
         try {
+            //libs/ffmpeg -i "concat:E:\stream_scoftyss\20230625_00_36_03_983\l_18973_1000067_500.ts|E:\stream_scoftyss\20230625_00_36_03_983\l_18973_100067_50.ts" -c copy H:\20230625_00_36_03_983.ts
             Process process = Runtime.getRuntime().exec(cmd.toString());
             // Lesen und Anzeigen des stdout-Streams
 
-            String line;
-
-            int exitValue = process.waitFor();
-            if (exitValue == 0) {
-                System.out.println("Zusammenfügen der Videos abgeschlossen.");
-            } else {
-                System.out.println("Fehler beim Zusammenfügen der Videos. Exit-Code: " + exitValue);
-                // Lese die Fehlermeldung aus dem Error-Stream
-                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                while ((line = errorReader.readLine()) != null) {
-                    System.out.println(line);
-                }
-            }
-        } catch (IOException | InterruptedException e) {
+//            String line;
+//
+//            int exitValue = process.waitFor();
+//            if (exitValue == 0) {
+//                System.out.println("Zusammenfügen der Videos abgeschlossen.");
+//            } else {
+//                System.out.println("Fehler beim Zusammenfügen der Videos. Exit-Code: " + exitValue);
+//                // Lese die Fehlermeldung aus dem Error-Stream
+//                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+//                while ((line = errorReader.readLine()) != null) {
+//                    System.out.println(line);
+//                }
+//            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -95,15 +98,15 @@ public class BongaServer {
                 for (StreamInfo curStream : streamInfo) {
                     Logger.bongaLog("Auflösung: " + curStream.getResolution() +
                             " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
-//                    if (curStream.getBandWith() < 3600000 && curStream.getBandWith() != 0) {
-//                        chunkList = curStream.getChunkLink();
-//                        curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
-//                    }
-                    if (Objects.equals(curStream.getResolution(), "1280x720")) {
-
+                    if (curStream.getBandWith() < 33600000 && curStream.getBandWith() != 0) {
                         chunkList = curStream.getChunkLink();
                         curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
                     }
+//                    if (Objects.equals(curStream.getResolution(), "1280x720")) {
+//
+//                        chunkList = curStream.getChunkLink();
+//                        curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
+//                    }
                 }
 
                 Logger.bongaLog(curRes, bonga);
@@ -116,7 +119,8 @@ public class BongaServer {
     }
 
     public static void main(String[] args) throws Exception {
-        mergeVideos("H:\\20230625_00_36_03_983.ts", "E:\\stream_scoftyss\\20230625_00_36_03_983");
+        //mergeVideos("H:\\stream_LadySunshine_001.mp4", "C:\\BongaCams\\hls\\stream_LadySunshine-\\public-aac\\stream_LadySunshine-\\2023\\06\\25\\17.34.47.940\\001");
+
 
         String curChuck = "";
         boolean curLive;
@@ -136,19 +140,18 @@ public class BongaServer {
                 bongaReader = new BongaReader(bongaPerformer);
 
                 if (!Objects.equals(curLive, bongaReader.getHistory().isOnline())) {
-                    if (curLive) {
+                    if (bongaReader.getHistory().isOnline()) {
                         Logger.bongaLog("🟢 " + bongaReader.getHistory().getDisplayName() + " ist Live.", bongaReader);
                     } else {
                         Logger.bongaLog("🔴 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live.", bongaReader);
                     }
                     curLive = bongaReader.getHistory().isOnline();
                 }
-                //System.out.println(StatusBongaCams.getPlayList(bongaReader.getPlayList()));
                 if (bongaReader.getHistory().isOnline()) {
 
                     if (StatusBongaCams.getLastOnline() == null) {
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HH_mm_ss_SSS");
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
                         StatusBongaCams.setLastOnline(sdf.format(new Date()));
                         getStreamLink(bongaReader);
                     }
@@ -156,30 +159,9 @@ public class BongaServer {
                     String chuckChecker = StatusBongaCams.GetUrlChunk(finalStreamUrl + "chunks.m3u8");
 
                     if (!Objects.equals(curChuck, chuckChecker)) {
-                        //Set<String> uniqueFileNames = new HashSet<>(readM3UPlaylist(chuckChecker, finalStreamUrl));
-                        //List<String> sortedList = new ArrayList<>(uniqueFileNames);
-                        //sortedList.sort(Comparator.naturalOrder());
-                        // urlQuere.addAll(sortedList);
 
                         curChuck = chuckChecker;
-                        //StatusBongaCams.DownloadVideos(urlQuere);
-                        // DownloadManager downloadManager = new DownloadManager();
-
-
-                        // Warten, bis alle Downloads abgeschlossen sind
-
-                        //for (String fileLin: readM3UPlaylist(chuckChecker, finalStreamUrl)){
                         StatusBongaCams.writeFile(readM3UPlaylist(chuckChecker, finalStreamUrl).get(0));
-                        //downloadManager.downloadFile(fileLin);
-                        //}
-                        //uniqueFileNames.clear();
-//                        while (!urlQuere.isEmpty()) {
-//                            String curFile = urlQuere.pop();
-//                            downloadManager.downloadFile(curFile);
-//                            //Thread thread = new Thread(() -> writeFile(curFile));
-//                            //thread.start();
-//                        }
-                        //downloadManager.shutdown();
                     }
 
                 } else {
@@ -191,51 +173,20 @@ public class BongaServer {
                 Logger.log("[BongaServer.checkChunk] :" + e.getMessage());
             }
         }
-//        Runnable checkChunk = () -> {
-//
-//        };
+    }
 
-//        Runnable BongaDownloadVideos = () -> {
-//            try {
-//                StatusBongaCams.DownloadVideos(urlQuere);
-//
-//            } catch (Exception e) {
-//                Logger.log("[BongaServer.BongaDownloadVideos]: " + e.getMessage());
-//            }
-//        };
-//        Runnable checkOnline = () -> {
-//            try {
-//                boolean isLive;
-//                BongaReader bongaReader = new BongaReader(bongaPerformer);
-//                isLive = bongaReader.getHistory().isOnline();
-//                if (curLive[0] == null) {
-//                    if (isLive) {
-//                        Logger.bongaLog("🟢 " + bongaReader.getHistory().getDisplayName() + " ist Live.", bongaReader);
-//
-//                    } else {
-//                        Logger.bongaLog("🔴 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live.", bongaReader);
-//                    }
-//                    curLive[0] = isLive;
-//                }
-//
-//                if (isLive != curLive[0]) {
-//                    if (isLive) {
-//                        Logger.bongaLog("🟢 " + bongaReader.getHistory().getDisplayName() + " ist Live.", bongaReader);
-//
-//                    } else {
-//                        Logger.bongaLog("🔴 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live.", bongaReader);
-//                    }
-//                    curLive[0] = isLive;
-//                }
-//            } catch (Exception e) {
-//                Logger.log(e.getMessage());
-//
-//            }
-//        };
+    static class FilenameComparator implements Comparator<String> {
+        @Override
+        public int compare(String filename1, String filename2) {
+            int startIndex1 = filename1.lastIndexOf('_') + 1;
+            int endIndex1 = filename1.lastIndexOf('.');
+            int number1 = Integer.parseInt(filename1.substring(startIndex1, endIndex1));
 
-        //executor.scheduleAtFixedRate(checkChunk, 0, 2, TimeUnit.SECONDS);
-        //executor.scheduleAtFixedRate(BongaDownloadVideos, 0, 2, TimeUnit.SECONDS);
-        //executor.scheduleAtFixedRate(checkOnline, 0, 2, TimeUnit.SECONDS);
-        //executor.scheduleAtFixedRate(checkStream, 0, 5, TimeUnit.SECONDS);
+            int startIndex2 = filename2.lastIndexOf('_') + 1;
+            int endIndex2 = filename2.lastIndexOf('.');
+            int number2 = Integer.parseInt(filename2.substring(startIndex2, endIndex2));
+
+            return Integer.compare(number1, number2);
+        }
     }
 }

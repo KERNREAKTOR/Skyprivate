@@ -129,6 +129,8 @@ public class Start {
 
         ArrayList<String> bongaPerformer = new ArrayList<>();
         bongaPerformer.add("scoftyss");
+        bongaPerformer.add("princessara");
+        bongaPerformer.add("LadySunshine-");
 
         for (String curPerformer : bongaPerformer) {
             BongaReader bongaReader = new BongaReader(curPerformer);

@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
-    private static final String performerName = "mashulya29";
+    private static final String performerName = "ladysunshine-";
     //private static final String performerName = "scoftyss";
     private Boolean currStatus = null;
     private int currId;
@@ -44,6 +44,27 @@ public class SecureWebSocketClientExample {
 
         SecureWebSocketClientExample reader = new SecureWebSocketClientExample();
         reader.start();
+    }
+
+    private static void incomingTip(JSONObject jsonObject, long timestamp) {
+        //{"type":"ServerMessageEvent:INCOMING_TIP","body":{"a":10,"st":"","f":{"isBestMember":false,"role":"member","isRaiseModelAvailable":false,"displayName":"Zubastikkkk","friendRequestSettings":"select","isPaymentsDisabled":false,"isLogged":true,"isRaiseModelReadyToUse":false,"showType":"public","isBanned":false,"hasProfile":true,"messageSenderSettings":"all","signupDate":"01/25/2016","accessLevel":"unlimited","avatarUrl":"/images/avatars/40/avatars.jpg","privateChatInvitationSettings":"all","hasNote":false,"userId":20328772,"isPerformer":false,"isMcm":false,"chathost":"Aroused1101","isRu":true,"isMuted":false,"username":"Zubastikkkk","hasStream":false,"isPayable":true}},"ts":1687465677028}
+        int amount = jsonObject.getJSONObject("body").getInt("a");
+        String username = jsonObject.getJSONObject("body").getJSONObject("f").getString("username");
+        int isBestMember;
+        if (jsonObject.getJSONObject("body").getJSONObject("f").getBoolean("isBestMember")) {
+            isBestMember = 1;
+        } else {
+            isBestMember = 0;
+        }
+        String role = jsonObject.getJSONObject("body").getJSONObject("f").getString("role");
+        String displayName = jsonObject.getJSONObject("body").getJSONObject("f").getString("displayName");
+        String signupDate = jsonObject.getJSONObject("body").getJSONObject("f").getString("signupDate");
+        String accessLevel = jsonObject.getJSONObject("body").getJSONObject("f").getString("accessLevel");
+        int userId = jsonObject.getJSONObject("body").getJSONObject("f").getInt("userId");
+
+        BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
+        dataBase.addIncomeInfo(amount, username, timestamp, isBestMember, role, displayName, signupDate, accessLevel, userId);
+        Logger.log(username + " hat " + amount + "(" + CurrencyHelper.convertWithEuro(amount * 0.05) + " €) Token gegeben.");
     }
 
     private void start() {
@@ -187,13 +208,6 @@ public class SecureWebSocketClientExample {
                                 Logger.log("Der aktuelle König ist :" + dnKingName + " mit " + amount + " Token");
 
                             }
-
-                            if (jsonObject.getJSONObject("result").has("audioAvailable") && jsonObject.getJSONObject("result").has("freeShow")) {
-                                if (!jsonObject.getJSONObject("result").getBoolean("audioAvailable") && !jsonObject.getJSONObject("result").getBoolean("freeShow")) {
-                                    Logger.log(performerName + " ist nicht verfügbar");
-                                }
-                            }
-
                             if (jsonObject.getJSONObject("result").has("status")) {
 
                                 BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
@@ -231,30 +245,12 @@ public class SecureWebSocketClientExample {
                                 //{"type":"ServerMessageEvent:INCOMING_NOTICE","body":{"style":{"fontFamily":"Comic Sans MS","color":"#008000","fontSize":"120%"},"type":"notice","message":"{\"t\":\"cb:tip-king\",\"m\":\"@username, you are my King! Thank you for the @tipsum Tokens!\",\"d\":{\"un\":\"RomanLyubovny\",\"dn\":\"LyubovnyRoman\",\"type\":\"tkn2\",\"tipsum\":\"4473\"}}","lang":"enc:en"},"ts":1687467601846}
                                 Logger.log("INCOMING_NOTICE");
                             }
-                            case "ServerMessageEvent:INCOMING_TIP" -> {
-                                //{"type":"ServerMessageEvent:INCOMING_TIP","body":{"a":10,"st":"","f":{"isBestMember":false,"role":"member","isRaiseModelAvailable":false,"displayName":"Zubastikkkk","friendRequestSettings":"select","isPaymentsDisabled":false,"isLogged":true,"isRaiseModelReadyToUse":false,"showType":"public","isBanned":false,"hasProfile":true,"messageSenderSettings":"all","signupDate":"01/25/2016","accessLevel":"unlimited","avatarUrl":"/images/avatars/40/avatars.jpg","privateChatInvitationSettings":"all","hasNote":false,"userId":20328772,"isPerformer":false,"isMcm":false,"chathost":"Aroused1101","isRu":true,"isMuted":false,"username":"Zubastikkkk","hasStream":false,"isPayable":true}},"ts":1687465677028}
-                                int amount = jsonObject.getJSONObject("body").getInt("a");
-                                String username = jsonObject.getJSONObject("body").getJSONObject("f").getString("username");
-                                int isBestMember;
-                                if (jsonObject.getJSONObject("body").getJSONObject("f").getBoolean("isBestMember")) {
-                                    isBestMember = 1;
-                                } else {
-                                    isBestMember = 0;
-                                }
-                                String role = jsonObject.getJSONObject("body").getJSONObject("f").getString("role");
-                                String displayName = jsonObject.getJSONObject("body").getJSONObject("f").getString("displayName");
-                                String signupDate = jsonObject.getJSONObject("body").getJSONObject("f").getString("signupDate");
-                                String accessLevel = jsonObject.getJSONObject("body").getJSONObject("f").getString("accessLevel");
-                                int userId = jsonObject.getJSONObject("body").getJSONObject("f").getInt("userId");
+                            case "ServerMessageEvent:INCOMING_TIP" -> incomingTip(jsonObject, timestamp);
 
-                                BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
-                                dataBase.addIncomeInfo(amount, username, timestamp, isBestMember, role, displayName, signupDate, accessLevel, userId);
-                                Logger.log(username + " hat " + amount + "(" + CurrencyHelper.convertWithEuro (amount * 0.05) + " €) Token gegeben.");
-                            }
                             case "ServerMessageEvent:PERFORMER_STATUS_CHANGE" -> {
                                 //{"ts":1687615387314,"type":"ServerMessageEvent:PERFORMER_STATUS_CHANGE","body":"offline"}
                                 BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
-                                dataBase.addStatus(jsonObject.getString("body"),timestamp);
+                                dataBase.addStatus(jsonObject.getString("body"), timestamp);
                                 switch (jsonObject.getString("body")) {
                                     case "offline" -> Logger.log(performerName + " ist offline.");
                                     case "fullprivate" -> Logger.log(performerName + " ist fullprivate.");
@@ -275,14 +271,7 @@ public class SecureWebSocketClientExample {
                                     Logger.log("PERFORMER_AUDIO_STATE:ROOM_CLOSE");
 
                             case "ServerMessageEvent:CHAT_INCOMING_MESSAGE" -> {
-                                //{"type":"ServerMessageEvent:CHAT_INCOMING_MESSAGE","body":{"author":{"signupDate":"05/01/2015","role":"model","avatarUrl":"/00c/31b/027/d2609ec6b66b5d636efec5838891d37b_avatars.jpg","messageStyle":{"color":"#ff00ff"},"displayName":"_LeraX_","friendRequestSettings":"all","isLogged":true,"sexType":"","userId":12795039,"isPerformer":true,"chathost":"Aroused1101","showType":"public","isRu":true,"hasProfile":true,"username":"Aroused1101","hasStream":true,"isPayable":false},"own":false,"id":"181","type":"public-chat","message":"Thank you  ❤ mmm...","l":"cb:tip-response:ml-en:ul-ru:un-Zubastikkkk"},"ts":1687465395590}
-                                if (!Objects.equals(jsonObject.getJSONObject("body").getString("message"), "tip_menu")) {
-                                    BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
-                                    String username = jsonObject.getJSONObject("body").getJSONObject("author").getString("displayName");
-                                    String userMessage = jsonObject.getJSONObject("body").getString("message");
-                                    dataBase.addMessage(userMessage, username, timestamp);
-                                    Logger.log("CHAT_INCOMING_MESSAGE: " + username + " :" + userMessage);
-                                }
+                                chatIncomingMessage(jsonObject, timestamp);
                             }
                             case "ServerMessageEvent:TOPIC_CHANGE" -> {
                                 //{"ts":1687614327788,"type":"ServerMessageEvent:TOPIC_CHANGE","body":{"topic":"Don&#39;t be afraid when you enter, don&#39;t cry when you leave =) 6560 tk  kisses to all","isRu":false}}
@@ -324,7 +313,8 @@ public class SecureWebSocketClientExample {
                 public void onClose(int code, String reason, boolean remote) {
                     // WebSocket connection is closed
                     Logger.log("WebSocket connection closed.");
-                    start();
+                    connectToWebSocket();
+
                 }
 
                 @Override
@@ -337,6 +327,17 @@ public class SecureWebSocketClientExample {
             client.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void chatIncomingMessage(JSONObject jsonObject, long timestamp) {
+        //{"type":"ServerMessageEvent:CHAT_INCOMING_MESSAGE","body":{"author":{"signupDate":"05/01/2015","role":"model","avatarUrl":"/00c/31b/027/d2609ec6b66b5d636efec5838891d37b_avatars.jpg","messageStyle":{"color":"#ff00ff"},"displayName":"_LeraX_","friendRequestSettings":"all","isLogged":true,"sexType":"","userId":12795039,"isPerformer":true,"chathost":"Aroused1101","showType":"public","isRu":true,"hasProfile":true,"username":"Aroused1101","hasStream":true,"isPayable":false},"own":false,"id":"181","type":"public-chat","message":"Thank you  ❤ mmm...","l":"cb:tip-response:ml-en:ul-ru:un-Zubastikkkk"},"ts":1687465395590}
+        if (!Objects.equals(jsonObject.getJSONObject("body").getString("message"), "tip_menu")) {
+            BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
+            String username = jsonObject.getJSONObject("body").getJSONObject("author").getString("displayName");
+            String userMessage = jsonObject.getJSONObject("body").getString("message");
+            dataBase.addMessage(userMessage, username, timestamp);
+            Logger.log("CHAT_INCOMING_MESSAGE: " + username + " :" + userMessage);
         }
     }
 

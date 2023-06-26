@@ -113,7 +113,7 @@ public class BongaCamsDataBase {
         String tableName = "bonga_cams_income";
         try (Connection conn = DriverManager.getConnection(url)) {
 
-            String insertQuery = "INSERT INTO " + tableName + " (performer_name, amount, username, timestamp,isBestMember, role, displayName, signupDate, accessLevel, userId, euro) " +
+            String insertQuery = "INSERT INTO " + tableName + " (performer_name, amount, username, timestamp, isBestMember, role, displayName, signupDate, accessLevel, userId, euro) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
 
