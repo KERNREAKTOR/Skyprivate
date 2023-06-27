@@ -39,6 +39,24 @@ public class Logger {
         w.flush();
         w.close();
     }
+    public static void nameLog(String message, String performerName) throws IOException {
+        System.out.println("[" + sdf.format(new Date()) + "] [BC] " + message);
+
+        LocalDate heute = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String filename = "C:\\BongaCams\\" + performerName;
+        File outputDir = new File(filename);
+
+        outputDir.getAbsolutePath();
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+        filename = filename + "\\" + heute.format(formatter) + "_" +performerName + ".log";
+        PrintWriter w = new PrintWriter(new FileWriter(filename, true));
+        w.println("[" + sdf.format(new Date()) + "] " + message);
+        w.flush();
+        w.close();
+    }
 
     public static void stripLog(String message, StripChatReader stripChatReader) throws IOException {
         System.out.println("[" + sdf.format(new Date()) + "] [SC] " + message);

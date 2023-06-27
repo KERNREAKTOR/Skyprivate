@@ -84,6 +84,27 @@ public class BongaCamsDataBase {
             System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank: " + e.getMessage());
         }
     }
+    public void addUserList(int allUsers, int totalUsers, int totalGuests,int userListLimit) {
+        // Verbindung zur Datenbank herstellen
+
+        String tableName = "bonga_userlist";
+        try (Connection conn = DriverManager.getConnection(url)) {
+
+            String insertQuery = "INSERT INTO " + tableName + " (performer_name, AllUser, totalUser, TotalGuests, userListLimit, timestamp ) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
+                stmt.setString(1, performerName);
+                stmt.setInt(2, allUsers);
+                stmt.setInt(3, totalUsers);
+                stmt.setInt(4, totalGuests);
+                stmt.setInt(5, userListLimit);
+                stmt.setString(6,DateHelper.getTimeNow());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank: " + e.getMessage());
+        }
+    }
 
     public void addMessage(String message, String userName, Long ts) {
         // Verbindung zur Datenbank herstellen
