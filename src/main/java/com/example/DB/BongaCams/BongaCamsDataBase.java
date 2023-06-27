@@ -60,6 +60,19 @@ public class BongaCamsDataBase {
                 stmt.executeUpdate(resetAutoIncrementQuery);
                 Logger.log("Auto-Increment-Wert in der Tabelle '" + currTable + " zurückgesetzt.");
             }
+
+            //Setze die Tabelle bonga_userlist zurück.
+            currTable = "bonga_userlist";
+            deleteQuery = "DELETE FROM " + currTable;
+            try (Statement stmt = conn.createStatement()) {
+                int rowCount = stmt.executeUpdate(deleteQuery);
+                Logger.log(rowCount + " Einträge inder Tabelle '" + currTable + "' wurden zurückgesetzt.");
+            }
+            resetAutoIncrementQuery = "DELETE FROM sqlite_sequence WHERE name='" + currTable + "'";
+            try (Statement stmt = conn.createStatement()) {
+                stmt.executeUpdate(resetAutoIncrementQuery);
+                Logger.log("Auto-Increment-Wert in der Tabelle '" + currTable + " zurückgesetzt.");
+            }
         } catch (SQLException e) {
             System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank: " + e.getMessage());
         }
