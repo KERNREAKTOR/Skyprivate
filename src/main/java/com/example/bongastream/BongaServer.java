@@ -135,9 +135,10 @@ public class BongaServer {
         } else {
             Logger.bongaLog("🔴 " + bongaReader.getHistory().getDisplayName() + " ist nicht Live.", bongaReader);
         }
-
+        String errorMessage = null;
         while (true) {
             Integer errorCode = null;
+
             try {
                 errorCode = 0;
 
@@ -196,7 +197,10 @@ public class BongaServer {
                 }
 
             } catch (Exception e) {
-                Logger.log("[BongaServer.checkChunk] :" + " Error Code:" + errorCode + " " + e.getMessage());
+                if (!("[BongaServer.checkChunk] :" + " Error Code:" + errorCode + " " + e.getMessage()).equals(errorMessage)) {
+                    errorMessage = ("[BongaServer.checkChunk] :" + " Error Code:" + errorCode + " " + e.getMessage());
+                    Logger.log(errorMessage);
+                }
             }
         }
     }
