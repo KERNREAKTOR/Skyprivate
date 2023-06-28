@@ -29,9 +29,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
-    private static final String WEBSOCKET_URL = "wss://chat05.bcccdn.com/websocket";
-    private static final String performerName = "rocksbabiess";
-    //private static final String performerName = "scoftyss";
+    private static final String WEBSOCKET_URL = "wss://chat04.bcccdn.com/websocket";
+    //private static final String performerName = "rocksbabiess";
+    private static final String performerName = "scoftyss";
     private Boolean currStatus = null;
     private int currId;
     private WebSocketClient client;
