@@ -3,6 +3,8 @@ package com.example.DB;
 import com.example.DB.BongaCams.BongaCamsDataBase;
 import com.example.helpers.CurrencyHelper;
 import com.example.skyprivate.CheckStatus.BongaCams.BongaReader;
+import com.example.skyprivate.CheckStatus.BongaCams.CheckStatus.StatusBongaCams;
+import com.example.skyprivate.CheckStatus.BongaCams.CheckStatus.StreamInfo;
 import com.example.skyprivate.Logger;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -20,21 +22,73 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat04.bcccdn.com/websocket";
-    //private static final String performerName = "rocksbabiess";
-    private static final String performerName = "scoftyss";
+    private static final String performerName = "princessara";
+    //private static final String performerName = "scoftyss";
+    private static String videoQuality = "720";
     private Boolean currStatus = null;
+    private String currPerformerStatus = null;
     private int currId;
     private WebSocketClient client;
+    private String m3u8Chunk = null;
+    private String currentVideoLink = null;
+
+    private static List<String> readM3UPlaylist(String playlistContent, String videoUrl) {
+        List<String> fileNames = new ArrayList<>();
+
+        String[] lines = playlistContent.split("\n");
+        for (String line : lines) {
+            if (line.startsWith("l_")) {
+                int commaIndex = line.indexOf('\r');
+                if (commaIndex != -1) {
+                    fileNames.add(videoUrl + "/" + line.replace("\r", ""));
+                }
+            }
+        }
+
+        return fileNames;
+    }
+
+    private static String getStreamLink() throws Exception {
+
+        BongaReader bonga = new BongaReader(performerName);
+        String streamUrl = bonga.getPlayList();
+        String chunkList = null;
+        String curRes = null;
+
+        ArrayList<StreamInfo> streamInfo = StatusBongaCams.getPlayList(streamUrl);
+
+        for (StreamInfo curStream : streamInfo) {
+            Logger.bongaLog("Auflösung: " + curStream.getResolution() +
+                    " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
+
+            if (Objects.equals(videoQuality, "best")) {
+                if (curStream.getBandWith() < curStream.getBandWith()) {
+                    chunkList = curStream.getChunkLink();
+                    curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
+                }
+            } else {
+                if (Objects.equals(curStream.getResolution(), "1280x720") || Objects.equals(curStream.getResolution(), "960x1280")) {
+
+                    chunkList = curStream.getChunkLink();
+                    curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
+                }
+            }
+        }
+
+        Logger.bongaLog(curRes, bonga);
+        assert chunkList != null;
+        streamUrl = streamUrl.split("playlist.m3u8")[0] + chunkList.split("chunks.m3u8")[0];
+        return streamUrl;
+
+    }
 
     public static void main(String[] args) {
 
@@ -156,6 +210,35 @@ public class SecureWebSocketClientExample {
 
                     ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
+                    Runnable videoDownloader = () -> {
+                        if (Objects.equals(currPerformerStatus, "public")) {
+                            try {
+                                if (m3u8Chunk != null) {
+                                    String chuckChecker = StatusBongaCams.GetUrlChunk(m3u8Chunk + "chunks.m3u8");
+                                    if (currentVideoLink == null) {
+                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
+                                        StatusBongaCams.writeFile(currentVideoLink);
+                                    }
+                                    if (!currentVideoLink.equals(readM3UPlaylist(chuckChecker, m3u8Chunk).get(0))) {
+                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
+                                        StatusBongaCams.writeFile(currentVideoLink);
+                                    }
+                                }else{
+                                    Logger.log("m3u8Chunk ist null");
+                                }
+
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                            if (StatusBongaCams.getLastOnline() == null) {
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
+                                StatusBongaCams.setLastOnline(sdf.format(new Date()));
+                            }
+
+                        }
+
+                    };
+
                     Runnable bongaChecker = () -> {
                         try {
                             if (!currStatus) {
@@ -182,6 +265,7 @@ public class SecureWebSocketClientExample {
                             throw new RuntimeException(e);
                         }
                     };
+                    executor.scheduleAtFixedRate(videoDownloader, 0, 500, TimeUnit.MILLISECONDS);
                     executor.scheduleAtFixedRate(syncUserList, 0, 1, TimeUnit.MINUTES);
                     executor.scheduleAtFixedRate(bongaChecker, 0, 2, TimeUnit.MINUTES);
                 }
@@ -225,29 +309,47 @@ public class SecureWebSocketClientExample {
                                 Logger.log("Der aktuelle König ist :" + dnKingName + " mit " + amount + " Token");
 
                             }
-//                            if (jsonObject.getJSONObject("result").has("status")) {
-//
-//                                BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
-//                                dataBase.addStatus(jsonObject.getJSONObject("result").getString("status"), timestamp);
-//
-//                                switch (jsonObject.getJSONObject("result").getString("status")) {
-//                                    case "offline" -> Logger.log(performerName + " ist Offline");
-//                                    case "fullprivate" -> Logger.log(performerName + " ist Offline");
-//                                    case "public" -> {
-//                                        if (jsonObject.getJSONObject("result").has("tipMenu")) {
-//                                            Logger.log("--- Tip Menü ---");
-//                                            Logger.log(jsonObject.getJSONObject("result").getString("tipMenu"));
-//                                        }
-//                                        Logger.log(performerName + " ist Öffentlich");
-//                                        send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
-//                                        Logger.log("Mit dem chat von '" + performerName + "' verbunden");
-//                                        currId = jsonObject.getInt("id") + 1;
-//                                    }
-//                                    case "away" -> Logger.log(performerName + " ist away");
-//                                    default ->
-//                                            Logger.log("Status unbekannt: " + jsonObject.getJSONObject("result").getString("status"));
-//                                }
-//                            }
+                            if (jsonObject.getJSONObject("result").has("status")) {
+
+                                BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
+                                dataBase.addStatus(jsonObject.getJSONObject("result").getString("status"), timestamp);
+
+                                currPerformerStatus = jsonObject.getJSONObject("result").getString("status");
+
+                                if (Objects.equals(jsonObject.getJSONObject("result").getString("status"), "public")) {
+                                    try {
+                                        m3u8Chunk = getStreamLink();
+                                    } catch (Exception e) {
+                                        try {
+                                            Logger.bongaLog(e.getMessage(), new BongaReader(performerName));
+                                        } catch (Exception ex) {
+                                            throw new RuntimeException(ex);
+                                        }
+                                    }
+                                } else {
+                                    m3u8Chunk = null;
+                                }
+
+                                switch (jsonObject.getJSONObject("result").getString("status")) {
+
+                                    case "offline" -> Logger.log(performerName + " ist Offline");
+                                    case "fullprivate" -> Logger.log(performerName + " ist Offline");
+                                    case "public" -> {
+
+                                        if (jsonObject.getJSONObject("result").has("tipMenu")) {
+                                            Logger.log("--- Tip Menü ---");
+                                            Logger.log(jsonObject.getJSONObject("result").getString("tipMenu"));
+                                        }
+                                        Logger.log(performerName + " ist Öffentlich");
+                                        send("{\"id\":2,\"name\":\"ChatModule.connect\",\"args\":[\"public-chat\"]}");
+                                        Logger.log("Mit dem chat von '" + performerName + "' verbunden");
+                                        currId = jsonObject.getInt("id") + 1;
+                                    }
+                                    case "away" -> Logger.log(performerName + " ist away");
+                                    default ->
+                                            Logger.log("Status unbekannt: " + jsonObject.getJSONObject("result").getString("status"));
+                                }
+                            }
                         }
                     }
 
@@ -268,11 +370,28 @@ public class SecureWebSocketClientExample {
                                 //{"ts":1687615387314,"type":"ServerMessageEvent:PERFORMER_STATUS_CHANGE","body":"offline"}
                                 BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
                                 dataBase.addStatus(jsonObject.getString("body"), timestamp);
+                                currPerformerStatus = jsonObject.getString("body");
+                                if (Objects.equals(jsonObject.getString("body"), "public")) {
+                                    try {
+                                        m3u8Chunk = getStreamLink();
+                                    } catch (Exception e) {
+                                        try {
+                                            Logger.bongaLog(e.getMessage(), new BongaReader(performerName));
+                                        } catch (Exception ex) {
+                                            throw new RuntimeException(ex);
+                                        }
+                                    }
+                                } else {
+                                    m3u8Chunk = null;
+                                }
                                 switch (jsonObject.getString("body")) {
                                     case "offline" -> Logger.log(performerName + " ist offline.");
                                     case "fullprivate" -> Logger.log(performerName + " ist fullprivate.");
                                     case "away" -> Logger.log(performerName + " ist away.");
-                                    case "public" -> Logger.log(performerName + " ist öffentlich.");
+                                    case "public" -> {
+
+                                        Logger.log(performerName + " ist öffentlich.");
+                                    }
                                     case "group" -> Logger.log(performerName + " ist in einem Gruppenchat.");
 //                                    default -> {
 //                                        //test
