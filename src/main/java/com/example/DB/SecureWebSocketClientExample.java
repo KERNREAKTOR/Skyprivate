@@ -32,7 +32,7 @@ public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat04.bcccdn.com/websocket";
     private static final String performerName = "princessara";
     //private static final String performerName = "scoftyss";
-    private static String videoQuality = "720";
+    private static final String videoQuality = "720";
     private Boolean currStatus = null;
     private String currPerformerStatus = null;
     private int currId;
@@ -213,18 +213,17 @@ public class SecureWebSocketClientExample {
                     Runnable videoDownloader = () -> {
                         if (Objects.equals(currPerformerStatus, "public")) {
                             try {
-                                if (m3u8Chunk != null) {
-                                    String chuckChecker = StatusBongaCams.GetUrlChunk(m3u8Chunk + "chunks.m3u8");
-                                    if (currentVideoLink == null) {
-                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
-                                        StatusBongaCams.writeFile(currentVideoLink);
-                                    }
-                                    if (!currentVideoLink.equals(readM3UPlaylist(chuckChecker, m3u8Chunk).get(0))) {
-                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
-                                        StatusBongaCams.writeFile(currentVideoLink);
-                                    }
-                                }else{
-                                    Logger.log("m3u8Chunk ist null");
+                                if (m3u8Chunk == null) {
+                                    m3u8Chunk = getStreamLink();
+                                }
+                                String chuckChecker = StatusBongaCams.GetUrlChunk(m3u8Chunk + "chunks.m3u8");
+                                if (currentVideoLink == null) {
+                                    currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
+                                    StatusBongaCams.writeFile(currentVideoLink);
+                                }
+                                if (!currentVideoLink.equals(readM3UPlaylist(chuckChecker, m3u8Chunk).get(0))) {
+                                    currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
+                                    StatusBongaCams.writeFile(currentVideoLink);
                                 }
 
                             } catch (Exception e) {
@@ -234,9 +233,7 @@ public class SecureWebSocketClientExample {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
                                 StatusBongaCams.setLastOnline(sdf.format(new Date()));
                             }
-
                         }
-
                     };
 
                     Runnable bongaChecker = () -> {
