@@ -40,7 +40,7 @@ public class Logger {
         w.close();
     }
     public static void nameLog(String message, String performerName) throws IOException {
-        System.out.println("[" + sdf.format(new Date()) + "] [BC] " + message);
+        //System.out.println("[" + sdf.format(new Date()) + "] [BC] " + message);
 
         LocalDate heute = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -51,7 +51,7 @@ public class Logger {
         if (!outputDir.exists()) {
             outputDir.mkdirs();
         }
-        filename = filename + "\\" + heute.format(formatter) + "_" +performerName + ".log";
+        filename = filename + "\\" + heute.format(formatter) + "_" +performerName + "_silent.log";
         PrintWriter w = new PrintWriter(new FileWriter(filename, true));
         w.println("[" + sdf.format(new Date()) + "] " + message);
         w.flush();

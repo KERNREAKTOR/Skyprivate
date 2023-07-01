@@ -90,14 +90,21 @@ public class BongaCamsDataBase {
             try (PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
                 stmt.setString(1, performerName);
                 stmt.setString(2, status);
-                stmt.setString(3, DateHelper.getBongaLongToDate(ts));
+
+                if (ts == 0) {
+                    stmt.setString(3, DateHelper.getTimeNow());
+                } else {
+                    stmt.setString(3, DateHelper.getBongaLongToDate(ts));
+                }
+
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
             System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank: " + e.getMessage());
         }
     }
-    public void addUserList(int allUsers, int totalUsers, int totalGuests,int userListLimit) {
+
+    public void addUserList(int allUsers, int totalUsers, int totalGuests, int userListLimit) {
         // Verbindung zur Datenbank herstellen
 
         String tableName = "bonga_userlist";
@@ -111,7 +118,7 @@ public class BongaCamsDataBase {
                 stmt.setInt(3, totalUsers);
                 stmt.setInt(4, totalGuests);
                 stmt.setInt(5, userListLimit);
-                stmt.setString(6,DateHelper.getTimeNow());
+                stmt.setString(6, DateHelper.getTimeNow());
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {

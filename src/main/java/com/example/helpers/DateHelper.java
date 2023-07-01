@@ -31,7 +31,7 @@ public class DateHelper {
         LocalDateTime now = LocalDateTime.now();
 
         // Datumsformat definieren
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
         // Datum und Uhrzeit in einen String umwandeln
         return now.format(formatter);

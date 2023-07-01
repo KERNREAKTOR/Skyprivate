@@ -206,6 +206,12 @@ public class StatusBongaCams {
                 Path finalPath = Paths.get(outputPath, String.valueOf(uriPath.subpath(0, uriPath.getNameCount())));
 
                 File outputDir = new File(finalPath.toString());
+
+                if(StatusBongaCams.getLastOnline() == null){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
+                    StatusBongaCams.setLastOnline(sdf.format(new Date()));
+                }
+
                 File Folder = new File(outputDir.getParent() + "\\" + StatusBongaCams.getLastOnline());
 
                 if (!Folder.exists()) {

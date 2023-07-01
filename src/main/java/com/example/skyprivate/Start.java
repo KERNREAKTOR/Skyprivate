@@ -152,7 +152,7 @@ public class Start {
 //                    }
 
                     StatusBongaCams.bongaCurrentTopic(currBonga, bongaReader);
-                    StatusBongaCams.bongaIsAvailable(currBonga, bongaReader);
+                    //StatusBongaCams.bongaIsAvailable(currBonga, bongaReader);
                     StatusBongaCams.bongaIsVipShow(currBonga, bongaReader);
                     StatusBongaCams.bongaIsOffline(currBonga, bongaReader);
                     StatusBongaCams.bongaIsGroupChat(currBonga, bongaReader);
@@ -189,7 +189,6 @@ public class Start {
                     LiveJasminReader liveJasminReader = new LiveJasminReader(currPerformer.getPerformerInfo().getDisplay_name());
                     StatusLiveJasmin.liveJasminGetAchievement(currPerformer, liveJasminReader);
                     StatusLiveJasmin.liveJasminGetOriginalStatus(currPerformer, liveJasminReader);
-
                     StatusLiveJasmin.liveJasminGetHas_vip_show(currPerformer, liveJasminReader);
                 }
             } catch (Exception e) {
@@ -287,11 +286,11 @@ public class Start {
         //https://b-hls-08.doppiocdn.com/hls/59707439/59707439_480p_868_gdf4Qx36VTbNwj4m_1683323192.mp4
         //https://cloudflare.videos.skyprivate.com/513720dd73b2bf0a28bbb6c8faa42f13/audio/131/seg_1.ts
         //https://cloudflare.videos.skyprivate.com/66aba461edf2b996a893ad873b513d77/audio/131/seg_1.ts?p=eyJ0eXBlIjoidHJhbnNtdXgiLCJ2aWRlb0lEIjoiNjZhYmE0NjFlZGYyYjk5NmE4OTNhZDg3M2I1MTNkNzciLCJvd25lcklEIjo1ODY1NTMsImNyZWF0b3JJRCI6IiIsInNlZ21lbnREdXJhdGlvblNlY3MiOjQuMDE1NTA0MTU3MjE4NDQsInVzZVZPRE9URkUiOnRydWUsImZyb21NZXp6YW5pbmUiOmZhbHNlLCJ0cmFjayI6IjJhZDBlYjEyZThlYWU1MTU0OTllM2UwNjdlZTc1ZDhiIiwicmVuZGl0aW9uIjoiMzk1ODQwNTQ1IiwibXV4aW5nIjoiNDQ2NDcwMTQyIn0&s=Q8OSGcK2V8KTPMOERMOIalHClhnClCojwqsaW3fCq8K_OMOqwqTDk3pecMKaYw
-        String urlString = "https://cloudflare.videos.skyprivate.com/513720dd73b2bf0a28bbb6c8faa42f13/video/480/seg_1.ts";
-
-        for (int i = 0; i < 53; i++) {
-            writefile("https://cv-h.phncdn.com/hls/videos/202305/13/431502351/,1080P_4000K,720P_4000K,480P_2000K,240P_1000K,_431502351.mp4.urlset/seg-" + i + "-f1-v1-a1.ts?aid_S5vqElJLERhWbZHvM7gf7-mQkk-TtKQVQBRmswtOs9bWlbJ0_1nVfXgfYSw89KSh9zhP7iBb-OHpbI2Jj3EtzeKcPxNDGbzVdsmfe_GIV9AOxPmUj1Xr7-fjtKkuoo75r7VSLiMZQjGnDk6wutgdUOjHuHZpVJpBpEs5hHVZC1A8PkcCy0oKagMOZFQeKEDeanM&");
-        }
+//        String urlString = "https://cloudflare.videos.skyprivate.com/513720dd73b2bf0a28bbb6c8faa42f13/video/480/seg_1.ts";
+//
+//        for (int i = 0; i < 53; i++) {
+//            writefile("https://cv-h.phncdn.com/hls/videos/202305/13/431502351/,1080P_4000K,720P_4000K,480P_2000K,240P_1000K,_431502351.mp4.urlset/seg-" + i + "-f1-v1-a1.ts?aid_S5vqElJLERhWbZHvM7gf7-mQkk-TtKQVQBRmswtOs9bWlbJ0_1nVfXgfYSw89KSh9zhP7iBb-OHpbI2Jj3EtzeKcPxNDGbzVdsmfe_GIV9AOxPmUj1Xr7-fjtKkuoo75r7VSLiMZQjGnDk6wutgdUOjHuHZpVJpBpEs5hHVZC1A8PkcCy0oKagMOZFQeKEDeanM&");
+//        }
     }
 
 

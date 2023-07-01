@@ -30,8 +30,9 @@ import java.util.concurrent.TimeUnit;
 
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat04.bcccdn.com/websocket";
-    private static final String performerName = "princessara";
-    //private static final String performerName = "scoftyss";
+    //private static final String performerName = "princessara";
+    //private static final String performerName = "necrolina";
+    private static final String performerName = "scoftyss";
     private static final String videoQuality = "720";
     private Boolean currStatus = null;
     private String currPerformerStatus = null;
@@ -62,6 +63,7 @@ public class SecureWebSocketClientExample {
         String streamUrl = bonga.getPlayList();
         String chunkList = null;
         String curRes = null;
+        Integer curBandWith =0;
 
         ArrayList<StreamInfo> streamInfo = StatusBongaCams.getPlayList(streamUrl);
 
@@ -70,9 +72,10 @@ public class SecureWebSocketClientExample {
                     " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
 
             if (Objects.equals(videoQuality, "best")) {
-                if (curStream.getBandWith() < curStream.getBandWith()) {
+                if (curStream.getBandWith() > curBandWith) {
                     chunkList = curStream.getChunkLink();
                     curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
+                    curBandWith = curStream.getBandWith();
                 }
             } else {
                 if (Objects.equals(curStream.getResolution(), "1280x720") || Objects.equals(curStream.getResolution(), "960x1280")) {
@@ -95,7 +98,7 @@ public class SecureWebSocketClientExample {
         //##########################
         //# Tabellen zurücksetzten #
         //##########################
-        new BongaCamsDataBase(performerName).resetDataBase();
+        //new BongaCamsDataBase(performerName).resetDataBase();
 
         SecureWebSocketClientExample reader = new SecureWebSocketClientExample();
         reader.start();
@@ -217,6 +220,7 @@ public class SecureWebSocketClientExample {
                                     m3u8Chunk = getStreamLink();
                                 }
                                 String chuckChecker = StatusBongaCams.GetUrlChunk(m3u8Chunk + "chunks.m3u8");
+
                                 if (currentVideoLink == null) {
                                     currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
                                     StatusBongaCams.writeFile(currentVideoLink);
@@ -236,12 +240,12 @@ public class SecureWebSocketClientExample {
                         }
                     };
 
-                    Runnable bongaChecker = () -> {
+                    Runnable bongaPing = () -> {
                         try {
                             if (!currStatus) {
                                 send("{\"id\":" + currId + ",\"name\":\"ping\"}");
 
-                                Logger.log("--- send Ping current Id :" + currId + " ---");
+                                //Logger.log("--- send Ping current Id :" + currId + " ---");
 
                             }
 
@@ -254,7 +258,7 @@ public class SecureWebSocketClientExample {
                             if (!currStatus) {
                                 send("{\"id\":" + currId + ",\"name\":\"ChatModule.syncUserList\",\"args\":[\"public-chat\"]}");
 
-                                Logger.log("--- Synchronisiere Userliste current Id :" + currId + " ---");
+                               // Logger.log("--- Synchronisiere Userliste current Id :" + currId + " ---");
 
                             }
 
@@ -264,7 +268,7 @@ public class SecureWebSocketClientExample {
                     };
                     executor.scheduleAtFixedRate(videoDownloader, 0, 500, TimeUnit.MILLISECONDS);
                     executor.scheduleAtFixedRate(syncUserList, 0, 1, TimeUnit.MINUTES);
-                    executor.scheduleAtFixedRate(bongaChecker, 0, 2, TimeUnit.MINUTES);
+                    executor.scheduleAtFixedRate(bongaPing, 0, 2, TimeUnit.MINUTES);
                 }
 
                 @Override
@@ -278,13 +282,14 @@ public class SecureWebSocketClientExample {
                         Logger.log(e.getMessage());
                     }
                     if (jsonObject.has("id")) {
-
                         currId = jsonObject.getInt("id") + 1;
                     }
+
                     if (jsonObject.has("ts")) {
 
                         timestamp = jsonObject.getLong("ts") + 1;
                     }
+
                     if (jsonObject.has("result")) {
                         if (!Objects.equals(jsonObject.get("result").toString(), "null")) {
                             //{"id":3,"result":{"totalUsers":324,"totalGuests":2534,"userListLimit":-1},"error":null}
@@ -292,7 +297,7 @@ public class SecureWebSocketClientExample {
                                 int totalUsers = jsonObject.getJSONObject("result").getInt("totalUsers");
                                 int totalGuests = jsonObject.getJSONObject("result").getInt("totalGuests");
                                 int userListLimit = jsonObject.getJSONObject("result").getInt("userListLimit");
-                                Logger.log("Zuschauer: " + (totalUsers + totalGuests) + " davon Gäste: " + totalGuests + " und Benutzer: " + totalUsers);
+                                //Logger.log("Zuschauer: " + (totalUsers + totalGuests) + " davon Gäste: " + totalGuests + " und Benutzer: " + totalUsers);
                                 new BongaCamsDataBase(performerName).addUserList(totalUsers + totalGuests, totalUsers, totalGuests, userListLimit);
                             }
 //                            if (jsonObject.getJSONObject("result").has("history")) {
@@ -323,9 +328,10 @@ public class SecureWebSocketClientExample {
                                             throw new RuntimeException(ex);
                                         }
                                     }
-                                } else {
-                                    m3u8Chunk = null;
                                 }
+//                                else {
+//                                    m3u8Chunk = null;
+//                                }
 
                                 switch (jsonObject.getJSONObject("result").getString("status")) {
 
@@ -378,9 +384,10 @@ public class SecureWebSocketClientExample {
                                             throw new RuntimeException(ex);
                                         }
                                     }
-                                } else {
-                                    m3u8Chunk = null;
                                 }
+//                                else {
+//                                    m3u8Chunk = null;
+//                                }
                                 switch (jsonObject.getString("body")) {
                                     case "offline" -> Logger.log(performerName + " ist offline.");
                                     case "fullprivate" -> Logger.log(performerName + " ist fullprivate.");
