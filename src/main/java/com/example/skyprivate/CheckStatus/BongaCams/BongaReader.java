@@ -1,18 +1,6 @@
 package com.example.skyprivate.CheckStatus.BongaCams;
 
 import com.google.gson.Gson;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Objects;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -22,13 +10,21 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BongaReader {
     private BongaHistory history;
-    private String vid;
     private BongaChat result;
     private String performerURL;
     private String jsonHistory;
@@ -50,9 +46,6 @@ public class BongaReader {
     private String jsonMiniProfile;
     private String jsonMiniProfileToggleOptions;
     private String jsonStylePanelOptions;
-    public BongaReader() {
-
-    }
     private static final String URL = "https://bongacams.com/tools/amf.php";
 
     public static void main(String[] args) {
@@ -128,23 +121,6 @@ public class BongaReader {
 //            //}
 //
 //            System.out.println(bongaContent);
-        }
-    }
-
-    public static boolean isFileAvailable(String fileURL) {
-        try {
-            URL url = new URL(fileURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("HEAD");
-
-            // Überprüfe den HTTP-Statuscode
-            int responseCode = connection.getResponseCode();
-
-            // Ein Statuscode von 200 bedeutet, dass die Datei verfügbar ist
-            return responseCode == HttpURLConnection.HTTP_OK;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
     }
 
@@ -225,14 +201,6 @@ public class BongaReader {
         return response.toString();
     }
 
-    public String getVid() {
-        return vid;
-    }
-
-    public void setVid(String vid) {
-        this.vid = vid;
-    }
-
     public String getVideoUrl() throws IOException {
 
         String vSID = null;
@@ -305,10 +273,6 @@ public class BongaReader {
 
     public void setJsonStreamOptions(String jsonStreamOptions) {
         this.jsonStreamOptions = jsonStreamOptions;
-    }
-
-    public String getJsonChatTopicOptions() {
-        return jsonChatTopicOptions;
     }
 
     public void setJsonChatTopicOptions(String jsonChatTopicOptions) {
@@ -425,10 +389,6 @@ public class BongaReader {
 
     public void setJsonHistory(String jsonHistory) {
         this.jsonHistory = jsonHistory;
-    }
-
-    public String getJsonResult() {
-        return jsonResult;
     }
 
     public void setJsonResult(String jsonResult) {
