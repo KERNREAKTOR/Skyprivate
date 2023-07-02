@@ -319,6 +319,8 @@ public class SecureWebSocketClientExample {
                                 currPerformerStatus = jsonObject.getJSONObject("result").getString("status");
 
                                 if (Objects.equals(jsonObject.getJSONObject("result").getString("status"), "public")) {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
+                                    StatusBongaCams.setLastOnline(sdf.format(new Date()));
                                     try {
                                         m3u8Chunk = getStreamLink();
                                     } catch (Exception e) {
@@ -375,6 +377,8 @@ public class SecureWebSocketClientExample {
                                 dataBase.addStatus(jsonObject.getString("body"), timestamp);
                                 currPerformerStatus = jsonObject.getString("body");
                                 if (Objects.equals(jsonObject.getString("body"), "public")) {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
+                                    StatusBongaCams.setLastOnline(sdf.format(new Date()));
                                     try {
                                         m3u8Chunk = getStreamLink();
                                     } catch (Exception e) {

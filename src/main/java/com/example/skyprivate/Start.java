@@ -131,6 +131,7 @@ public class Start {
         bongaPerformer.add("scoftyss");
         bongaPerformer.add("princessara");
         bongaPerformer.add("LadySunshine-");
+        bongaPerformer.add("tenderpassion");
 
         for (String curPerformer : bongaPerformer) {
             BongaReader bongaReader = new BongaReader(curPerformer);
