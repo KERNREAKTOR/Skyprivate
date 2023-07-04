@@ -306,7 +306,7 @@ public class StatusBongaCams {
             }
 
         } catch (FileNotFoundException e) {
-            Logger.log("Die Url: " + fileURL + " ist nicht verfügbar.");
+            Logger.nameLog ("Die Url: " + fileURL + " ist nicht verfügbar. Error message: " + e.getMessage(),"getUrlChunk");
         }
         return content.toString();
     }
