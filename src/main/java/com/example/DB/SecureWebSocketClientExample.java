@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat04.bcccdn.com/websocket";
     //private static final String performerName = "princessara";
-    private static final String performerName = "jozylina";
+    private static final String performerName = "baby6boy9";
     //private static final String performerName = "scoftyss";
     private static final String videoQuality = "720";
     private Boolean currStatus = null;
@@ -63,47 +63,32 @@ public class SecureWebSocketClientExample {
         String streamUrl = bonga.getPlayList();
         String chunkList = null;
         String curRes = null;
-        Integer curBandWith = 0;
-        Boolean streamIsNull = true;
+        Integer curBandWith =0;
 
+        ArrayList<StreamInfo> streamInfo = StatusBongaCams.getPlayList(streamUrl);
 
-        while (streamIsNull = false) {
-            ArrayList<StreamInfo> streamInfo = StatusBongaCams.getPlayList(streamUrl);
-            for (StreamInfo curStream : streamInfo) {
-                Logger.bongaLog("Auflösung: " + curStream.getResolution() +
-                        " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
+        for (StreamInfo curStream : streamInfo) {
+            Logger.bongaLog("Auflösung: " + curStream.getResolution() +
+                    " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
 
-                if (Objects.equals(videoQuality, "best")) {
-                    if (curStream.getBandWith() == 0) {
-                        streamIsNull = true;
-                    } else {
-                        streamIsNull = false;
-                        if (curStream.getBandWith() > curBandWith) {
-                            chunkList = curStream.getChunkLink();
-                            curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
-                            curBandWith = curStream.getBandWith();
-                        }
-                    }
-                } else {
-                    if (Objects.equals(curStream.getResolution(), "1280x720") || Objects.equals(curStream.getResolution(), "960x1280")) {
+            if (Objects.equals(videoQuality, "best")) {
+                if (curStream.getBandWith() > curBandWith) {
+                    chunkList = curStream.getChunkLink();
+                    curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
+                    curBandWith = curStream.getBandWith();
+                }
+            } else {
+                if (Objects.equals(curStream.getResolution(), "1280x720") || Objects.equals(curStream.getResolution(), "960x1280")) {
 
-                        if (curStream.getBandWith() == 0) {
-                            streamIsNull = true;
-                        } else {
-                            streamIsNull = false;
-                            chunkList = curStream.getChunkLink();
-                            curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
-                        }
-
-                    }
+                    chunkList = curStream.getChunkLink();
+                    curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
                 }
             }
-
-            Logger.bongaLog(curRes, bonga);
-            assert chunkList != null;
-            streamUrl = streamUrl.split("playlist.m3u8")[0] + chunkList.split("chunks.m3u8")[0];
         }
 
+        Logger.bongaLog(curRes, bonga);
+        assert chunkList != null;
+        streamUrl = streamUrl.split("playlist.m3u8")[0] + chunkList.split("chunks.m3u8")[0];
         return streamUrl;
 
     }
@@ -273,7 +258,7 @@ public class SecureWebSocketClientExample {
                             if (!currStatus) {
                                 send("{\"id\":" + currId + ",\"name\":\"ChatModule.syncUserList\",\"args\":[\"public-chat\"]}");
 
-                                // Logger.log("--- Synchronisiere Userliste current Id :" + currId + " ---");
+                               // Logger.log("--- Synchronisiere Userliste current Id :" + currId + " ---");
 
                             }
 
