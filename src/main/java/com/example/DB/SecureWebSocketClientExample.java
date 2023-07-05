@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat04.bcccdn.com/websocket";
     //private static final String performerName = "princessara";
-    private static final String performerName = "baby6boy9";
+    private static final String performerName = "-ange1ok-";
     //private static final String performerName = "scoftyss";
     private static final String videoQuality = "720";
     private Boolean currStatus = null;
@@ -217,18 +217,24 @@ public class SecureWebSocketClientExample {
                         if (Objects.equals(currPerformerStatus, "public")) {
                             try {
                                 if (m3u8Chunk == null) {
-                                    m3u8Chunk = getStreamLink();
+                                    if(getStreamLink() != null){
+                                        m3u8Chunk = getStreamLink();
+                                    }
+
                                 }
                                 String chuckChecker = StatusBongaCams.GetUrlChunk(m3u8Chunk + "chunks.m3u8");
 
-                                if (currentVideoLink == null) {
-                                    currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
-                                    StatusBongaCams.writeFile(currentVideoLink);
+                                if(chuckChecker != null){
+                                    if (currentVideoLink == null) {
+                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
+                                        StatusBongaCams.writeFile(currentVideoLink);
+                                    }
+                                    if (!currentVideoLink.equals(readM3UPlaylist(chuckChecker, m3u8Chunk).get(0))) {
+                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
+                                        StatusBongaCams.writeFile(currentVideoLink);
+                                    }
                                 }
-                                if (!currentVideoLink.equals(readM3UPlaylist(chuckChecker, m3u8Chunk).get(0))) {
-                                    currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
-                                    StatusBongaCams.writeFile(currentVideoLink);
-                                }
+
 
                             } catch (Exception e) {
                                 throw new RuntimeException(e);

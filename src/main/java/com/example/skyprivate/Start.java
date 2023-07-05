@@ -130,7 +130,7 @@ public class Start {
         ArrayList<String> bongaPerformer = new ArrayList<>();
         bongaPerformer.add("scoftyss");
         bongaPerformer.add("princessara");
-        bongaPerformer.add("LadySunshine-");
+        //bongaPerformer.add("LadySunshine-");
         bongaPerformer.add("tenderpassion");
 
         for (String curPerformer : bongaPerformer) {
