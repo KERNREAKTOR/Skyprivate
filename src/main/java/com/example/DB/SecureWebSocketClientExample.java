@@ -31,8 +31,8 @@ import java.util.concurrent.TimeUnit;
 public class SecureWebSocketClientExample {
     private static final String WEBSOCKET_URL = "wss://chat04.bcccdn.com/websocket";
     //private static final String performerName = "princessara";
-    private static final String performerName = "-ange1ok-";
-    //private static final String performerName = "scoftyss";
+    //private static final String performerName = "ustinaxxx";
+    private static final String performerName = "Scoftyss";
     private static final String videoQuality = "720";
     private Boolean currStatus = null;
     private String currPerformerStatus = null;
@@ -41,57 +41,57 @@ public class SecureWebSocketClientExample {
     private String m3u8Chunk = null;
     private String currentVideoLink = null;
 
-    private static List<String> readM3UPlaylist(String playlistContent, String videoUrl) {
-        List<String> fileNames = new ArrayList<>();
+//    private static List<String> readM3UPlaylist(String playlistContent, String videoUrl) {
+//        List<String> fileNames = new ArrayList<>();
+//
+//        String[] lines = playlistContent.split("\n");
+//        for (String line : lines) {
+//            if (line.startsWith("l_")) {
+//                int commaIndex = line.indexOf('\r');
+//                if (commaIndex != -1) {
+//                    fileNames.add(videoUrl + "/" + line.replace("\r", ""));
+//                }
+//            }
+//        }
+//
+//        return fileNames;
+//    }
 
-        String[] lines = playlistContent.split("\n");
-        for (String line : lines) {
-            if (line.startsWith("l_")) {
-                int commaIndex = line.indexOf('\r');
-                if (commaIndex != -1) {
-                    fileNames.add(videoUrl + "/" + line.replace("\r", ""));
-                }
-            }
-        }
-
-        return fileNames;
-    }
-
-    private static String getStreamLink() throws Exception {
-
-        BongaReader bonga = new BongaReader(performerName);
-        String streamUrl = bonga.getPlayList();
-        String chunkList = null;
-        String curRes = null;
-        Integer curBandWith =0;
-
-        ArrayList<StreamInfo> streamInfo = StatusBongaCams.getPlayList(streamUrl);
-
-        for (StreamInfo curStream : streamInfo) {
-            Logger.bongaLog("Auflösung: " + curStream.getResolution() +
-                    " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
-
-            if (Objects.equals(videoQuality, "best")) {
-                if (curStream.getBandWith() > curBandWith) {
-                    chunkList = curStream.getChunkLink();
-                    curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
-                    curBandWith = curStream.getBandWith();
-                }
-            } else {
-                if (Objects.equals(curStream.getResolution(), "1280x720") || Objects.equals(curStream.getResolution(), "960x1280")) {
-
-                    chunkList = curStream.getChunkLink();
-                    curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
-                }
-            }
-        }
-
-        Logger.bongaLog(curRes, bonga);
-        assert chunkList != null;
-        streamUrl = streamUrl.split("playlist.m3u8")[0] + chunkList.split("chunks.m3u8")[0];
-        return streamUrl;
-
-    }
+//    private static String getStreamLink() throws Exception {
+//
+//        BongaReader bonga = new BongaReader(performerName);
+//        String streamUrl = bonga.getPlayList();
+//        String chunkList = null;
+//        String curRes = null;
+//        Integer curBandWith =0;
+//
+//        ArrayList<StreamInfo> streamInfo = StatusBongaCams.getPlayList(streamUrl);
+//
+//        for (StreamInfo curStream : streamInfo) {
+//            Logger.bongaLog("Auflösung: " + curStream.getResolution() +
+//                    " Bandbreite: " + curStream.getBandWith() + " Codecs: " + curStream.getCodecs(), bonga);
+//
+//            if (Objects.equals(videoQuality, "best")) {
+//                if (curStream.getBandWith() > curBandWith) {
+//                    chunkList = curStream.getChunkLink();
+//                    curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
+//                    curBandWith = curStream.getBandWith();
+//                }
+//            } else {
+//                if (Objects.equals(curStream.getResolution(), "1280x720") || Objects.equals(curStream.getResolution(), "960x1280")) {
+//
+//                    chunkList = curStream.getChunkLink();
+//                    curRes = "Aktuelle Auflösung: " + curStream.getResolution() + " Bandbreite: " + curStream.getBandWith();
+//                }
+//            }
+//        }
+//
+//        Logger.bongaLog(curRes, bonga);
+//        assert chunkList != null;
+//        streamUrl = streamUrl.split("playlist.m3u8")[0] + chunkList.split("chunks.m3u8")[0];
+//        return streamUrl;
+//
+//    }
 
     public static void main(String[] args) {
 
@@ -213,38 +213,38 @@ public class SecureWebSocketClientExample {
 
                     ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-                    Runnable videoDownloader = () -> {
-                        if (Objects.equals(currPerformerStatus, "public")) {
-                            try {
-                                if (m3u8Chunk == null) {
-                                    if(getStreamLink() != null){
-                                        m3u8Chunk = getStreamLink();
-                                    }
-
-                                }
-                                String chuckChecker = StatusBongaCams.GetUrlChunk(m3u8Chunk + "chunks.m3u8");
-
-                                if(chuckChecker != null){
-                                    if (currentVideoLink == null) {
-                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
-                                        StatusBongaCams.writeFile(currentVideoLink);
-                                    }
-                                    if (!currentVideoLink.equals(readM3UPlaylist(chuckChecker, m3u8Chunk).get(0))) {
-                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
-                                        StatusBongaCams.writeFile(currentVideoLink);
-                                    }
-                                }
-
-
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                            if (StatusBongaCams.getLastOnline() == null) {
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
-                                StatusBongaCams.setLastOnline(sdf.format(new Date()));
-                            }
-                        }
-                    };
+//                    Runnable videoDownloader = () -> {
+//                        if (Objects.equals(currPerformerStatus, "public")) {
+//                            try {
+//                                if (m3u8Chunk == null) {
+//                                    if(getStreamLink() != null){
+//                                        m3u8Chunk = getStreamLink();
+//                                    }
+//
+//                                }
+//                                String chuckChecker = StatusBongaCams.GetUrlChunk(m3u8Chunk + "chunks.m3u8");
+//
+//                                if(chuckChecker != null){
+//                                    if (currentVideoLink == null) {
+//                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
+//                                        StatusBongaCams.writeFile(currentVideoLink);
+//                                    }
+//                                    if (!currentVideoLink.equals(readM3UPlaylist(chuckChecker, m3u8Chunk).get(0))) {
+//                                        currentVideoLink = readM3UPlaylist(chuckChecker, m3u8Chunk).get(0);
+//                                        StatusBongaCams.writeFile(currentVideoLink);
+//                                    }
+//                                }
+//
+//
+//                            } catch (Exception e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                            if (StatusBongaCams.getLastOnline() == null) {
+//                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
+//                                StatusBongaCams.setLastOnline(sdf.format(new Date()));
+//                            }
+//                        }
+//                    };
 
                     Runnable bongaPing = () -> {
                         try {
@@ -272,7 +272,7 @@ public class SecureWebSocketClientExample {
                             throw new RuntimeException(e);
                         }
                     };
-                    executor.scheduleAtFixedRate(videoDownloader, 0, 500, TimeUnit.MILLISECONDS);
+                    //executor.scheduleAtFixedRate(videoDownloader, 0, 500, TimeUnit.MILLISECONDS);
                     executor.scheduleAtFixedRate(syncUserList, 0, 1, TimeUnit.MINUTES);
                     executor.scheduleAtFixedRate(bongaPing, 0, 2, TimeUnit.MINUTES);
                 }
@@ -324,19 +324,19 @@ public class SecureWebSocketClientExample {
 
                                 currPerformerStatus = jsonObject.getJSONObject("result").getString("status");
 
-                                if (Objects.equals(jsonObject.getJSONObject("result").getString("status"), "public")) {
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
-                                    StatusBongaCams.setLastOnline(sdf.format(new Date()));
-                                    try {
-                                        m3u8Chunk = getStreamLink();
-                                    } catch (Exception e) {
-                                        try {
-                                            Logger.bongaLog(e.getMessage(), new BongaReader(performerName));
-                                        } catch (Exception ex) {
-                                            throw new RuntimeException(ex);
-                                        }
-                                    }
-                                }
+//                                if (Objects.equals(jsonObject.getJSONObject("result").getString("status"), "public")) {
+//                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
+//                                    StatusBongaCams.setLastOnline(sdf.format(new Date()));
+//                                    try {
+//                                        m3u8Chunk = getStreamLink();
+//                                    } catch (Exception e) {
+//                                        try {
+//                                            Logger.bongaLog(e.getMessage(), new BongaReader(performerName));
+//                                        } catch (Exception ex) {
+//                                            throw new RuntimeException(ex);
+//                                        }
+//                                    }
+//                                }
 //                                else {
 //                                    m3u8Chunk = null;
 //                                }
@@ -382,19 +382,19 @@ public class SecureWebSocketClientExample {
                                 BongaCamsDataBase dataBase = new BongaCamsDataBase(performerName);
                                 dataBase.addStatus(jsonObject.getString("body"), timestamp);
                                 currPerformerStatus = jsonObject.getString("body");
-                                if (Objects.equals(jsonObject.getString("body"), "public")) {
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
-                                    StatusBongaCams.setLastOnline(sdf.format(new Date()));
-                                    try {
-                                        m3u8Chunk = getStreamLink();
-                                    } catch (Exception e) {
-                                        try {
-                                            Logger.bongaLog(e.getMessage(), new BongaReader(performerName));
-                                        } catch (Exception ex) {
-                                            throw new RuntimeException(ex);
-                                        }
-                                    }
-                                }
+//                                if (Objects.equals(jsonObject.getString("body"), "public")) {
+//                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy\\MM\\dd\\HH.mm.ss.SSS");
+//                                    StatusBongaCams.setLastOnline(sdf.format(new Date()));
+//                                    try {
+//                                        m3u8Chunk = getStreamLink();
+//                                    } catch (Exception e) {
+//                                        try {
+//                                            Logger.bongaLog(e.getMessage(), new BongaReader(performerName));
+//                                        } catch (Exception ex) {
+//                                            throw new RuntimeException(ex);
+//                                        }
+//                                    }
+//                                }
 //                                else {
 //                                    m3u8Chunk = null;
 //                                }
